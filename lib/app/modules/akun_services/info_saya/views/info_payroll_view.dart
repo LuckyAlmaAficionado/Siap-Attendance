@@ -6,7 +6,6 @@ import 'package:iconsax/iconsax.dart';
 import 'package:talenta_app/app/modules/akun_services/info_saya/ajukan_perubahan_data_view.dart';
 
 import '../../../../shared/theme.dart';
-import '../info_personal_page_view.dart';
 
 class InfoPayrollView extends GetView {
   const InfoPayrollView({Key? key}) : super(key: key);
@@ -34,30 +33,30 @@ class InfoPayrollView extends GetView {
             top: 20,
           ),
           children: [
-            InfoPersonalTile(
-              title: "BPJS Ketenagakerjaan",
-              subTitle: "-",
-            ),
-            InfoPersonalTile(
-              title: "BPJS Kesehatan",
-              subTitle: "-",
-            ),
-            InfoPersonalTile(
-              title: "Nama Bank",
-              subTitle: "Other",
-            ),
-            InfoPersonalTile(
-              title: "No Rekening Bank",
-              subTitle: "Other",
-            ),
-            InfoPersonalTile(
-              title: "Nama Pemilik Rekening",
-              subTitle: "-",
-            ),
-            InfoPersonalTile(
-              title: "Status PTKP",
-              subTitle: "TK/0",
-            ),
+            // InfoPersonalTile(
+            //   title: "BPJS Ketenagakerjaan",
+            //   subTitle: "-",
+            // ),
+            // InfoPersonalTile(
+            //   title: "BPJS Kesehatan",
+            //   subTitle: "-",
+            // ),
+            // InfoPersonalTile(
+            //   title: "Nama Bank",
+            //   subTitle: "Other",
+            // ),
+            // InfoPersonalTile(
+            //   title: "No Rekening Bank",
+            //   subTitle: "Other",
+            // ),
+            // InfoPersonalTile(
+            //   title: "Nama Pemilik Rekening",
+            //   subTitle: "-",
+            // ),
+            // InfoPersonalTile(
+            //   title: "Status PTKP",
+            //   subTitle: "TK/0",
+            // ),
           ],
         ));
   }

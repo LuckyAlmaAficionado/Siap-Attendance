@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 import 'package:talenta_app/app/modules/daftar_absensi_page/controllers/daftar_absensi_page_controller.dart';
 import 'package:talenta_app/app/modules/daftar_absensi_page/views/pengajuan_absensi_view.dart';
 import 'package:talenta_app/app/modules/persetujuan_page/views/status_persetujuan_view.dart';
+import 'package:talenta_app/app/shared/button/button_1.dart';
 import 'package:talenta_app/app/shared/utils.dart';
 
 import '../../../shared/theme.dart';
@@ -61,8 +63,10 @@ class _AbsensiPageViewState extends State<AbsensiPageView> {
                             const SizedBox(width: 10),
                             Text(
                               "${DateFormat("MMM yyyy").format(DateTime.now())} - ${DateFormat("MMM yyyy").format(DateTime.now())}",
-                              style:
-                                  blackTextStyle.copyWith(fontWeight: regular),
+                              style: normalTextStyle.copyWith(
+                                fontWeight: regular,
+                                fontSize: 14,
+                              ),
                             ),
                             new Spacer(),
                             Icon(
@@ -100,7 +104,7 @@ class _AbsensiPageViewState extends State<AbsensiPageView> {
                                         child: Text(
                                           'Filter',
                                           textAlign: TextAlign.center,
-                                          style: blackTextStyle.copyWith(
+                                          style: normalTextStyle.copyWith(
                                               fontWeight: semiBold,
                                               fontSize: 16),
                                         ),
@@ -113,7 +117,7 @@ class _AbsensiPageViewState extends State<AbsensiPageView> {
                                   ),
                                   Text(
                                     'Status',
-                                    style: blackTextStyle.copyWith(
+                                    style: normalTextStyle.copyWith(
                                       fontWeight: semiBold,
                                       fontSize: 14,
                                     ),
@@ -125,7 +129,8 @@ class _AbsensiPageViewState extends State<AbsensiPageView> {
                                     children: [
                                       Text(
                                         "Semua Status",
-                                        style: darkGreyTextStyle,
+                                        style: normalTextStyle.copyWith(
+                                            color: darkGreyColor, fontSize: 14),
                                       ),
                                       Radio<Sorting>(
                                         value: Sorting.semuaStatus,
@@ -145,7 +150,8 @@ class _AbsensiPageViewState extends State<AbsensiPageView> {
                                     children: [
                                       Text(
                                         "Menunggu",
-                                        style: darkGreyTextStyle,
+                                        style: normalTextStyle.copyWith(
+                                            color: darkGreyColor, fontSize: 14),
                                       ),
                                       Radio<Sorting>(
                                         value: Sorting.menunggu,
@@ -165,7 +171,8 @@ class _AbsensiPageViewState extends State<AbsensiPageView> {
                                     children: [
                                       Text(
                                         "Disetujui",
-                                        style: darkGreyTextStyle,
+                                        style: normalTextStyle.copyWith(
+                                            color: darkGreyColor, fontSize: 14),
                                       ),
                                       Radio<Sorting>(
                                         value: Sorting.disetujui,
@@ -185,7 +192,8 @@ class _AbsensiPageViewState extends State<AbsensiPageView> {
                                     children: [
                                       Text(
                                         "Tidak disetujui",
-                                        style: darkGreyTextStyle,
+                                        style: normalTextStyle.copyWith(
+                                            color: darkGreyColor, fontSize: 14),
                                       ),
                                       Radio<Sorting>(
                                         value: Sorting.tidakDisetujui,
@@ -205,7 +213,8 @@ class _AbsensiPageViewState extends State<AbsensiPageView> {
                                     children: [
                                       Text(
                                         "Dibatalkan",
-                                        style: darkGreyTextStyle,
+                                        style: normalTextStyle.copyWith(
+                                            color: darkGreyColor, fontSize: 14),
                                       ),
                                       Radio<Sorting>(
                                         value: Sorting.dibatalkan,
@@ -268,19 +277,24 @@ class _AbsensiPageViewState extends State<AbsensiPageView> {
                                     children: [
                                       Text(
                                         "${DateFormat("dd MMM yyyy").format(DateTime.now())}",
-                                        style: blackTextStyle.copyWith(
+                                        style: normalTextStyle.copyWith(
                                           fontWeight: regular,
                                           fontSize: 16,
                                         ),
                                       ),
+                                      const Gap(5),
                                       Text(
                                         "Clock In pada ${DateFormat("dd MMM yyyy, HH:MM").format(DateTime.now())}",
-                                        style: darkGreyTextStyle.copyWith(
-                                          fontWeight: regular,
-                                          fontSize: 14,
-                                        ),
+                                        style: normalTextStyle
+                                            .copyWith(
+                                              color: darkGreyColor,
+                                              fontSize: 14,
+                                            )
+                                            .copyWith(
+                                              fontWeight: regular,
+                                              fontSize: 14,
+                                            ),
                                       ),
-                                      const SizedBox(height: 5),
                                       Text(
                                         "Disetujui",
                                         style: greenTextStyle.copyWith(
@@ -313,12 +327,15 @@ class _AbsensiPageViewState extends State<AbsensiPageView> {
             ],
           ),
           Positioned(
-            left: 20,
-            right: 20,
-            bottom: 20,
-            child: CustomButton(
-              title: "Kirim pengajuan",
-              onTap: () => Get.to(PengajuanAbsensiView()),
+            left: 10,
+            right: 10,
+            bottom: 10,
+            child: Button1(
+              title: "Kirim Pengajuan",
+              onTap: () => Get.to(
+                () => PengajuanAbsensiView(),
+                transition: Transition.cupertino,
+              ),
             ),
           ),
         ],

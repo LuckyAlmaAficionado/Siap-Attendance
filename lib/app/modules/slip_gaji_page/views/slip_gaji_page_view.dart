@@ -96,7 +96,24 @@ class SlipGajiPageView extends GetView<SlipGajiPageController> {
                                 ],
                               ),
                               new Spacer(),
-                              CircleAvatar(),
+                              CircleAvatar(
+                                radius: 25,
+                                backgroundColor: lightGreyColor,
+                                child: controller.data.user.avatar!.isEmpty
+                                    ? Icon(Iconsax.user)
+                                    : ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(100),
+                                        child: Image.network(
+                                          loadingBuilder: (context, child,
+                                                  loadingProgress) =>
+                                              loadingProgress == null
+                                                  ? child
+                                                  : CircularProgressIndicator(),
+                                          "${controller.data.user.avatar}",
+                                        ),
+                                      ),
+                              ),
                             ],
                           )
                         ],

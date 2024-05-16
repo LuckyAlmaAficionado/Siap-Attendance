@@ -4,8 +4,8 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:talenta_app/app/modules/home/views/menu_view.dart';
 
-import 'package:talenta_app/app/routes/app_pages.dart';
 import 'package:talenta_app/app/shared/utils.dart';
 
 class DetailAbsenView extends StatelessWidget {
@@ -52,7 +52,7 @@ class DetailAbsenView extends StatelessWidget {
               Gap(Get.height * 0.35),
               CustomButton(
                 title: 'Kembali',
-                onTap: () => Get.offAllNamed(Routes.DASHBOARD_PAGE),
+                onTap: () => Get.offAll(() => MenuView()),
               )
             ],
           ),

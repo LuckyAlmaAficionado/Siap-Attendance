@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import 'package:talenta_app/app/routes/app_pages.dart';
@@ -25,21 +27,22 @@ class AbsenPageView extends GetView<AbsenPageController> {
               children: [
                 Text(
                   '${DateFormat("HH:mm", "id_ID").format(DateTime.now())}',
-                  style: TextStyle(
+                  style: GoogleFonts.lexend(
                     fontSize: 30,
-                    fontWeight: semiBold,
+                    fontWeight: regular,
                     color: whiteColor,
                   ),
                 ),
+                const Gap(5),
                 Text(
                   '${DateFormat("EEEE, dd MMMM yyyy", "id_ID").format(DateTime.now())}',
-                  style: TextStyle(
+                  style: normalTextStyle.copyWith(
                     fontSize: 16,
                     fontWeight: semiBold,
                     color: whiteColor,
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 15),
               ],
             ),
           ),
@@ -52,7 +55,7 @@ class AbsenPageView extends GetView<AbsenPageController> {
                 children: [
                   Text(
                     "Daftar absensi",
-                    style: blackTextStyle.copyWith(
+                    style: normalTextStyle.copyWith(
                       fontWeight: semiBold,
                       fontSize: 16,
                     ),
@@ -73,25 +76,25 @@ class AbsenPageView extends GetView<AbsenPageController> {
               const SizedBox(height: 20),
               Column(
                 children: [
-                  if (controller.authC.clockInEntry.value != null)
+                  if (controller.m.ci.value.id != null)
                     ListTile(
                       onTap: () => Get.to(
                         DetailClockInView(),
-                        arguments: controller.authC.clockInEntry,
+                        arguments: controller.m.ci.value,
                       ),
                       leading: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${DateFormat("HH:mm", "id_ID").format(controller.authC.clockInEntry.value!.createdAt!)}",
-                            style: blackTextStyle.copyWith(
+                            "${DateFormat("HH:mm", "id_ID").format(controller.m.ci.value.createdAt!)}",
+                            style: normalTextStyle.copyWith(
                               fontWeight: semiBold,
                               fontSize: 16,
                             ),
                           ),
                           Text(
-                            "${DateFormat("dd MMM", "id_ID").format(controller.authC.clockInEntry.value!.createdAt!)}",
+                            "${DateFormat("dd MMM", "id_ID").format(controller.m.ci.value.createdAt!)}",
                             style: greenTextStyle.copyWith(
                               fontSize: 14,
                               fontWeight: extraLight,
@@ -100,21 +103,20 @@ class AbsenPageView extends GetView<AbsenPageController> {
                         ],
                       ),
                       title: Text(
-                        controller.authC.clockInEntry.value!.type!,
-                        style: blackTextStyle.copyWith(
+                        controller.m.ci.value.type!,
+                        style: normalTextStyle.copyWith(
                           fontWeight: extraLight,
                           fontSize: 14,
                         ),
                       ),
                       trailing: Icon(Icons.keyboard_arrow_right_outlined),
                     ),
-                  if (controller.authC.clockOutEntry.value != null)
+                  if (controller.m.co.value.id != null)
                     ListTile(
                       onTap: () {
-                        print(controller.authC.clockOutEntry.value!.createdAt);
                         Get.to(
                           DetailClockInView(),
-                          arguments: controller.authC.clockOutEntry,
+                          arguments: controller.m.co.value,
                         );
                       },
                       leading: Column(
@@ -122,14 +124,14 @@ class AbsenPageView extends GetView<AbsenPageController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${DateFormat("HH:mm", "id_ID").format(controller.authC.clockOutEntry.value!.createdAt!)}",
-                            style: blackTextStyle.copyWith(
+                            "${DateFormat("HH:mm", "id_ID").format(controller.m.co.value.createdAt!)}",
+                            style: normalTextStyle.copyWith(
                               fontWeight: semiBold,
                               fontSize: 16,
                             ),
                           ),
                           Text(
-                            "${DateFormat("dd MMM", "id_ID").format(controller.authC.clockOutEntry.value!.createdAt!)}",
+                            "${DateFormat("dd MMM", "id_ID").format(controller.m.co.value.createdAt!)}",
                             style: greenTextStyle.copyWith(
                               fontSize: 14,
                               fontWeight: extraLight,
@@ -138,8 +140,8 @@ class AbsenPageView extends GetView<AbsenPageController> {
                         ],
                       ),
                       title: Text(
-                        controller.authC.clockOutEntry.value!.type!,
-                        style: blackTextStyle.copyWith(
+                        controller.m.co.value.type!,
+                        style: normalTextStyle.copyWith(
                           fontWeight: extraLight,
                           fontSize: 14,
                         ),
@@ -148,11 +150,6 @@ class AbsenPageView extends GetView<AbsenPageController> {
                     ),
                 ],
               )
-              // Column(
-              //   children: List.generate(3, (index) {
-              //     return
-              //   }).toList(),
-              // )
             ],
           ),
         ));

@@ -1,27 +1,22 @@
-// ignore_for_file: must_be_immutable
-
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:talenta_app/app/controllers/authentication_controller.dart';
-import 'package:talenta_app/app/models/users.dart';
+import 'package:intl/intl.dart';
+import 'package:talenta_app/app/controllers/model_controller.dart';
+import 'package:talenta_app/app/modules/akun_services/info_saya/info_personal_page_view.dart';
 import 'package:talenta_app/app/shared/theme.dart';
 
-import 'info_personal_page_view.dart';
-
+// ignore: must_be_immutable
 class InfoPekerjaanView extends GetView {
   InfoPekerjaanView({Key? key}) : super(key: key);
 
-  Data data = Get.find<AuthenticationController>().data.value!.data;
+  final m = Get.find<ModelController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Info pekerjaan',
-          style: appBarTextStyle,
-        ),
+        title: Text('Info pekerjaan', style: appBarTextStyle),
         centerTitle: true,
       ),
       body: ListView(
@@ -33,7 +28,7 @@ class InfoPekerjaanView extends GetView {
         children: [
           InfoPersonalTile(
             title: "ID Karyawan",
-            subTitle: "${data.user.id}",
+            subTitle: "${m.u.value.user.id}",
           ),
           InfoPersonalTile(
             title: "Barcode",
@@ -49,11 +44,11 @@ class InfoPekerjaanView extends GetView {
           ),
           InfoPersonalTile(
             title: "Nama Organisasi",
-            subTitle: "${data.divisi}",
+            subTitle: "${m.u.value.divisi}",
           ),
           InfoPersonalTile(
             title: "Posisi Pekerjaan",
-            subTitle: "${data.jabatan}",
+            subTitle: "${m.u.value.user.nama}",
           ),
           InfoPersonalTile(
             title: "Level Pekerjaan",
@@ -73,10 +68,25 @@ class InfoPekerjaanView extends GetView {
           ),
           InfoPersonalTile(
             title: "Masa Kerja",
-            subTitle: "0 Year 0 Month 3 Day",
+            subTitle: "${yearsOfService()}",
           ),
         ],
       ),
     );
+  }
+
+  yearsOfService() {
+    DateTime firstTime = DateTime(2024, 3, 19).toLocal();
+    DateTime secondTime = DateTime.now().toLocal();
+
+    Duration difference = secondTime.difference(firstTime);
+
+    int totalDays = difference.inDays;
+    int years = totalDays ~/ 365;
+    int remainingDaysAfterYears = totalDays % 365;
+    int months = remainingDaysAfterYears ~/ 30;
+    int days = remainingDaysAfterYears % 30;
+
+    return "$years Tahun $months Bulan $days Hari";
   }
 }

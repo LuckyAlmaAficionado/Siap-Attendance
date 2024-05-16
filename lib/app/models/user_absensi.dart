@@ -1,38 +1,38 @@
-class UserAbsensi {
+class ModelAbsensi {
   int? id;
   String? userAbsensiId;
   String? type;
   String? lang;
   String? lat;
   String? address;
-  String? imageData;
+  String? image;
   String? urlImage;
   String? catatan;
   DateTime? createdAt;
   DateTime? updatedAt;
 
-  UserAbsensi({
+  ModelAbsensi({
     this.id,
     this.userAbsensiId,
     this.type,
     this.lang,
     this.lat,
     this.address,
-    this.imageData,
+    this.image,
     this.urlImage,
     this.catatan,
     this.createdAt,
     this.updatedAt,
   });
 
-  factory UserAbsensi.fromJson(Map<String, dynamic> json) => UserAbsensi(
+  factory ModelAbsensi.fromJson(Map<String, dynamic> json) => ModelAbsensi(
         id: json["id"],
         userAbsensiId: json["userAbsensiId"],
         type: json["type"],
         lang: json["lang"],
         lat: json["lat"],
         address: json["address"],
-        imageData: json["imageData"],
+        image: json["image"],
         urlImage: json["urlImage"],
         catatan: json["catatan"],
         createdAt: json["createdAt"] == null
@@ -50,7 +50,7 @@ class UserAbsensi {
         "lang": lang,
         "lat": lat,
         "address": address,
-        "imageData": imageData,
+        "image": image,
         "urlImage": urlImage,
         "catatan": catatan,
         "createdAt": createdAt?.toIso8601String(),

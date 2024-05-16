@@ -1,8 +1,8 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
+
 import 'package:talenta_app/app/controllers/camera_data_controller.dart';
 import 'package:talenta_app/app/controllers/locations_controller.dart';
 

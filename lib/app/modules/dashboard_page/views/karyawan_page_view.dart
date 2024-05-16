@@ -142,7 +142,19 @@ class _KaryawanPageViewState extends State<KaryawanPageView> {
                         fontSize: 12,
                       ),
                     ),
-                    leading: CircleAvatar(),
+                    leading: CircleAvatar(
+                      backgroundColor: darkGreyColor,
+                      // child: ClipRRect(
+                      //   borderRadius: BorderRadius.circular(100),
+                      //   child: Image.network(
+                      //     loadingBuilder: (context, child, loadingProgress) =>
+                      //         loadingProgress == null
+                      //             ? child
+                      //             : Center(child: CircularProgressIndicator()),
+                      //     "https://images.unsplash.com/photo-1709594625825-7c03659c695d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTcxNTgyNTI0OQ&ixlib=rb-4.0.3&q=80&w=1080",
+                      //   ),
+                      // ),
+                    ),
                     trailing: Container(
                       width: 100,
                       child: Row(

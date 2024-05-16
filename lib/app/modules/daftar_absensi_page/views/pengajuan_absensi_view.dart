@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:talenta_app/app/controllers/authentication_controller.dart';
+
 import 'package:talenta_app/app/controllers/date_controller.dart';
 import 'package:talenta_app/app/controllers/file_picker_controller.dart';
+import 'package:talenta_app/app/controllers/model_controller.dart';
 import 'package:talenta_app/app/models/user_absensi.dart';
 import 'package:talenta_app/app/modules/daftar_absensi_page/controllers/daftar_absensi_page_controller.dart';
+import 'package:talenta_app/app/shared/button/button_1.dart';
 import 'package:talenta_app/app/shared/theme.dart';
-import 'package:talenta_app/app/shared/utils.dart';
 
 class PengajuanAbsensiView extends StatefulWidget {
   PengajuanAbsensiView({Key? key}) : super(key: key);
@@ -28,41 +29,41 @@ class _PengajuanAbsensiViewState extends State<PengajuanAbsensiView> {
   final controller = Get.put(DaftarAbsensiPageController());
   final dateController = Get.put(DateController());
   final filePicker = Get.put(FilePickerController());
-  final authC = Get.find<AuthenticationController>();
 
-  DateTime? picked;
-  late List<UserAbsensi> absensi;
-  late UserAbsensi currentTime;
+  final m = Get.find<ModelController>();
 
-  late UserAbsensi tempClockIn;
-  late UserAbsensi tempClockOut;
+  DateTime picked = DateTime.now();
+  late List<ModelAbsensi> absensi;
+  late ModelAbsensi currentTime;
+
+  ModelAbsensi tempClockIn = ModelAbsensi();
+  ModelAbsensi tempClockOut = ModelAbsensi();
 
   @override
   void initState() {
     super.initState();
-    absensi = authC.listUserAbsensi;
+    absensi = m.a;
+    // absensi = authC.listUserAbsensi;
   }
 
   findAbsensiByDate() {
-    print(absensi
-        .where((element) => element.createdAt!.day == picked!.day)
-        .isBlank);
+    tempClockIn = absensi.firstWhere(
+      (element) =>
+          element.createdAt!.day == picked.day &&
+          element.createdAt!.month == picked.month &&
+          element.createdAt!.year == picked.year &&
+          element.type == "clockin",
+      orElse: () => ModelAbsensi(),
+    );
 
-    if (absensi
-        .where((element) =>
-            element.createdAt!.day == picked!.day &&
-            element.createdAt!.month == picked!.month &&
-            element.createdAt!.year == picked!.year)
-        .isNotEmpty) {
-      absensi
-          .where((element) =>
-              element.createdAt!.day == picked!.day &&
-              element.createdAt!.month == picked!.month &&
-              element.createdAt!.year == picked!.year)
-          .forEach((element) {
-        print("${element.type} jam ${element.createdAt}");
-      });
-    }
+    tempClockOut = absensi.firstWhere(
+      (element) =>
+          element.createdAt!.day == picked.day &&
+          element.createdAt!.month == picked.month &&
+          element.createdAt!.year == picked.year &&
+          element.type == "clockout",
+      orElse: () => ModelAbsensi(),
+    );
   }
 
   @override
@@ -90,12 +91,13 @@ class _PengajuanAbsensiViewState extends State<PengajuanAbsensiView> {
                     controller: timeController,
                     onTap: () async {
                       FocusScope.of(context).requestFocus(new FocusNode());
-                      picked = await dateController.selectDate(context);
+                      picked = await dateController.selectDate(context, picked);
                       timeController.text =
-                          DateFormat("dd MMM yyyy", "id_ID").format(picked!);
+                          DateFormat("dd MMM yyyy", "id_ID").format(picked);
 
-                      setState(() {});
-                      findAbsensiByDate();
+                      setState(() {
+                        findAbsensiByDate();
+                      });
                     },
                     decoration: InputDecoration(
                       labelText: 'Pick a date',
@@ -128,7 +130,9 @@ class _PengajuanAbsensiViewState extends State<PengajuanAbsensiView> {
                             ),
                             const Gap(4),
                             Text(
-                              "07:38",
+                              tempClockIn.id != null
+                                  ? "${DateFormat("HH:mm", "id_ID").format(tempClockIn.createdAt!)}"
+                                  : " - ",
                               style: darkGreyTextStyle,
                             ),
                           ],
@@ -144,7 +148,9 @@ class _PengajuanAbsensiViewState extends State<PengajuanAbsensiView> {
                             ),
                             const Gap(4),
                             Text(
-                              "-",
+                              tempClockOut.id != null
+                                  ? "${DateFormat("HH:mm").format(tempClockOut.createdAt!)}"
+                                  : " - ",
                               style: darkGreyTextStyle,
                             ),
                           ],
@@ -257,10 +263,10 @@ class _PengajuanAbsensiViewState extends State<PengajuanAbsensiView> {
               ),
             ),
             Positioned(
-              left: 20,
-              right: 20,
-              bottom: 20,
-              child: CustomButton(
+              left: 10,
+              right: 10,
+              bottom: 10,
+              child: Button1(
                 title: "Kirim pengajuan",
                 onTap: () {},
               ),

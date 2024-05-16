@@ -78,7 +78,10 @@ class DashboardPageController extends GetxController {
         karyawan.sort((a, b) => a.name!.compareTo(b.name!));
       }
     } catch (e) {
-      Get.dialog(ErrorAlert(text: e.toString()));
+      Get.dialog(ErrorAlert(
+        msg: e.toString(),
+        methodName: "fetchAllKaryawan | dashboard_page_controller.dart",
+      ));
     }
   }
 

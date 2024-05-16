@@ -3,16 +3,15 @@ import 'dart:isolate';
 
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
+import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:talenta_app/app/models/user_absensi.dart';
 import 'package:talenta_app/app/models/users.dart';
+import 'package:talenta_app/app/modules/home/views/menu_view.dart';
 import 'package:talenta_app/app/routes/app_pages.dart';
-import 'package:talenta_app/app/shared/error_alert.dart';
 import 'package:talenta_app/app/shared/utils.dart';
-
-import 'date_controller.dart';
 
 class AuthenticationController extends GetxController {
   final _prefs = SharedPreferences.getInstance();
@@ -24,22 +23,22 @@ class AuthenticationController extends GetxController {
   RxBool autoLoginC = false.obs;
   RxString pin = "".obs;
   String token = "";
-  Rx<UserAbsensi?> clockInEntry = Rx<UserAbsensi?>(null);
-  Rx<UserAbsensi?> clockOutEntry = Rx<UserAbsensi?>(null);
-  Rx<User?> data = Rx<User?>(null);
-  String BASE_URL = "https://backend-siap-production.up.railway.app";
-  // String BASE_URL = "http://192.168.5.9:41016";
-  RxList<UserAbsensi> listUserAbsensi = <UserAbsensi>[].obs;
+  Rx<ModelAbsensi?> clockInEntry = Rx<ModelAbsensi?>(null);
+  Rx<ModelAbsensi?> clockOutEntry = Rx<ModelAbsensi?>(null);
+  Rx<ModelLogin?> data = Rx<ModelLogin?>(null);
+  // String BASE_URL = "https://andioffset-siap-production.up.railway.app";
+  String BASE_URL = "http://192.168.5.9:8080";
+  RxList<ModelAbsensi> listUserAbsensi = <ModelAbsensi>[].obs;
   RxString jabatan = "".obs;
   late bool isSuperAdmin = true;
 
   @override
   void onInit() async {
     super.onInit();
-    await autoLoginIsTrue();
-    await validatorPIN();
-    Get.put(DateController()).fetchHolidayDate();
-    validatorPIN();
+    // await autoLoginIsTrue();
+    // await validatorPIN();
+    // Get.put(DateController()).fetchHolidayDate();
+    // validatorPIN();
   }
 
   Future fetchDetailAbsensi() async {
@@ -51,11 +50,13 @@ class AuthenticationController extends GetxController {
           headers: {"Authorization": "Bearer $token"},
         );
 
+        print(res.statusCode);
+
         if (res.statusCode == 200) {
           List temp = json.decode(res.body);
 
-          return listUserAbsensi(
-              List<UserAbsensi>.from(temp.map((e) => UserAbsensi.fromJson(e))));
+          return listUserAbsensi(List<ModelAbsensi>.from(
+              temp.map((e) => ModelAbsensi.fromJson(e))));
         }
       } else {
         return listUserAbsensi.clear();
@@ -65,7 +66,7 @@ class AuthenticationController extends GetxController {
     }
   }
 
-  autoLoginIsTrue() async {
+  Future autoLoginIsTrue() async {
     try {
       SharedPreferences pref = await _prefs;
       if (pref.containsKey("email") && pref.containsKey("password")) {
@@ -76,9 +77,7 @@ class AuthenticationController extends GetxController {
         return true;
       }
       return false;
-    } catch (e) {
-      Get.dialog(ErrorAlert(text: e.toString()));
-    }
+    } catch (e) {}
   }
 
   Future<void> autoLogin() async {
@@ -103,39 +102,29 @@ class AuthenticationController extends GetxController {
 
   Future signIn(String email, String password) async {
     try {
-      SharedPreferences pref = await _prefs;
-      pref.remove("token");
-
+      print("=== masuk kesini ===");
       bool result = await fetchUser(email, password);
 
       if (result) {
         fetchDataAbsensi(data.value!.data.user.id!).then((value) {
           Get.back();
-          Get.offAllNamed(Routes.DASHBOARD_PAGE);
+          Get.off(() => MenuView());
         });
       } else {
         Get.back();
         Utils().snackbarC("Oh Tidak!", "Password atau Email salah", false);
       }
-    } catch (e) {
-      Get.back();
-      Utils().snackbarC("Oh Tidak!", "Password atau Email salah", false);
-      throw Exception(e);
-    }
+    } catch (e) {}
   }
 
   Future fetchUser(String email, String password) async {
     try {
-      SharedPreferences pref = await _prefs;
-      pref.remove("token");
-
       Map<String, dynamic> body = {"email": "$email", "password": "$password"};
 
-      final response =
-          await dio.post("$BASE_URL/api/v1/auth/login", data: body);
+      final res = await dio.post("$BASE_URL/api/v1/auth/login", data: body);
 
-      if (response.statusCode == 200) {
-        data(User.fromJson(response.data));
+      if (res.statusCode == 200) {
+        data(ModelLogin.fromJson(res.data));
         jabatan(data.value!.data.jabatan);
         this.token = data.value!.data.token;
 
@@ -144,9 +133,7 @@ class AuthenticationController extends GetxController {
       } else {
         return false;
       }
-    } catch (e) {
-      Get.dialog(ErrorAlert(text: e.toString()));
-    }
+    } catch (e) {}
   }
 
   Future<void> fetchDataAbsensi(String userId) async {
@@ -160,9 +147,9 @@ class AuthenticationController extends GetxController {
         clockInEntry.value = null;
         clockOutEntry.value = null;
       } else if (response.statusCode == 200) {
-        List<UserAbsensi> req = await Isolate.run(() {
+        List<ModelAbsensi> req = await Isolate.run(() {
           List<dynamic> responseData = jsonDecode(response.body);
-          return responseData.map((e) => UserAbsensi.fromJson(e)).toList();
+          return responseData.map((e) => ModelAbsensi.fromJson(e)).toList();
         });
 
         clockInEntry.value =
@@ -184,7 +171,7 @@ class AuthenticationController extends GetxController {
 
     if (response.statusCode == 200) {
       List<dynamic> responseData = response.data;
-      responseData.map((item) => User.fromJson(item)).toList();
+      responseData.map((item) => ModelLogin.fromJson(item)).toList();
     }
   }
 
@@ -260,5 +247,18 @@ class AuthenticationController extends GetxController {
     (isNeededPinWhenOpenApps.value)
         ? Get.toNamed(Routes.VALIDATOR_PIN)
         : Get.toNamed(Routes.DASHBOARD_PAGE);
+  }
+
+  final _hive = Hive.box("testBox");
+
+  Future hiveAutoLogin() async {
+    try {
+      String email = await _hive.get("email");
+      String password = await _hive.get("password");
+      if (email.isNotEmpty && password.isNotEmpty) {
+        await fetchUser(email, password);
+        await fetchDataAbsensi(data.value!.data.user.id!);
+      }
+    } catch (e) {}
   }
 }

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:talenta_app/app/controllers/api_controller.dart';
 import 'package:talenta_app/app/controllers/authentication_controller.dart';
 import 'package:talenta_app/app/controllers/file_picker_controller.dart';
+import 'package:talenta_app/app/controllers/model_controller.dart';
 
 class DaftarAbsensiPageController extends GetxController
     with GetTickerProviderStateMixin {
@@ -21,12 +23,12 @@ class DaftarAbsensiPageController extends GetxController
   }
 
   final filePickerC = Get.put(FilePickerController());
-  final authC = Get.find<AuthenticationController>();
+  final a = Get.put(ApiController());
 
   @override
   void onInit() async {
     controller = TabController(length: 3, vsync: this);
-    await authC.fetchDetailAbsensi();
+    await a.fetchDetailAttendance();
     super.onInit();
   }
 

@@ -4,6 +4,8 @@ import '../modules/absen_page/bindings/absen_page_binding.dart';
 import '../modules/absen_page/views/absen_page_view.dart';
 import '../modules/anggota_tim/bindings/anggota_tim_binding.dart';
 import '../modules/anggota_tim/views/anggota_tim_view.dart';
+import '../modules/authentication/bindings/authentication_binding.dart';
+import '../modules/authentication/views/authentication_view.dart';
 import '../modules/camera_page/bindings/camera_page_binding.dart';
 import '../modules/camera_page/views/camera_page_view.dart';
 import '../modules/cuti_page/bindings/cuti_page_binding.dart';
@@ -17,10 +19,12 @@ import '../modules/detail_karyawan/bindings/detail_karyawan_binding.dart';
 import '../modules/detail_karyawan/views/detail_karyawan_view.dart';
 import '../modules/detail_pengumuman/bindings/detail_pengumuman_binding.dart';
 import '../modules/detail_pengumuman/views/detail_pengumuman_view.dart';
+import '../modules/home/bindings/home_binding.dart';
+import '../modules/home/views/home_view.dart';
 import '../modules/izin_kembali_page/bindings/izin_kembali_page_binding.dart';
 import '../modules/izin_kembali_page/views/izin_kembali_page_view.dart';
-import '../modules/locations_page/bindings/locations_page_binding.dart';
-import '../modules/locations_page/views/locations_page_view.dart';
+import '../modules/locations/bindings/locations_page_binding.dart';
+import '../modules/locations/views/locations_page_view.dart';
 import '../modules/persetujuan_page/bindings/persetujuan_page_binding.dart';
 import '../modules/persetujuan_page/views/persetujuan_page_view.dart';
 import '../modules/reimbursement_page/bindings/reimbursement_page_binding.dart';
@@ -124,7 +128,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.IZIN_KEMBALI_PAGE,
-      page: () => const IzinKembaliPageView(),
+      page: () => IzinKembaliPageView(),
       binding: IzinKembaliPageBinding(),
     ),
     GetPage(
@@ -136,6 +140,16 @@ class AppPages {
       name: _Paths.DETAIL_KARYAWAN,
       page: () => const DetailKaryawanView(),
       binding: DetailKaryawanBinding(),
+    ),
+    GetPage(
+      name: _Paths.AUTHENTICATION,
+      page: () => const AuthenticationView(),
+      binding: AuthenticationBinding(),
+    ),
+    GetPage(
+      name: _Paths.HOME,
+      page: () => const HomeView(),
+      binding: HomeBinding(),
     ),
   ];
 }

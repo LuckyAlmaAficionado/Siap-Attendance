@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:talenta_app/app/shared/theme.dart';
 import 'package:talenta_app/app/shared/utils.dart';
 
 class ErrorAlert extends StatelessWidget {
-  const ErrorAlert({super.key, required this.text});
+  const ErrorAlert({super.key, required this.msg, required this.methodName});
 
-  final String text;
+  final String msg;
+  final String methodName;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,14 @@ class ErrorAlert extends StatelessWidget {
         child: ListView(
           physics: BouncingScrollPhysics(),
           children: [
-            Text(text),
+            Text(
+              methodName,
+              style: normalTextStyle.copyWith(fontSize: 16, fontWeight: medium),
+            ),
+            Text(
+              msg,
+              style: normalTextStyle,
+            ),
           ],
         ),
       ),

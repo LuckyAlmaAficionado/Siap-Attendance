@@ -38,9 +38,7 @@ class _InboxPageViewState extends State<InboxPageView>
           Container(
             width: Get.width,
             padding: const EdgeInsets.symmetric(horizontal: 15),
-            decoration: BoxDecoration(
-              color: whiteColor,
-            ),
+            decoration: BoxDecoration(color: whiteColor),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -64,16 +62,8 @@ class _InboxPageViewState extends State<InboxPageView>
                   labelStyle: GoogleFonts.outfit(fontSize: 15),
                   unselectedLabelColor: darkGreyColor,
                   tabs: [
-                    Tab(
-                      child: Text(
-                        'Notifikasi',
-                      ),
-                    ),
-                    Tab(
-                      child: Text(
-                        'Butuh Persetujuan',
-                      ),
-                    ),
+                    Tab(child: Text('Notifikasi')),
+                    Tab(child: Text('Butuh Persetujuan')),
                   ],
                 ),
               ],

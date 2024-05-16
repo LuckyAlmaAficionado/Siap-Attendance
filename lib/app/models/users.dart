@@ -1,28 +1,24 @@
-// To parse this JSON data, do
-//
-//     final user = userFromJson(jsonString);
-
 import 'dart:convert';
 
-User userFromJson(String str) => User.fromJson(json.decode(str));
+ModelLogin userFromJson(String str) => ModelLogin.fromJson(json.decode(str));
 
-String userToJson(User data) => json.encode(data.toJson());
+String userToJson(ModelLogin data) => json.encode(data.toJson());
 
-class User {
+class ModelLogin {
   int status;
   String message;
-  Data data;
+  ModelData data;
 
-  User({
+  ModelLogin({
     required this.status,
     required this.message,
     required this.data,
   });
 
-  factory User.fromJson(Map<String, dynamic> json) => User(
+  factory ModelLogin.fromJson(Map<String, dynamic> json) => ModelLogin(
         status: json["status"],
         message: json["message"],
-        data: Data.fromJson(json["data"]),
+        data: ModelData.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -32,24 +28,24 @@ class User {
       };
 }
 
-class Data {
+class ModelData {
   String token;
-  String divisi;
-  String jabatan;
-  UserData user;
+  String? divisi;
+  String? jabatan;
+  ModelUser user;
 
-  Data({
+  ModelData({
     required this.token,
-    required this.divisi,
-    required this.jabatan,
+    this.divisi,
+    this.jabatan,
     required this.user,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) => Data(
+  factory ModelData.fromJson(Map<String, dynamic> json) => ModelData(
         token: json["token"],
-        divisi: json["divisi"],
-        jabatan: json["jabatan"],
-        user: UserData.fromJson(json["user"]),
+        divisi: json["divisi"] ?? "",
+        jabatan: json["jabatan"] ?? "",
+        user: ModelUser.fromJson(json["user"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -60,7 +56,7 @@ class Data {
       };
 }
 
-class UserData {
+class ModelUser {
   String? id;
   String? email;
   String? avatar;
@@ -81,7 +77,7 @@ class UserData {
   String? manager;
   String? username;
 
-  UserData({
+  ModelUser({
     this.id,
     this.email,
     this.avatar,
@@ -103,7 +99,7 @@ class UserData {
     this.username,
   });
 
-  factory UserData.fromJson(Map<String, dynamic> json) => UserData(
+  factory ModelUser.fromJson(Map<String, dynamic> json) => ModelUser(
         id: json["id"],
         email: json["email"],
         avatar: json["avatar"],

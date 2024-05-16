@@ -14,7 +14,7 @@ class MoreServices extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(20),
       ),
       content: Container(
         width: Get.width * 0.8,
@@ -56,18 +56,24 @@ class MoreServices extends StatelessWidget {
     );
   }
 
-  _Cbutton(Function()? onTap, String title, IconData icons) => ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-        onTap: onTap,
-        title: Text(
-          title,
-          style: blackTextStyle.copyWith(
-            fontSize: 14,
-            fontWeight: regular,
+  _Cbutton(Function()? onTap, String title, IconData icons) => Container(
+        margin: const EdgeInsets.only(top: 10),
+        child: Material(
+          borderRadius: BorderRadius.circular(20),
+          child: ListTile(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+            onTap: onTap,
+            title: Text(
+              title,
+              style: normalTextStyle.copyWith(
+                fontSize: 14,
+                fontWeight: regular,
+              ),
+            ),
+            minLeadingWidth: 0,
+            leading: Icon(icons, color: Colors.black),
+            trailing: Icon(Icons.keyboard_arrow_right),
           ),
         ),
-        minLeadingWidth: 0,
-        leading: Icon(icons, color: Colors.black),
-        trailing: Icon(Icons.keyboard_arrow_right),
       );
 }

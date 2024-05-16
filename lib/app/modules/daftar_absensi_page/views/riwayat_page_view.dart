@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
+import 'package:talenta_app/app/controllers/api_controller.dart';
 
 import 'package:talenta_app/app/modules/daftar_absensi_page/controllers/daftar_absensi_page_controller.dart';
 import 'package:talenta_app/app/shared/theme.dart';
@@ -18,6 +19,8 @@ class RiwayatPageView extends StatefulWidget {
 
 class _RiwayatPageViewState extends State<RiwayatPageView> {
   final controller = Get.put(DaftarAbsensiPageController());
+
+  final a = Get.put(ApiController());
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +68,7 @@ class _RiwayatPageViewState extends State<RiwayatPageView> {
                     DateTime(controller.startDate.year,
                         controller.startDate.month + 1),
                   )}",
-                  style: blackTextStyle,
+                  style: normalTextStyle,
                 ),
                 new Spacer(),
                 Icon(
@@ -77,84 +80,81 @@ class _RiwayatPageViewState extends State<RiwayatPageView> {
           ),
         ),
         Expanded(
-          child: RefreshIndicator(
-            onRefresh: () async {
-              await controller.refreshInformation();
+          child: FutureBuilder(
+            future: a.fetchDetailAttendance(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData ||
+                  snapshot.connectionState == ConnectionState.done) {
+                return ListView(
+                  physics: BouncingScrollPhysics(),
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      margin: const EdgeInsets.all(10),
+                      height: 150,
+                      decoration: BoxDecoration(
+                        color: blueColor.withAlpha(40),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Obx(
+                                () => ListTileInfo(
+                                  title: "Absen",
+                                  value: controller.absent.value,
+                                ),
+                              ),
+                              ListTileInfo(
+                                title: "No clock in",
+                                value: 0,
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ListTileInfo(
+                                title: "Late clock in",
+                                value: 0,
+                              ),
+                              Obx(
+                                () => ListTileInfo(
+                                  title: "No clock out",
+                                  value: controller.noClockOut.value,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ListTileInfo(
+                                title: "Early clock out",
+                                value: 0,
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                    ...List.generate(
+                      controller.dateOfMonthLength(),
+                      (index) => TileInfoTime(index, context),
+                    ),
+                  ],
+                );
+              }
+              return Center(child: CircularProgressIndicator());
             },
-            child: FutureBuilder(
-              future: controller.authC.fetchDetailAbsensi(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData ||
-                    snapshot.connectionState == ConnectionState.done) {
-                  return ListView(
-                    physics: BouncingScrollPhysics(),
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(20),
-                        margin: const EdgeInsets.all(10),
-                        height: 150,
-                        decoration: BoxDecoration(
-                          color: blueColor.withAlpha(40),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Obx(() => ListTileInfo(
-                                      title: "Absen",
-                                      value: controller.absent.value,
-                                    )),
-                                ListTileInfo(
-                                  title: "No clock in",
-                                  value: 0,
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 20),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ListTileInfo(
-                                  title: "Late clock in",
-                                  value: 0,
-                                ),
-                                Obx(
-                                  () => ListTileInfo(
-                                    title: "No clock out",
-                                    value: controller.noClockOut.value,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 20),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                ListTileInfo(
-                                  title: "Early clock out",
-                                  value: 0,
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                      ...List.generate(
-                        controller.dateOfMonthLength(),
-                        (index) => TileInfoTime(index, context),
-                      ),
-                    ],
-                  );
-                }
-                return Center(child: CircularProgressIndicator());
-              },
-            ),
           ),
         ),
       ],
@@ -173,9 +173,11 @@ class _RiwayatPageViewState extends State<RiwayatPageView> {
   Container TileInfoTime(int index, BuildContext context) {
     String clockin = '';
     String clockout = '';
-    List<DateTime?> detailDate = controller.authC.listUserAbsensi
-        .map((element) => element.createdAt)
-        .toList();
+    List<DateTime?> detailDate =
+        a.m.a.map((element) => element.createdAt).toList();
+    // List<DateTime?> detailDate = controller.authC.listUserAbsensi
+    //     .map((element) => element.createdAt)
+    //     .toList();
 
 // Mendapatkan tanggal saat ini dalam format yang sesuai
     String curDate =
@@ -226,13 +228,8 @@ class _RiwayatPageViewState extends State<RiwayatPageView> {
                     ),
                     style: (controller.checkIsHoliday(
                             controller.startDate.add(Duration(days: index))))
-                        ? GoogleFonts.outfit(
-                            color: Colors.red,
-                            fontSize: 16,
-                          )
-                        : blackTextStyle.copyWith(
-                            fontSize: 16,
-                          ),
+                        ? GoogleFonts.outfit(color: Colors.red, fontSize: 16)
+                        : normalTextStyle.copyWith(fontSize: 16),
                   ),
                   const SizedBox(height: 5),
                   Text(
@@ -242,21 +239,21 @@ class _RiwayatPageViewState extends State<RiwayatPageView> {
                         : 'Jam kerja',
                     style: (controller.checkIsHoliday(
                             controller.startDate.add(Duration(days: index))))
-                        ? redTextStyle
-                        : blackTextStyle,
+                        ? redTextStyle.copyWith(fontSize: 14)
+                        : normalTextStyle.copyWith(fontSize: 14),
                   ),
                 ],
               ),
               Text(
                 (clockin.isEmpty) ? "-" : clockin,
-                style: GoogleFonts.lexend(
+                style: normalTextStyle.copyWith(
                   fontWeight: regular,
                   fontSize: 15,
                 ),
               ),
               Text(
                 (clockout.isEmpty) ? "-" : clockout,
-                style: GoogleFonts.lexend(
+                style: normalTextStyle.copyWith(
                   fontWeight: regular,
                   fontSize: 15,
                 ),
@@ -297,7 +294,7 @@ class _RiwayatPageViewState extends State<RiwayatPageView> {
             children: [
               Text(
                 "${DateFormat("EEE, dd MMM yyyy", "id_ID").format(controller.startDate.add(Duration(days: index)))}",
-                style: blackTextStyle.copyWith(
+                style: normalTextStyle.copyWith(
                   fontWeight: semiBold,
                   fontSize: 16,
                 ),
@@ -305,7 +302,7 @@ class _RiwayatPageViewState extends State<RiwayatPageView> {
               const Gap(20),
               Text(
                 "Office (08:00-16:45)",
-                style: GoogleFonts.outfit(
+                style: normalTextStyle.copyWith(
                   fontWeight: FontWeight.w300,
                   fontSize: 14,
                 ),
@@ -340,7 +337,7 @@ class _RiwayatPageViewState extends State<RiwayatPageView> {
                             Text(
                               "Detail log Anda akan muncul jika Anda telah melakukan clock in/out.",
                               textAlign: TextAlign.center,
-                              style: blackTextStyle.copyWith(
+                              style: normalTextStyle.copyWith(
                                 fontWeight: regular,
                                 fontSize: 14,
                               ),
@@ -354,7 +351,7 @@ class _RiwayatPageViewState extends State<RiwayatPageView> {
                             // Text(
                             //   "Anda tidak ada shift di tanggal ini",
                             //   textAlign: TextAlign.center,
-                            //   style: blackTextStyle.copyWith(
+                            //   style: normalTextStyle.copyWith(
                             //     fontWeight: regular,
                             //     fontSize: 14,
                             //   ),
@@ -372,7 +369,7 @@ class _RiwayatPageViewState extends State<RiwayatPageView> {
                                       (clockin.isEmpty)
                                           ? "Belum Clock-In"
                                           : clockin,
-                                      style: blackTextStyle.copyWith(
+                                      style: normalTextStyle.copyWith(
                                         fontWeight: semiBold,
                                         fontSize: 14,
                                       ),
@@ -380,7 +377,7 @@ class _RiwayatPageViewState extends State<RiwayatPageView> {
                                     new Spacer(),
                                     Text(
                                       "Status Pengajuan",
-                                      style: blackTextStyle.copyWith(
+                                      style: normalTextStyle.copyWith(
                                         fontWeight: medium,
                                         fontSize: 12,
                                       ),
@@ -403,7 +400,7 @@ class _RiwayatPageViewState extends State<RiwayatPageView> {
                                       (clockout.isEmpty)
                                           ? "Belum Clock-Out"
                                           : clockout,
-                                      style: blackTextStyle.copyWith(
+                                      style: normalTextStyle.copyWith(
                                         fontWeight: semiBold,
                                         fontSize: 14,
                                       ),
@@ -411,7 +408,7 @@ class _RiwayatPageViewState extends State<RiwayatPageView> {
                                     new Spacer(),
                                     Text(
                                       "Status Pengajuan",
-                                      style: blackTextStyle.copyWith(
+                                      style: normalTextStyle.copyWith(
                                         fontWeight: medium,
                                         fontSize: 12,
                                       ),
@@ -449,8 +446,8 @@ class ListTileInfo extends StatelessWidget {
       children: [
         Text(
           title,
-          style: blackTextStyle.copyWith(
-            fontSize: 16,
+          style: normalTextStyle.copyWith(
+            fontSize: 14,
           ),
         ),
         Text(

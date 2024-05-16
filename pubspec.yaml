@@ -6,6 +6,8 @@ environment:
   sdk: ">=3.2.6 <4.0.0"
 
 dependencies:
+  hive: ^2.2.3
+  hive_flutter: any
   cupertino_icons: ^1.0.2
   get: 4.6.6
   carousel_slider: 4.2.1
@@ -38,6 +40,8 @@ dependencies:
   shimmer: ^3.0.0
 
 dev_dependencies:
+  hive_generator: any
+  build_runner: any
   flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter

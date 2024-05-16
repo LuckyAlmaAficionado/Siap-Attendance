@@ -33,6 +33,8 @@ class Data {
         divisi: DivisiClass.fromJson(json["divisi"]),
       );
 
+  get user => null;
+
   Map<String, dynamic> toJson() => {
         "divisi": divisi.toJson(),
       };

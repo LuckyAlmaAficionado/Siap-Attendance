@@ -7,8 +7,9 @@ import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:latlong2/latlong.dart';
 
-import 'package:talenta_app/app/controllers/authentication_controller.dart';
-import 'package:talenta_app/app/modules/locations_page/controllers/locations_page_controller.dart';
+import 'package:talenta_app/app/controllers/model_controller.dart';
+import 'package:talenta_app/app/modules/locations/controllers/locations_page_controller.dart';
+import 'package:talenta_app/app/shared/button/button_1.dart';
 import 'package:talenta_app/app/shared/loading_dialog.dart';
 import 'package:talenta_app/app/shared/theme.dart';
 
@@ -23,7 +24,14 @@ class LocationsPageView extends StatefulWidget {
 
 class _LocationsPageViewState extends State<LocationsPageView> {
   final controller = Get.put(LocationsPageController());
-  final authC = Get.find<AuthenticationController>();
+  final m = Get.find<ModelController>();
+  String status = "";
+
+  @override
+  void initState() {
+    super.initState();
+    status = Get.arguments;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +47,7 @@ class _LocationsPageViewState extends State<LocationsPageView> {
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return LoadingDialog(
-                        text: "Tunggu Sebentar Yaa...",
-                        icon: Icons.abc, // Ganti dengan ikon yang sesuai
-                      );
+                          text: "Tunggu Sebentar Yaa...", icon: Icons.abc);
                     } else if (snapshot.hasData) {
                       final position = snapshot.data!;
 
@@ -76,13 +82,12 @@ class _LocationsPageViewState extends State<LocationsPageView> {
                             style: LocationMarkerStyle(
                               showHeadingSector: false,
                               marker: DefaultLocationMarker(
-                                child: authC.data.value!.data.user.avatar!
-                                        .isNotEmpty
+                                child: m.u.value.user.avatar!.isNotEmpty
                                     ? ClipRRect(
                                         borderRadius:
                                             BorderRadius.circular(100),
                                         child: Image.network(
-                                            "${authC.data.value!.data.user.avatar}"),
+                                            "${m.u.value.user.avatar}"),
                                       )
                                     : Icon(Iconsax.user),
                               ),
@@ -101,17 +106,15 @@ class _LocationsPageViewState extends State<LocationsPageView> {
               Container(
                 width: Get.width,
                 padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: lightGreyColor,
-                ),
+                decoration: BoxDecoration(color: lightGreyColor),
                 child: LayoutBuilder(
                   builder: (context, constraints) => Column(
                     children: [
-                      CustomButton(
+                      Button1(
                         title: "Lanjutkan Absensi",
                         onTap: () async =>
-                            await controller.checkCurrentLocation(),
-                      )
+                            await controller.checkCurrentLocation(status),
+                      ),
                     ],
                   ),
                 ),

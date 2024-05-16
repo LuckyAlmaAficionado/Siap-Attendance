@@ -24,6 +24,9 @@ abstract class Routes {
   static const LOCATIONS_PAGE = _Paths.LOCATIONS_PAGE;
   static const AUTOLOGIN = _Paths.AUTOLOGIN;
   static const DETAIL_KARYAWAN = _Paths.DETAIL_KARYAWAN;
+  static const LOGIN = _Paths.LOGIN;
+  static const AUTHENTICATION = _Paths.AUTHENTICATION;
+  static const ATTENDANCE = _Paths.ATTENDANCE;
 }
 
 abstract class _Paths {
@@ -49,4 +52,7 @@ abstract class _Paths {
   static const LOCATIONS_PAGE = '/locations-page';
   static const AUTOLOGIN = '/autologin';
   static const DETAIL_KARYAWAN = '/detail-karyawan';
+  static const LOGIN = '/login';
+  static const AUTHENTICATION = '/authentication';
+  static const ATTENDANCE = '/attendance';
 }

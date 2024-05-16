@@ -16,7 +16,7 @@ class SignInPageView extends GetView<SignInPageController> {
   SignInPageView({Key? key}) : super(key: key);
 
   final controller = Get.put(SignInPageController());
-  final authC = Get.find<AuthenticationController>();
+  final authC = Get.put(AuthenticationController(), permanent: true);
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -24,6 +24,7 @@ class SignInPageView extends GetView<SignInPageController> {
       future: authC.autoLoginIsTrue(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
+          // Jika loading ...
           return SplashPageView();
         } else if (snapshot.hasData) {
           bool result = snapshot.data as bool;
@@ -56,7 +57,7 @@ class SignInPageView extends GetView<SignInPageController> {
         }
 
         return Scaffold(
-          body: Container(),
+          body: Container(child: Center(child: Text("Something Error"))),
         );
       },
     );
@@ -169,18 +170,19 @@ class SignInView extends StatelessWidget {
                     )),
               ),
               const SizedBox(height: 30),
-              CustomButton(
-                title: 'Sign In',
-                onTap: () {
-                  Utils().informationUtils(
-                    "Loading..!",
-                    "Sebentar yaa",
-                    false,
-                  );
+              if (true)
+                CustomButton(
+                  title: 'Sign In',
+                  onTap: () {
+                    Utils().informationUtils(
+                      "Loading..!",
+                      "Sebentar yaa",
+                      false,
+                    );
 
-                  controller.login();
-                },
-              ),
+                    controller.login();
+                  },
+                ),
             ],
           ),
         ),

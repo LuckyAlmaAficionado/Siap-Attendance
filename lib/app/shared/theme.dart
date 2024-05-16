@@ -3,7 +3,7 @@ import "package:google_fonts/google_fonts.dart";
 import "package:hexcolor/hexcolor.dart";
 
 // .. Light
-Color lightGreyColor = HexColor("F5F1EE");
+Color lightGreyColor = Colors.grey.shade50;
 Color lightBlueColor = HexColor("53C1F9");
 
 // .. Dark
@@ -13,13 +13,14 @@ Color darkBlueColor = HexColor("191D88");
 Color darkRedColor = HexColor("E74C3C");
 
 // .. Normal
+Color redColor = Colors.red;
 Color blueColor = HexColor("3085FE");
 Color whiteColor = Colors.white;
 Color blackColor = Colors.black;
 Color greenColor = Colors.green;
 Color greenColor1 = HexColor("91C789");
 
-TextStyle normalTextStyle = GoogleFonts.nunito(color: Colors.black);
+// TextStyle normalTextStyle = GoogleFonts.nunito(color: Colors.black);
 
 TextStyle blackTextStyle = GoogleFonts.nunito(color: Colors.black);
 
@@ -37,8 +38,13 @@ TextStyle blueTextStyle = GoogleFonts.nunito(color: Colors.blue[800]);
 
 TextStyle redTextStyle = GoogleFonts.nunito(color: Colors.red);
 
+TextStyle normalTextStyle = GoogleFonts.plusJakartaSans(
+  color: blackColor,
+  fontSize: 14,
+);
+
 // ... TEXTSTYLE APPBAR
-TextStyle appBarTextStyle = GoogleFonts.nunito(
+TextStyle appBarTextStyle = normalTextStyle.copyWith(
   fontWeight: regular,
   color: whiteColor,
   fontSize: 18,

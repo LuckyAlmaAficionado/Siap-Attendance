@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:talenta_app/app/models/google_calendar.dart';
+import 'package:talenta_app/app/shared/error_alert.dart';
 
 class DateController extends GetxController {
   List<DateTime> holidays = [];
@@ -45,7 +46,10 @@ class DateController extends GetxController {
         }).toList();
       }
     } catch (e) {
-      throw Exception(e);
+      Get.dialog(ErrorAlert(
+        msg: e.toString(),
+        methodName: "fetchHolidayDate | date_controller.dart",
+      ));
     }
   }
 
@@ -62,11 +66,11 @@ class DateController extends GetxController {
     return DateTime.now();
   }
 
-  Future<DateTime> selectDate(BuildContext context) async {
+  Future<DateTime> selectDate(BuildContext context, DateTime picker) async {
     // ... mendapatkan tanggal
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: picker,
       firstDate: DateTime(2015, 8),
       lastDate: DateTime(2101),
     );

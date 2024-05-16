@@ -33,7 +33,7 @@ class DaftarAbsensiPageView extends GetView<DaftarAbsensiPageController> {
             ],
             unselectedLabelColor: darkGreyColor,
             labelColor: blueColor,
-            labelStyle: darkGreyTextStyle.copyWith(fontWeight: medium),
+            labelStyle: normalTextStyle.copyWith(fontWeight: regular),
           ),
           Expanded(
             child: TabBarView(

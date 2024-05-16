@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:talenta_app/app/controllers/authentication_controller.dart';
+import 'package:talenta_app/app/controllers/model_controller.dart';
 
 class AbsenPageController extends GetxController {
-  final authC = Get.find<AuthenticationController>();
+  final m = Get.find<ModelController>();
 }

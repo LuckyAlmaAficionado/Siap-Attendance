@@ -4,8 +4,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:talenta_app/app/controllers/authentication_controller.dart';
 
+import 'package:talenta_app/app/controllers/model_controller.dart';
 import 'package:talenta_app/app/models/user_absensi.dart';
 import 'package:talenta_app/app/shared/theme.dart';
 
@@ -15,9 +15,8 @@ class DetailClockInView extends GetView {
 
   @override
   Widget build(BuildContext context) {
-    // Extract UserAbsensi instance from Get.arguments, handling possible null value
-    UserAbsensi? absen = Get.arguments.value as UserAbsensi?;
-    final authC = Get.find<AuthenticationController>();
+    ModelAbsensi? absen = Get.arguments as ModelAbsensi?;
+    final ModelController m = Get.find<ModelController>();
 
     if (absen == null) {
       // If absen is null, handle gracefully (e.g., show error message)
@@ -26,12 +25,11 @@ class DetailClockInView extends GetView {
           title: Text('Error'),
         ),
         body: Center(
-          child: Text('Error: UserAbsensi data not available'),
+          child: Text('Error: ModelAbsensi data not available'),
         ),
       );
     }
 
-    print('${absen.urlImage}');
     return Scaffold(
         appBar: AppBar(
           title: Text(
@@ -80,16 +78,15 @@ class DetailClockInView extends GetView {
                                 child: Container(
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    border: Border.all(
-                                      width: 2,
-                                      color: darkBlueColor,
-                                    ),
+                                    border:
+                                        Border.all(width: 2, color: whiteColor),
                                   ),
                                   child: CircleAvatar(
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(100),
                                       child: Image.network(
-                                        "https://yt3.ggpht.com/ERDsampD88U7cvmuqz1jXcpxIqiekRxIUIcf09z9h1riUdlIu_-E43SkLcB6fzWRj9oGg3oM=s108-c-k-c0x00ffffff-no-rj",
+                                        // "https://yt3.ggpht.com/ERDsampD88U7cvmuqz1jXcpxIqiekRxIUIcf09z9h1riUdlIu_-E43SkLcB6fzWRj9oGg3oM=s108-c-k-c0x00ffffff-no-rj",
+                                        "${m.u.value.user.avatar}",
                                         fit: BoxFit.cover,
                                         filterQuality: FilterQuality.high,
                                       ),
@@ -109,12 +106,12 @@ class DetailClockInView extends GetView {
                     child: Container(
                       width: Get.width,
                       child: Image.network(
-                        headers: {"Authorization": "Bearer ${authC.token}"},
+                        headers: {"Authorization": "Bearer ${m.u.value.token}"},
                         loadingBuilder: (context, child, loadingProgress) =>
                             loadingProgress == null
                                 ? child
                                 : Center(child: CircularProgressIndicator()),
-                        "https://backend-siap-production.up.railway.app/api/v1/absensi/${absen.urlImage}",
+                        "http://192.168.5.9:8080/api/fileSystem/${absen.image}",
                         filterQuality: FilterQuality.high,
                         fit: BoxFit.fitWidth,
                       ),
@@ -125,7 +122,8 @@ class DetailClockInView extends GetView {
             ),
             Expanded(
               child: ListView(
-                padding: const EdgeInsets.all(16.0),
+                physics: BouncingScrollPhysics(),
+                padding: const EdgeInsets.all(10.0),
                 children: [
                   _buildListTile(
                       'Waktu ${absen.type}',
@@ -151,16 +149,12 @@ class DetailClockInView extends GetView {
         ));
   }
 
-  ListTile _buildListTile(String title, String subtitle) {
-    return ListTile(
-      title: Text(
-        title,
-        style: darkGreyTextStyle,
-      ),
-      subtitle: Text(
-        subtitle,
-        style: blackTextStyle,
-      ),
-    );
-  }
+  ListTile _buildListTile(String title, String subtitle) => ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 15),
+        title: Text(
+          title,
+          style: normalTextStyle.copyWith(color: darkGreyColor),
+        ),
+        subtitle: Text(subtitle, style: normalTextStyle),
+      );
 }
