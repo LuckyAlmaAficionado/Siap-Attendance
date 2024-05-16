@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
+
 import 'package:talenta_app/app/controllers/api_controller.dart';
-import 'package:talenta_app/app/controllers/authentication_controller.dart';
 import 'package:talenta_app/app/controllers/file_picker_controller.dart';
-import 'package:talenta_app/app/controllers/model_controller.dart';
 
 class DaftarAbsensiPageController extends GetxController
     with GetTickerProviderStateMixin {

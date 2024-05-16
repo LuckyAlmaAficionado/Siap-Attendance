@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 
 import 'package:camera/camera.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
 import 'package:talenta_app/app/controllers/api_controller.dart';
@@ -45,16 +44,24 @@ class CameraPageController extends GetxController {
         quality: 40,
       );
 
-  Future<void> onPressButton() async {
+  Future<void> onPressButton(String s) async {
     if (!cameraC.value.isInitialized) return;
 
     try {
-      imgPath((await cameraC.takePicture()).path);
-      File img = File((await compress(File(imgPath.value)))!.path);
+      XFile p = await cameraC.takePicture();
 
-      status == "argument-izin"
-          ? await a.permitApplication(note.text, img)
-          : await a.attendance(note.text, img);
+      imgPath(p.path);
+      File img = File((await compress(File(p.path)))!.path);
+
+      if (s == "argument-izin") {
+        print("masuk ke izin");
+        await a.permitApplication(note.text, img);
+      } else {
+        print("masuk ke absen");
+        await a.attendance(note.text, img);
+      }
+
+      status = "";
     } catch (e) {
       Get.dialog(ErrorAlert(
         msg: e.toString(),

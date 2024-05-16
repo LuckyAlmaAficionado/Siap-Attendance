@@ -13,8 +13,6 @@ import 'package:talenta_app/app/shared/button/button_1.dart';
 import 'package:talenta_app/app/shared/loading_dialog.dart';
 import 'package:talenta_app/app/shared/theme.dart';
 
-import '../../../shared/utils.dart';
-
 class LocationsPageView extends StatefulWidget {
   const LocationsPageView({Key? key}) : super(key: key);
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
+
 import 'package:talenta_app/app/controllers/model_controller.dart';
 import 'package:talenta_app/app/modules/akun_services/info_saya/info_personal_page_view.dart';
 import 'package:talenta_app/app/shared/theme.dart';

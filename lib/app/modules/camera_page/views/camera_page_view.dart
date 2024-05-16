@@ -75,7 +75,7 @@ class CameraPageView extends GetView<CameraPageController> {
                               "tunggu sebentar",
                               false,
                             );
-                            await controller.onPressButton();
+                            await controller.onPressButton(controller.status);
                           }
                         } else {
                           Utils().informationUtils(
@@ -83,7 +83,7 @@ class CameraPageView extends GetView<CameraPageController> {
                             "tunggu sebentar",
                             false,
                           );
-                          await controller.onPressButton();
+                          await controller.onPressButton(controller.status);
                         }
 
                         controller.note.text = ""; // set default null

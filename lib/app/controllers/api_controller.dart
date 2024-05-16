@@ -42,7 +42,9 @@ class ApiController extends GetxController {
     "fetchAllEmployee": "api/v1/all-users",
     "todayAttendance": "api/v1/absensi",
     "permit": "api/izin/find",
-    "detailAttendance": "api/v1/absensi/detail"
+    "addPermit": "api/izin",
+    "detailAttendance": "api/v1/absensi/detail",
+    "attendance": "api/v1/user-absensi",
   };
 
   // === save model data
@@ -165,8 +167,9 @@ class ApiController extends GetxController {
   }
 
   Future attendance(String note, File img) async {
+    print('masuk attendance');
     try {
-      final url = Uri.parse("uri");
+      final url = Uri.parse("$BASE_URL/${listApi['attendance']}");
 
       var req = http.MultipartRequest("POST", url);
 
@@ -219,7 +222,7 @@ class ApiController extends GetxController {
 
   Future permitApplication(String note, File img) async {
     try {
-      final url = Uri.parse("$BASE_URL/api/izin");
+      final url = Uri.parse("$BASE_URL/${listApi['addPermit']}");
       var req = http.MultipartRequest("POST", url);
 
       req.files.add(await http.MultipartFile.fromPath("image", img.path));
