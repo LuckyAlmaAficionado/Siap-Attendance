@@ -1,14 +1,17 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+
 import 'package:gap/gap.dart';
-
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:talenta_app/app/controllers/authentication_controller.dart';
-import 'package:talenta_app/app/controllers/camera_data_controller.dart';
 
+import 'package:talenta_app/app/controllers/camera_data_controller.dart';
+import 'package:talenta_app/app/controllers/model_controller.dart';
 import 'package:talenta_app/app/modules/cuti_page/controllers/cuti_page_controller.dart';
+import 'package:talenta_app/app/shared/textfield/textfield_1.dart';
 import 'package:talenta_app/app/shared/theme.dart';
 import 'package:talenta_app/app/shared/utils.dart';
 
@@ -21,8 +24,10 @@ class AjukanPerubahanDataView extends StatefulWidget {
 
 class _PengajuanCutiViewState extends State<AjukanPerubahanDataView> {
   final cutiC = Get.put(CutiPageController());
-  final authC = Get.find<AuthenticationController>();
+  final m = Get.find<ModelController>();
   String pathFile = "";
+
+  TextEditingController opsi = TextEditingController();
 
   String pickDate = "";
   String opsiData = "Pilih data";
@@ -64,6 +69,7 @@ class _PengajuanCutiViewState extends State<AjukanPerubahanDataView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: whiteColor,
       appBar: AppBar(
         centerTitle: true,
         title: Text(
@@ -81,33 +87,17 @@ class _PengajuanCutiViewState extends State<AjukanPerubahanDataView> {
                 await showDialogOpsi(context);
                 setState(() {});
               },
-              child: Container(
-                padding: const EdgeInsets.all(15),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.work_outline_outlined,
-                      color: darkGreyColor,
-                    ),
-                    const SizedBox(width: 10),
-                    SizedBox(
-                      width: Get.width * 0.6,
-                      child: Text(
-                        opsiData,
-                        maxLines: 2,
-                        style: blackTextStyle.copyWith(
-                          fontSize: 16,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                    new Spacer(),
-                    Icon(
-                      Icons.keyboard_arrow_down_sharp,
-                      color: darkGreyColor,
-                    ),
-                  ],
-                ),
+              child: TextField1(
+                onTap: () async {
+                  await showDialogOpsi(context);
+                  opsi.text = opsiData;
+                  setState(() {});
+                },
+                readOnly: true,
+                hintText: opsiData,
+                controller: opsi,
+                preffixIcon: Icon(Iconsax.data),
+                suffixIcon: Icon(Iconsax.arrow_bottom),
               ),
             ),
 
@@ -131,7 +121,7 @@ class _PengajuanCutiViewState extends State<AjukanPerubahanDataView> {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(100),
                               child: Image.network(
-                                "${authC.data.value!.data.user.avatar}",
+                                "${m.u.value.user.avatar}",
                                 errorBuilder: (context, error, stackTrace) =>
                                     Icon(
                                   Icons.person,
@@ -186,9 +176,9 @@ class _PengajuanCutiViewState extends State<AjukanPerubahanDataView> {
                         thickness: 1,
                         color: darkGreyColor,
                       ),
-                      CustomTextfield(
-                        hint: "Ubah Menjadi",
-                        prefix: Icons.edit_outlined,
+                      TextField1(
+                        hintText: "Ubah menjadi",
+                        preffixIcon: Icon(Iconsax.edit_2),
                       ),
                     ],
                   ),
@@ -197,9 +187,9 @@ class _PengajuanCutiViewState extends State<AjukanPerubahanDataView> {
               thickness: 1,
               color: darkGreyColor,
             ),
-            CustomTextfield(
-              hint: "Deskripsi",
-              prefix: Icons.format_align_left,
+            TextField1(
+              hintText: "Deskripsi",
+              preffixIcon: Icon(Iconsax.note_1),
             ),
             // ..
             Divider(
@@ -209,6 +199,7 @@ class _PengajuanCutiViewState extends State<AjukanPerubahanDataView> {
             (opsiData.contains("Gambar"))
                 ? SizedBox()
                 : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       GestureDetector(
                         onTap: () {
@@ -220,7 +211,7 @@ class _PengajuanCutiViewState extends State<AjukanPerubahanDataView> {
                           child: Row(
                             children: [
                               Icon(
-                                Icons.file_copy_outlined,
+                                Iconsax.document,
                                 color: darkGreyColor,
                               ),
                               const SizedBox(width: 10),
@@ -232,8 +223,8 @@ class _PengajuanCutiViewState extends State<AjukanPerubahanDataView> {
                                         ? cutiC.filePath.value.split("/").last
                                         : "Unggah file",
                                     maxLines: 2,
-                                    style: blackTextStyle.copyWith(
-                                      fontSize: 16,
+                                    style: normalTextStyle.copyWith(
+                                      fontSize: 14,
                                     ),
                                   ),
                                 ),
@@ -244,7 +235,7 @@ class _PengajuanCutiViewState extends State<AjukanPerubahanDataView> {
                       ),
                       Text(
                         "ukuran maksimal file 10 MB",
-                        style: darkGreyTextStyle,
+                        style: normalTextStyle.copyWith(color: darkGreyColor),
                       ),
                       Divider(
                         thickness: 1,
@@ -273,11 +264,11 @@ class _PengajuanCutiViewState extends State<AjukanPerubahanDataView> {
                     onCancel: () {},
                     confirmTextColor: whiteColor,
                     cancelTextColor: blackColor,
-                    titleStyle: blackTextStyle.copyWith(
+                    titleStyle: normalTextStyle.copyWith(
                       fontWeight: semiBold,
                       fontSize: 18,
                     ),
-                    middleTextStyle: blackTextStyle.copyWith(
+                    middleTextStyle: normalTextStyle.copyWith(
                       fontWeight: regular,
                       fontSize: 14,
                     ),
@@ -285,7 +276,7 @@ class _PengajuanCutiViewState extends State<AjukanPerubahanDataView> {
                 },
                 child: Text(
                   "Batal",
-                  style: darkGreyTextStyle,
+                  style: normalTextStyle,
                 ),
               ),
             )
@@ -343,7 +334,7 @@ class _PengajuanCutiViewState extends State<AjukanPerubahanDataView> {
                         const Gap(5),
                         Text(
                           "Kamera",
-                          style: blackTextStyle.copyWith(
+                          style: normalTextStyle.copyWith(
                             fontWeight: regular,
                             fontSize: 16,
                           ),
@@ -376,7 +367,7 @@ class _PengajuanCutiViewState extends State<AjukanPerubahanDataView> {
                         const Gap(5),
                         Text(
                           "Galeri",
-                          style: blackTextStyle.copyWith(
+                          style: normalTextStyle.copyWith(
                             fontWeight: regular,
                             fontSize: 16,
                           ),
@@ -415,7 +406,7 @@ class _PengajuanCutiViewState extends State<AjukanPerubahanDataView> {
                   const SizedBox(width: 5),
                   Text(
                     "Dilegasi Ke",
-                    style: blackTextStyle.copyWith(
+                    style: normalTextStyle.copyWith(
                       fontWeight: semiBold,
                       fontSize: 18,
                     ),
@@ -431,7 +422,7 @@ class _PengajuanCutiViewState extends State<AjukanPerubahanDataView> {
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.all(0),
                     hintText: "Cari...",
-                    hintStyle: darkGreyTextStyle.copyWith(
+                    hintStyle: normalTextStyle.copyWith(
                       fontWeight: extraLight,
                     ),
                     prefixIcon: Icon(Icons.search),
@@ -511,7 +502,7 @@ class _PengajuanCutiViewState extends State<AjukanPerubahanDataView> {
                   const SizedBox(width: 5),
                   Text(
                     "Tipe cuti",
-                    style: blackTextStyle.copyWith(
+                    style: normalTextStyle.copyWith(
                       fontWeight: semiBold,
                       fontSize: 18,
                     ),
@@ -533,7 +524,7 @@ class _PengajuanCutiViewState extends State<AjukanPerubahanDataView> {
                       },
                       title: Text(
                         opsiPerubahanData[index],
-                        style: darkGreyTextStyle.copyWith(
+                        style: normalTextStyle.copyWith(
                           fontWeight: regular,
                           fontSize: 16,
                         ),
@@ -569,23 +560,13 @@ class CustomTextfield extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
-      style: blackTextStyle.copyWith(
-        fontSize: 16,
-      ),
+      style: normalTextStyle.copyWith(fontSize: 16),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: darkGreyTextStyle,
-        prefixIcon: Icon(
-          prefix,
-          color: darkGreyColor,
-        ),
-        border: OutlineInputBorder(
-          borderSide: BorderSide.none,
-        ),
-        suffixIcon: Icon(
-          suffix,
-          color: darkGreyColor,
-        ),
+        hintStyle: normalTextStyle,
+        prefixIcon: Icon(prefix, color: darkGreyColor),
+        border: OutlineInputBorder(borderSide: BorderSide.none),
+        suffixIcon: Icon(suffix, color: darkGreyColor),
       ),
     );
   }

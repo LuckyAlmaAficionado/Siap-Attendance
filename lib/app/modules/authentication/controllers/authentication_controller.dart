@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
-import 'package:talenta_app/app/controllers/api_controller.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:talenta_app/app/controllers/api_controller.dart';
+import 'package:talenta_app/app/shared/error_alert.dart';
 import 'package:talenta_app/app/shared/loading/loading1.dart';
 import 'package:talenta_app/app/shared/utils.dart';
 
@@ -18,7 +19,7 @@ class AuthController extends GetxController {
   RxString tempPin = "".obs;
   RxString status = "".obs;
 
-  final _hive = Hive.box("testBox");
+  final sp = SharedPreferences.getInstance();
 
   TextEditingController email = TextEditingController(
     text: "superAdmin@gmail.com",
@@ -45,28 +46,39 @@ class AuthController extends GetxController {
   // ============= HIVE ACCOUNT ===============
 
   Future login(String email, String password) async {
-    api.login(email, password).then((value) => (value)
+    await api.login(email, password).then((value) => (value)
         ? Get.off(() => MenuView(), transition: Transition.cupertino)
         : Utils().snackbarC("Failed", "email or password false", false));
   }
 
   Future saveEmailAndPassword(String email, String password) async {
-    await _hive.put("email", email);
-    await _hive.put("password", password);
+    SharedPreferences sps = await sp;
+    sps.setString("email", email);
+    sps.setString("password", password);
   }
 
   Future checkEmailAndPassword() async {
-    if (await _hive.get("email") != null &&
-        await _hive.get('password') != null) {}
-    return {
-      "email": await _hive.get("email") ?? "",
-      "password": await _hive.get("password") ?? ""
-    };
+    SharedPreferences sps = await sp;
+
+    String email = sps.get("email").toString();
+    String password = sps.get("password").toString();
+
+    if (email.isNotEmpty && password.isNotEmpty) {
+      return login(email, password).then((value) => {
+            "email": email,
+            "password": password,
+          });
+    }
+
+    return {"email": "", "password": ""};
   }
 
   Future hiveRemoveEmailAndPassword() async {
-    await _hive.delete("email");
-    await _hive.delete("password");
+    SharedPreferences sps = await sp;
+
+    sps.remove("email");
+    sps.remove("password");
+
     await hiveRemovePin();
   }
 
@@ -83,21 +95,21 @@ class AuthController extends GetxController {
   }
 
   Future hiveSetPin(String value) async {
-    await _hive.put("pin-code", value);
+    SharedPreferences sps = await sp;
+    sps.setString("pin-code", value);
   }
 
   Future hiveRemovePin() async {
-    await _hive.delete("pin-code");
+    SharedPreferences sps = await sp;
+    sps.remove("pin-code");
   }
 
   Future hiveCheckPin() async {
-    print(await _hive.get("pin-code"));
-    return await _hive.get("pin-code");
+    SharedPreferences sps = await sp;
+    return sps.get("pin-code");
   }
 
   onCheckPinValidator(String value, String status) async {
-    print(this.status.value);
-
     if (status == "remove-pin-code") {
       print("remove-pin-code");
       await hiveRemovePin();
@@ -127,5 +139,21 @@ class AuthController extends GetxController {
     }
 
     tempPin("");
+  }
+
+  Future hiveAutoLogin() async {
+    SharedPreferences sps = await sp;
+    try {
+      String email = sps.get("email").toString();
+      String password = sps.get("password").toString();
+      if (email.isNotEmpty && password.isNotEmpty) {
+        // Jika password dan email tidak kosong
+      }
+    } on Exception catch (e) {
+      Get.dialog(ErrorAlert(
+        msg: e.toString(),
+        methodName: "hiveAutoLogin | authentication_controller",
+      ));
+    }
   }
 }

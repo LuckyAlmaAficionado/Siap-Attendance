@@ -16,7 +16,6 @@ import 'package:talenta_app/app/shared/theme.dart';
 import '../../../controllers/date_controller.dart';
 import '../../../models/google_calendar.dart';
 import '../../../routes/app_pages.dart';
-import '../../dashboard_page/views/dashboard_view.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -231,7 +230,10 @@ class Pengumuman extends StatelessWidget {
                                                     loadingProgress) =>
                                                 loadingProgress == null
                                                     ? child
-                                                    : CircularProgressIndicator(),
+                                                    : Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      ),
                                             "https://static.vecteezy.com/system/resources/previews/024/552/492/non_2x/eid-al-adha-greetings-banner-selamat-hari-raya-idul-adha-means-happy-eid-mubarak-banner-design-vector.jpg",
                                             fit: BoxFit.cover,
                                           ),
@@ -564,4 +566,30 @@ class PanelIzin extends StatelessWidget {
       ),
     );
   }
+}
+
+Container IconWidgetService(IconData icons, String title, Color colors) {
+  return Container(
+    width: 80,
+    height: 90,
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Material(
+          elevation: 5,
+          borderRadius: BorderRadius.circular(100),
+          child: Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(shape: BoxShape.circle, color: colors),
+            child: Icon(icons, size: 25, color: whiteColor),
+          ),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          title,
+          style: blackTextStyle.copyWith(fontSize: 11, fontWeight: regular),
+        ),
+      ],
+    ),
+  );
 }

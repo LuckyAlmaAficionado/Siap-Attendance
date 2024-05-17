@@ -13,8 +13,6 @@ import '../modules/cuti_page/views/cuti_page_view.dart';
 import '../modules/daftar_absensi_page/bindings/daftar_absensi_page_binding.dart';
 import '../modules/daftar_absensi_page/views/daftar_absensi_page_view.dart';
 import '../modules/daftar_absensi_page/views/pengajuan_absensi_view.dart';
-import '../modules/dashboard_page/bindings/dashboard_page_binding.dart';
-import '../modules/dashboard_page/views/dashboard_page_view.dart';
 import '../modules/detail_karyawan/bindings/detail_karyawan_binding.dart';
 import '../modules/detail_karyawan/views/detail_karyawan_view.dart';
 import '../modules/detail_pengumuman/bindings/detail_pengumuman_binding.dart';
@@ -29,8 +27,6 @@ import '../modules/persetujuan_page/bindings/persetujuan_page_binding.dart';
 import '../modules/persetujuan_page/views/persetujuan_page_view.dart';
 import '../modules/reimbursement_page/bindings/reimbursement_page_binding.dart';
 import '../modules/reimbursement_page/views/reimbursement_page_view.dart';
-import '../modules/sign_in_page/bindings/sign_in_page_binding.dart';
-import '../modules/sign_in_page/views/sign_in_page_view.dart';
 import '../modules/slip_gaji_page/bindings/slip_gaji_page_binding.dart';
 import '../modules/slip_gaji_page/views/slip_gaji_page_view.dart';
 import '../modules/telat_masuk_page/bindings/telat_masuk_page_binding.dart';
@@ -60,16 +56,6 @@ class AppPages {
     GetPage(
       name: "/detail-info-absensi-view",
       page: () => DetailInfoAbsensiView(),
-    ),
-    GetPage(
-      name: _Paths.SIGN_IN_PAGE,
-      page: () => SignInPageView(),
-      binding: SignInPageBinding(),
-    ),
-    GetPage(
-      name: _Paths.DASHBOARD_PAGE,
-      page: () => DashboardPageView(),
-      binding: DashboardPageBinding(),
     ),
     GetPage(
       name: _Paths.CAMERA_PAGE,

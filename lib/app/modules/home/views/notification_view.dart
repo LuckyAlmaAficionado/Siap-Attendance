@@ -5,10 +5,10 @@ import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
 
 import 'package:talenta_app/app/modules/home/controllers/home_controller.dart';
+import 'package:talenta_app/app/shared/alert/alert-detail-inbox.dart';
 
 import '../../../routes/app_pages.dart';
 import '../../../shared/theme.dart';
-import '../../dashboard_page/views/detail_inbox_view.dart';
 
 class NotificationView extends StatefulWidget {
   const NotificationView({Key? key}) : super(key: key);

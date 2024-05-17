@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import 'package:camera/camera.dart';
@@ -17,7 +19,6 @@ import '../../../models/karyawan.dart';
 import '../../../routes/app_pages.dart';
 import '../../../shared/apps_version_failed.dart';
 import '../../../shared/utils.dart';
-import '../../camera_page/controllers/camera_page_controller.dart';
 
 class HomeController extends GetxController {
   final versionC = Get.put(VersionController());
@@ -43,7 +44,6 @@ class HomeController extends GetxController {
   void onInit() async {
     super.onInit();
     await validatorIzin();
-    await initCamera();
 
     if (u.user.manager == "1") await a.fetchAllEmployee();
 
@@ -54,23 +54,14 @@ class HomeController extends GetxController {
   }
 
   Future validatorIzin() async {
-    var res = await http.get(Uri.parse(
-        "http://192.168.5.9:8080/api/izin/c9ae6c55-ac04-4ca5-b088-5555b36d8957"));
+    log("validatorIzin");
+    var res = await http
+        .get(Uri.parse("http://192.168.5.9:8080/api/izin/${u.user.id}"));
 
     if (res.statusCode == 200) {
       isIzin(bool.parse(res.body));
       return isIzin.value;
     }
-  }
-
-  initCamera() async {
-    final camera = await availableCameras();
-    final frontCamera = camera.firstWhere(
-      (camera) => camera.lensDirection == CameraLensDirection.front,
-      orElse: () => camera.first,
-    );
-
-    Get.put(CameraPageController()..setCamera(frontCamera), permanent: true);
   }
 
   clockInAbsensi() async {

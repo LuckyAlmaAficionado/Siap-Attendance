@@ -12,6 +12,8 @@ class TextField1 extends StatelessWidget {
     this.hintText,
     this.textInputAction,
     this.onChanged,
+    this.onTap,
+    this.readOnly,
   });
 
   final TextEditingController? controller;
@@ -21,14 +23,18 @@ class TextField1 extends StatelessWidget {
   final Widget? preffixIcon;
   final bool? obsecure;
   final Function(String)? onChanged;
+  final Function()? onTap;
+  final bool? readOnly;
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       style: normalTextStyle,
+      readOnly: readOnly ?? false,
       controller: controller,
       autocorrect: false,
       autofillHints: null,
+      onTap: onTap,
       onChanged: onChanged,
       obscureText: obsecure ?? false,
       textInputAction: textInputAction,

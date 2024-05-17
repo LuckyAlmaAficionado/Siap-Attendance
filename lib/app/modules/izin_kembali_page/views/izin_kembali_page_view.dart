@@ -42,6 +42,7 @@ class IzinKembaliPageView extends GetView<IzinKembaliPageController> {
 
                   return ListView.builder(
                     itemCount: i.length,
+                    physics: BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
                       ModelIzin a = i[index];
 
@@ -94,16 +95,17 @@ class IzinKembaliPageView extends GetView<IzinKembaliPageController> {
               },
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Button1(
-              title: (homeC.isIzin.value) ? "Izin Kembali" : "Izin Keluar",
-              onTap: () => Get.toNamed(
-                Routes.LOCATIONS_PAGE,
-                arguments: "argument-izin",
+          if (m.ci.value.id != null)
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Button1(
+                title: (homeC.isIzin.value) ? "Izin Kembali" : "Izin Keluar",
+                onTap: () => Get.toNamed(
+                  Routes.LOCATIONS_PAGE,
+                  arguments: "argument-izin",
+                ),
               ),
             ),
-          ),
         ],
       ),
     );

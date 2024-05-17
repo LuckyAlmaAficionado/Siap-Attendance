@@ -48,36 +48,41 @@ class AbsenPageView extends GetView<AbsenPageController> {
           ),
         ),
         body: Padding(
-          padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
+          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
           child: ListView(
             children: [
-              Row(
-                children: [
-                  Text(
-                    "Daftar absensi",
-                    style: normalTextStyle.copyWith(
-                      fontWeight: semiBold,
-                      fontSize: 16,
-                    ),
-                  ),
-                  new Spacer(),
-                  GestureDetector(
-                    onTap: () => Get.toNamed(Routes.DAFTAR_ABSENSI_PAGE),
-                    child: Text(
-                      "Lihat Log",
-                      style: blueTextStyle.copyWith(
-                        fontWeight: regular,
-                        fontSize: 14,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  children: [
+                    Text(
+                      "Daftar absensi",
+                      style: normalTextStyle.copyWith(
+                        fontWeight: semiBold,
+                        fontSize: 16,
                       ),
                     ),
-                  )
-                ],
+                    new Spacer(),
+                    GestureDetector(
+                      onTap: () => Get.toNamed(Routes.DAFTAR_ABSENSI_PAGE),
+                      child: Text(
+                        "Lihat Log",
+                        style: blueTextStyle.copyWith(
+                          fontWeight: regular,
+                          fontSize: 14,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
               const SizedBox(height: 20),
               Column(
                 children: [
                   if (controller.m.ci.value.id != null)
                     ListTile(
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 20),
                       onTap: () => Get.to(
                         DetailClockInView(),
                         arguments: controller.m.ci.value,
@@ -113,6 +118,8 @@ class AbsenPageView extends GetView<AbsenPageController> {
                     ),
                   if (controller.m.co.value.id != null)
                     ListTile(
+                      contentPadding:
+                          const EdgeInsets.symmetric(horizontal: 20),
                       onTap: () {
                         Get.to(
                           DetailClockInView(),

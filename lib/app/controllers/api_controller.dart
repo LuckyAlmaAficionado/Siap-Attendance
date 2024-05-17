@@ -1,8 +1,7 @@
 import 'dart:convert';
-import 'dart:developer' as d;
+import 'dart:developer';
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -50,31 +49,37 @@ class ApiController extends GetxController {
   // === save model data
 
   final m = Get.find<ModelController>();
-  final dio = Dio();
 
   // ===
   Future login(String email, String password) async {
     try {
-      d.log("==== Start Login ====");
+      log("==== Start Login ====");
 
       Map<String, dynamic> body = {
         "email": "$email",
         "password": "$password",
       };
 
-      final res = await dio.post("${BASE_URL}/${listApi["login"]}", data: body);
+      Uri url = Uri.parse("${BASE_URL}/${listApi["login"]}");
+      final res = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode(body),
+      );
+
+      print(res.statusCode);
 
       if (res.statusCode == 200) {
-        final result = res.data;
+        final result = json.decode(res.body);
         m.u(ModelLogin.fromJson(result).data);
 
         await fetchTodayAttendance();
         await fetchPermitByUserId();
 
-        d.log("==== End Login ====");
+        log("==== End Login ====");
         return true;
       }
-      d.log("==== End Login Error ====");
+      log("==== End Login Error ====");
       return false;
     } catch (e) {
       Get.dialog(ErrorAlert(
@@ -85,7 +90,7 @@ class ApiController extends GetxController {
   }
 
   Future fetchAllEmployee() async {
-    d.log("==== fetchAll Employee ====");
+    log("==== fetchAll Employee ====");
     try {
       Uri url = Uri.parse("${BASE_URL}/${listApi["fetchAllEmployee"]}");
       final res = await http.get(url);
@@ -95,9 +100,9 @@ class ApiController extends GetxController {
         m.k(result.map((e) => Karyawan.fromJson(e)).toList());
         m.k.sort((a, b) => a.name!.compareTo(b.name!));
 
-        d.log("==== End fetchAllEmployee ====");
+        log("==== End fetchAllEmployee ====");
       }
-      d.log("==== End fetchAllEmployee Error ====");
+      log("==== End fetchAllEmployee Error ====");
     } catch (e) {
       Get.dialog(ErrorAlert(
           msg: e.toString(),
@@ -108,7 +113,7 @@ class ApiController extends GetxController {
   // ===== Attendance
 
   Future fetchDetailAttendance() async {
-    d.log("==== fetchDetailAttendance ====");
+    log("==== fetchDetailAttendance ====");
 
     try {
       Uri url = Uri.parse(
@@ -124,11 +129,11 @@ class ApiController extends GetxController {
         List result = json.decode(res.body);
         m.a(result.map((e) => ModelAbsensi.fromJson(e)).toList());
 
-        d.log("==== End fetchDetailAttendance ====");
+        log("==== End fetchDetailAttendance ====");
         return result.map((e) => ModelAbsensi.fromJson(e)).toList();
       }
 
-      d.log("==== End fetchDetailAttendance Error ====");
+      log("==== End fetchDetailAttendance Error ====");
       return null;
     } on HttpException catch (e) {
       Get.dialog(ErrorAlert(
@@ -139,7 +144,7 @@ class ApiController extends GetxController {
   }
 
   Future fetchTodayAttendance() async {
-    d.log("==== fetchTodayAttendance ====");
+    log("==== fetchTodayAttendance ====");
 
     try {
       Uri url = Uri.parse(
@@ -157,7 +162,7 @@ class ApiController extends GetxController {
         m.ci(null);
         m.co(null);
       }
-      d.log("==== End fetchTodayAttendance ====");
+      log("==== End fetchTodayAttendance ====");
     } on HttpException catch (e) {
       Get.dialog(ErrorAlert(
         msg: e.toString(),
@@ -166,8 +171,7 @@ class ApiController extends GetxController {
     }
   }
 
-  Future attendance(String note, File img) async {
-    print('masuk attendance');
+  Future submitAttendance(String note, File img) async {
     try {
       final url = Uri.parse("$BASE_URL/${listApi['attendance']}");
 
@@ -249,7 +253,7 @@ class ApiController extends GetxController {
   }
 
   Future fetchPermitByUserId() async {
-    d.log("==== fetchPermitByUserId ====");
+    log("==== fetchPermitByUserId ====");
 
     try {
       Uri url = Uri.parse("${BASE_URL}/${listApi['permit']}");
@@ -262,11 +266,11 @@ class ApiController extends GetxController {
         final result = json.decode(res.body);
         List dt = result['data'];
         List<ModelIzin> mi = dt.map((e) => ModelIzin.fromJson(e)).toList();
-        d.log("==== End fetchPermitByUserId ====");
+        log("==== End fetchPermitByUserId ====");
         return mi;
       }
 
-      d.log("==== fetchPermitByUserId Error ====");
+      log("==== fetchPermitByUserId Error ====");
 
       return null;
     } on HttpException catch (e) {

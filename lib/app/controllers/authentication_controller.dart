@@ -3,7 +3,6 @@ import 'dart:isolate';
 
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
-import 'package:hive/hive.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -247,18 +246,5 @@ class AuthenticationController extends GetxController {
     (isNeededPinWhenOpenApps.value)
         ? Get.toNamed(Routes.VALIDATOR_PIN)
         : Get.toNamed(Routes.DASHBOARD_PAGE);
-  }
-
-  final _hive = Hive.box("testBox");
-
-  Future hiveAutoLogin() async {
-    try {
-      String email = await _hive.get("email");
-      String password = await _hive.get("password");
-      if (email.isNotEmpty && password.isNotEmpty) {
-        await fetchUser(email, password);
-        await fetchDataAbsensi(data.value!.data.user.id!);
-      }
-    } catch (e) {}
   }
 }

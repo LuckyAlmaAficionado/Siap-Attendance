@@ -11,7 +11,7 @@ import 'package:talenta_app/app/modules/cuti_page/controllers/cuti_page_controll
 import 'package:talenta_app/app/shared/theme.dart';
 import 'package:talenta_app/app/shared/utils.dart';
 
-import '../../dashboard_page/views/dashboard_view.dart';
+import '../../home/views/home_view.dart';
 
 class PengajuanCutiView extends StatefulWidget {
   const PengajuanCutiView({super.key});
