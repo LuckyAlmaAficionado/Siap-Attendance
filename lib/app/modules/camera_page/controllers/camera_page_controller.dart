@@ -53,12 +53,16 @@ class CameraPageController extends GetxController {
       imgPath(p.path);
       File img = File((await compress(File(p.path)))!.path);
 
-      if (s == "argument-izin") {
-        print("masuk ke izin");
-        await a.permitApplication(note.text, img);
-      } else {
-        print("masuk ke absen");
-        await a.submitAttendance(note.text, img);
+      switch (s) {
+        case "argument-izin":
+          await a.permitApplication(note.text, img);
+          break;
+        case "argument-telat":
+          await a.approvalRequest(note.text);
+          break;
+        default:
+          await a.submitAttendance(note.text, img);
+          break;
       }
 
       status = "";

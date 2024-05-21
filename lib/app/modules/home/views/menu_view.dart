@@ -1,8 +1,10 @@
+import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:talenta_app/app/modules/home/controllers/home_controller.dart';
+import 'package:talenta_app/app/shared/theme.dart';
 
 class MenuView extends GetView<HomeController> {
   MenuView({Key? key}) : super(key: key);
@@ -11,33 +13,94 @@ class MenuView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     Get.lazyPut(() => HomeController());
     return Scaffold(
+      backgroundColor: Colors.blue.shade100,
       body: Obx(() => controller.widget[controller.btmNavIndex.value]),
       bottomNavigationBar: Obx(
-        () => NavigationBar(
-          onDestinationSelected: controller.changeBtmNavIndex,
-          selectedIndex: controller.btmNavIndex.value,
-          height: 80,
-          elevation: 5,
-          backgroundColor: Colors.white,
-          destinations: const [
-            NavigationDestination(
-              icon: Icon(Iconsax.home_2),
-              label: "Home",
-            ),
-            NavigationDestination(
-              icon: Icon(Iconsax.people),
-              label: "Karyawan",
-            ),
-            NavigationDestination(
-              icon: Icon(Iconsax.notification),
-              label: "Inbox",
-            ),
-            NavigationDestination(
-              icon: Icon(Iconsax.setting),
-              label: "Settings",
-            ),
-          ],
-        ),
+        () => CustomNavigationBar(
+            currentIndex: controller.btmNavIndex.value,
+            onTap: (value) => controller.btmNavIndex(value),
+            items: [
+              CustomNavigationBarItem(
+                selectedIcon: Icon(
+                  Iconsax.home_2,
+                  color: Colors.blue,
+                ),
+                icon: Icon(
+                  Iconsax.home_2,
+                  color: Colors.black12,
+                ),
+                selectedTitle: Text(
+                  "Home",
+                  style: normalTextStyle.copyWith(color: Colors.blue),
+                ),
+                title: Text(
+                  "Home",
+                  style: normalTextStyle.copyWith(color: Colors.black12),
+                ),
+              ),
+              CustomNavigationBarItem(
+                selectedIcon: Icon(
+                  Iconsax.people,
+                  color: Colors.blue,
+                ),
+                icon: Icon(
+                  Iconsax.people,
+                  color: Colors.black12,
+                ),
+                selectedTitle: Text(
+                  "Employee",
+                  style: normalTextStyle.copyWith(color: Colors.blue),
+                ),
+                title: Text(
+                  "Employee",
+                  style: normalTextStyle.copyWith(color: Colors.black12),
+                ),
+              ),
+              CustomNavigationBarItem(
+                selectedIcon: Icon(
+                  Iconsax.message,
+                  color: Colors.blue,
+                ),
+                icon: Icon(
+                  Iconsax.message,
+                  color: Colors.black12,
+                ),
+                selectedTitle: Text(
+                  "Inbox",
+                  style: normalTextStyle.copyWith(
+                    color: Colors.blue,
+                  ),
+                ),
+                title: Text(
+                  "Inbox",
+                  style: normalTextStyle.copyWith(
+                    color: Colors.black12,
+                  ),
+                ),
+              ),
+              CustomNavigationBarItem(
+                selectedIcon: Icon(
+                  Iconsax.personalcard,
+                  color: Colors.blue,
+                ),
+                icon: Icon(
+                  Iconsax.personalcard,
+                  color: Colors.black12,
+                ),
+                selectedTitle: Text(
+                  "Settings",
+                  style: normalTextStyle.copyWith(
+                    color: Colors.blue,
+                  ),
+                ),
+                title: Text(
+                  "Settings",
+                  style: normalTextStyle.copyWith(
+                    color: Colors.black12,
+                  ),
+                ),
+              )
+            ]),
       ),
     );
   }

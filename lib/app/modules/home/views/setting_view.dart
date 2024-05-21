@@ -53,33 +53,38 @@ class SettingView extends GetView<HomeController> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${controller.u.user.nama}',
-                        style: blackTextStyle.copyWith(
-                          fontWeight: semiBold,
-                          fontSize: 20,
+                  SizedBox(
+                    width: context.width * 0.6,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${controller.u.user.nama}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: blackTextStyle.copyWith(
+                            fontWeight: semiBold,
+                            fontSize: 16,
+                          ),
                         ),
-                      ),
-                      Text(
-                        "${controller.u.jabatan}",
-                        style: normalTextStyle.copyWith(
-                          fontWeight: FontWeight.w300,
-                          fontSize: 14,
-                          color: darkGreyColor,
+                        Text(
+                          "${controller.u.jabatan}",
+                          style: normalTextStyle.copyWith(
+                            fontWeight: FontWeight.w300,
+                            fontSize: 12,
+                            color: darkGreyColor,
+                          ),
                         ),
-                      ),
-                      Text(
-                        "Andi Offset",
-                        style: normalTextStyle.copyWith(
-                          fontWeight: FontWeight.w300,
-                          fontSize: 14,
-                          color: darkGreyColor,
-                        ),
-                      )
-                    ],
+                        Text(
+                          "Andi Offset",
+                          style: normalTextStyle.copyWith(
+                            fontWeight: FontWeight.w300,
+                            fontSize: 12,
+                            color: darkGreyColor,
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                   CircleAvatar(
                     radius: 30,

@@ -57,20 +57,23 @@ class AuthController extends GetxController {
     sps.setString("password", password);
   }
 
-  Future checkEmailAndPassword() async {
+  Future<Map<String, dynamic>> checkEmailAndPassword() async {
     SharedPreferences sps = await sp;
 
-    String email = sps.get("email").toString();
-    String password = sps.get("password").toString();
+    String email = sps.getString("email").toString();
+    String password = sps.getString("password").toString();
 
-    if (email.isNotEmpty && password.isNotEmpty) {
+    if (!email.isNotEmpty && !password.isNotEmpty) {
       return login(email, password).then((value) => {
             "email": email,
             "password": password,
           });
     }
 
-    return {"email": "", "password": ""};
+    return {
+      "email": null,
+      "password": null,
+    };
   }
 
   Future hiveRemoveEmailAndPassword() async {

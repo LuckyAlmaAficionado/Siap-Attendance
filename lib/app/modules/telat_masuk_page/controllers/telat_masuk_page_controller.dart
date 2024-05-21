@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:talenta_app/app/controllers/api_controller.dart';
 
 import 'package:talenta_app/app/controllers/locations_controller.dart';
+import 'package:talenta_app/app/routes/app_pages.dart';
 
 class TelatMasukPageController extends GetxController {
   RxInt rentangWaktu = 0.obs;
@@ -12,18 +14,15 @@ class TelatMasukPageController extends GetxController {
   RxString longitude = "".obs;
 
   final locationC = Get.put(LocationController());
+  final a = Get.put(ApiController());
 
   @override
   void onInit() async {
     super.onInit();
   }
 
-  onPressedAction() async {
-    await fetchCurrentLocation();
-    print(DateTime.now());
-    print(rentangWaktu.value);
-    print(latitude.value);
-    print(longitude.value);
+  submitAction() async {
+    Get.toNamed(Routes.LOCATIONS_PAGE, arguments: "argument-telat");
   }
 
   fetchCurrentLocation() async {

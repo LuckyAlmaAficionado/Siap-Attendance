@@ -74,6 +74,7 @@ class _LocationsPageViewState extends State<LocationsPageView> {
                                 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                             maxZoom: 19,
                           ),
+
                           CurrentLocationLayer(
                             alignPositionOnUpdate: AlignOnUpdate.always,
                             alignDirectionOnUpdate: AlignOnUpdate.never,
@@ -92,7 +93,7 @@ class _LocationsPageViewState extends State<LocationsPageView> {
                               markerSize: const Size(40, 40),
                               markerDirection: MarkerDirection.top,
                             ),
-                          ) // <
+                          ), // <
                         ],
                       );
                     } else {
@@ -143,7 +144,9 @@ class _LocationsPageViewState extends State<LocationsPageView> {
                   ),
                   Container(
                     decoration: BoxDecoration(
-                        shape: BoxShape.circle, color: Colors.white),
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                    ),
                     child: AnimatedRotation(
                       turns: controller.turns.value,
                       duration: const Duration(seconds: 2),

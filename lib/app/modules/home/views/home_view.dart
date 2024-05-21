@@ -150,7 +150,7 @@ class Pengumuman extends StatelessWidget {
           const Gap(10),
           Container(
               width: Get.width,
-              height: 170,
+              height: context.height * 0.25,
               child: FutureBuilder(
                 future: holidayC.filterMonthAndYear(),
                 builder: (context, snapshot) {
@@ -163,6 +163,7 @@ class Pengumuman extends StatelessWidget {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                           ),
+                          height: context.height * 0.25,
                           child: Shimmer.fromColors(
                             baseColor: Colors.grey[300]!,
                             highlightColor: Colors.grey[100]!,
@@ -171,7 +172,7 @@ class Pengumuman extends StatelessWidget {
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (context, index) {
                                 return Container(
-                                  width: 305,
+                                  width: context.width * 0.75,
                                   margin: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),
@@ -209,6 +210,7 @@ class Pengumuman extends StatelessWidget {
                                   children: [
                                     Container(
                                       width: Get.width,
+                                      height: context.height * 0.25,
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
                                         child: ColorFiltered(

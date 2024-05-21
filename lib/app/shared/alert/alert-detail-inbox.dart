@@ -29,29 +29,34 @@ class DetailInboxView extends GetView {
                 children: [
                   CircleAvatar(radius: 25),
                   const SizedBox(width: 15),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Maria Setiawati Purbaningtyas",
-                        style: blueTextStyle.copyWith(
-                          fontWeight: semiBold,
-                          fontSize: 16,
+                  SizedBox(
+                    width: context.width * 0.6,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Maria Setiawati Purbaningtyas",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: blueTextStyle.copyWith(
+                            fontWeight: semiBold,
+                            fontSize: 16,
+                          ),
                         ),
-                      ),
-                      Text(
-                        "Attendance Request Approved",
-                        style: blackTextStyle,
-                      ),
-                      Text(
-                        '${DateFormat("dd MMM yyyy   hh:MM", "id_ID").format(DateTime.now())}',
-                        style: darkGreyTextStyle.copyWith(
-                          fontWeight: extraLight,
-                          fontSize: 12,
+                        Text(
+                          "Attendance Request Approved",
+                          style: normalTextStyle,
                         ),
-                      ),
-                    ],
+                        Text(
+                          '${DateFormat("dd MMM yyyy   hh:MM", "id_ID").format(DateTime.now())}',
+                          style: darkGreyTextStyle.copyWith(
+                            fontWeight: extraLight,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   Spacer(),
                   IconButton(
@@ -77,7 +82,7 @@ class DetailInboxView extends GetView {
                                     const SizedBox(width: 15),
                                     Text(
                                       "Maria Setiawati Purbaningtyas",
-                                      style: blackTextStyle.copyWith(
+                                      style: normalTextStyle.copyWith(
                                         fontWeight: semiBold,
                                         fontSize: 16,
                                       ),
@@ -90,65 +95,78 @@ class DetailInboxView extends GetView {
                                   ],
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.all(10.0),
+                                  padding: const EdgeInsets.all(6.0),
                                   child: Row(
                                     children: [
-                                      SizedBox(
-                                        width: Get.width * 0.4,
-                                        child: Text("ID Karyawan"),
-                                      ),
-                                      Text(": "),
-                                      SizedBox(
-                                        width: Get.width * 0.4,
-                                        child: Text("074"),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        width: Get.width * 0.4,
-                                        child: Text("Organisasi"),
-                                      ),
-                                      Text(": "),
-                                      SizedBox(
-                                        width: Get.width * 0.4,
-                                        child: Text("Personalia & Umum"),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        width: Get.width * 0.4,
-                                        child: Text("Posisi pekerjaan"),
-                                      ),
-                                      Text(": "),
-                                      SizedBox(
-                                        width: Get.width * 0.4,
-                                        child: Text("Staff Personalia"),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        width: Get.width * 0.4,
-                                        child: Text("Cabang"),
-                                      ),
-                                      Text(": "),
                                       SizedBox(
                                         width: Get.width * 0.4,
                                         child: Text(
+                                            style: normalTextStyle,
+                                            "ID Karyawan"),
+                                      ),
+                                      Text(style: normalTextStyle, ": "),
+                                      SizedBox(
+                                        width: Get.width * 0.4,
+                                        child:
+                                            Text(style: normalTextStyle, "074"),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(6.0),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: Get.width * 0.4,
+                                        child: Text(
+                                            style: normalTextStyle,
+                                            "Organisasi"),
+                                      ),
+                                      Text(style: normalTextStyle, ": "),
+                                      SizedBox(
+                                        width: Get.width * 0.4,
+                                        child: Text(
+                                            style: normalTextStyle,
+                                            "Personalia & Umum"),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(6.0),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: Get.width * 0.4,
+                                        child: Text(
+                                            style: normalTextStyle,
+                                            "Posisi pekerjaan"),
+                                      ),
+                                      Text(style: normalTextStyle, ": "),
+                                      SizedBox(
+                                        width: Get.width * 0.4,
+                                        child: Text(
+                                            style: normalTextStyle,
+                                            "Staff Personalia"),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(6.0),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: Get.width * 0.4,
+                                        child: Text(
+                                            style: normalTextStyle, "Cabang"),
+                                      ),
+                                      Text(style: normalTextStyle, ": "),
+                                      SizedBox(
+                                        width: Get.width * 0.4,
+                                        child: Text(
+                                            style: normalTextStyle,
                                             "CV Andi Offset Yogyakarta Pusat"),
                                       ),
                                     ],
@@ -171,7 +189,7 @@ class DetailInboxView extends GetView {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
                   "Your request attendance, check in on 18 Mar 2024 at 07:53 for 18 Mar 2024 has been approved. Reason: pertama kali pake berbakat",
-                  style: blackTextStyle.copyWith(
+                  style: normalTextStyle.copyWith(
                     fontWeight: extraLight,
                     fontSize: 13,
                   ),

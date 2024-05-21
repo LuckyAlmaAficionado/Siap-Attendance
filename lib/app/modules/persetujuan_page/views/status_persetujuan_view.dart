@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 
-import 'package:get/get.dart';
-import 'package:talenta_app/app/controllers/authentication_controller.dart';
-import 'package:talenta_app/app/shared/theme.dart';
 import 'package:another_stepper/another_stepper.dart';
+import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+
+import 'package:talenta_app/app/controllers/model_controller.dart';
+import 'package:talenta_app/app/shared/theme.dart';
 
 // ignore: must_be_immutable
 class StatusPersetujuanView extends GetView {
   StatusPersetujuanView({Key? key}) : super(key: key);
 
-  final authC = Get.find<AuthenticationController>();
+  final m = Get.find<ModelController>();
 
   @override
   Widget build(BuildContext context) {
@@ -27,14 +28,14 @@ class StatusPersetujuanView extends GetView {
                 ),
                 const Gap(10),
                 Text(
-                  'Lucky Alma Aficionado Rigel',
+                  '${m.u.value.user.nama}',
                   style: whiteTextStyle.copyWith(
                     fontWeight: semiBold,
                     fontSize: 18,
                   ),
                 ),
                 Text(
-                  "${authC.jabatan.value}",
+                  "${m.u.value.jabatan}",
                   style: whiteTextStyle,
                 ),
                 const Gap(20),

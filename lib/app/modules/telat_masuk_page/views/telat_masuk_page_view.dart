@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+
+import 'package:talenta_app/app/models/approval.dart';
+import 'package:talenta_app/app/modules/telat_masuk_page/views/detail_telat_masuk_view.dart';
+import 'package:talenta_app/app/shared/button/button_1.dart';
 import 'package:talenta_app/app/shared/theme.dart';
-import 'package:talenta_app/app/shared/utils.dart';
 
 import '../controllers/telat_masuk_page_controller.dart';
 
@@ -17,71 +20,79 @@ class TelatMasukPageView extends GetView<TelatMasukPageController> {
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            'Pengajuan Telat Masuk',
+            'Terlambat Masuk',
             style: appBarTextStyle,
           ),
           centerTitle: true,
         ),
         body: Stack(
           children: [
-            ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              children: [
-                const Gap(20),
-                ListTile(
-                  title: RichText(
-                    text: TextSpan(
-                      text: "Alasan Keterlambatan ",
-                      style: blackTextStyle.copyWith(
-                        fontWeight: medium,
-                        fontSize: 16,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: "*Wajib diisi",
-                          style: redTextStyle.copyWith(fontSize: 12),
-                        )
-                      ],
-                    ),
-                  ),
-                  contentPadding: const EdgeInsets.all(0),
-                  subtitle: Padding(
-                    padding: const EdgeInsets.only(top: 5),
-                    child: TextField(
-                      minLines: 5,
-                      maxLines: 6,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        hintText: "Alasan keterlambatan",
-                        hintStyle: darkGreyTextStyle.copyWith(
-                          fontWeight: regular,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const Gap(15),
-              ],
+            Container(
+              width: Get.width,
+              height: Get.height,
+              child: FutureBuilder(
+                future: controller.a.fetchApprovalByUserId(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasData) {
+                    List<Approval> listApp = snapshot.data;
+                    print("listApp lenght: ${listApp.length}");
+
+                    return ListView.builder(
+                      itemCount: listApp.length,
+                      itemBuilder: (context, index) {
+                        Approval model = listApp[index];
+
+                        return ListTile(
+                          onTap: () async {
+                            controller.a
+                                .findApprovalById(model.id)
+                                .then((value) => Get.to(
+                                      () => DetailTelatMasukView(),
+                                      arguments: value,
+                                      transition: Transition.cupertino,
+                                    ));
+                          },
+                          title: Text(
+                            "Pengajuan Izin Telat",
+                            style: normalTextStyle.copyWith(
+                              fontSize: 14,
+                              fontWeight: medium,
+                              color: blackColor,
+                            ),
+                          ),
+                          subtitle: Text(
+                            "${DateFormat("dd MMM yyyy", "id_ID").format(DateTime.now())}",
+                            style: normalTextStyle.copyWith(
+                              color: darkGreyColor,
+                              fontSize: 12,
+                            ),
+                          ),
+                          trailing: SizedBox(
+                            child: Text(
+                              "",
+                              style: normalTextStyle.copyWith(
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  }
+                  return Container();
+                },
+              ),
             ),
             Positioned(
               left: 20,
               right: 20,
               bottom: 20,
-              child: CustomButton(
-                title: 'Ajukan Telat Masuk',
+              child: Button1(
+                title: "Pengajuan Terlambat",
                 onTap: () async {
-                  Utils().informationUtils(
-                    "Loading...!",
-                    "Tunggu sebentar yaa...!",
-                    false,
-                  );
-
-                  await controller.onPressedAction();
-
-                  Navigator.pop(context);
+                  await controller.submitAction();
                 },
               ),
             ),

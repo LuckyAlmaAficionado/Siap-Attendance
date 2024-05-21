@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
@@ -8,6 +10,7 @@ import 'package:intl/intl.dart';
 
 import 'package:talenta_app/app/controllers/camera_data_controller.dart';
 import 'package:talenta_app/app/modules/cuti_page/controllers/cuti_page_controller.dart';
+import 'package:talenta_app/app/shared/textfield/textfield_1.dart';
 import 'package:talenta_app/app/shared/theme.dart';
 import 'package:talenta_app/app/shared/utils.dart';
 
@@ -24,15 +27,22 @@ class _PengajuanCutiViewState extends State<PengajuanCutiView> {
   final cutiC = Get.put(CutiPageController());
   final cameraC = Get.put(CameraDataController());
 
+  TextEditingController date = TextEditingController();
+  TextEditingController si = TextEditingController();
+  TextEditingController fl = TextEditingController();
+  DateTimeRange? sd = DateTimeRange(start: DateTime.now(), end: DateTime.now());
+
   RxString imgPath = "".obs;
 
   String jenisCutiController = "Jenis Cuti";
-  String pickDateDari = "";
-  String pickDateSampaiDengan = "";
+
+  String firstDate = "";
+  String lastDate = "";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: whiteColor,
       appBar: AppBar(
         centerTitle: true,
         title: Text(
@@ -45,161 +55,61 @@ class _PengajuanCutiViewState extends State<PengajuanCutiView> {
         child: ListView(
           children: [
             const SizedBox(height: 15),
-            GestureDetector(
+            TextField1(
+              controller: si,
               onTap: () async {
                 await jenisCuti();
                 setState(() {});
               },
-              child: Container(
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(width: 1, color: darkGreyColor),
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.work_outline_outlined,
-                      color: darkGreyColor,
-                    ),
-                    const SizedBox(width: 10),
-                    SizedBox(
-                      width: Get.width * 0.6,
-                      child: Text(
-                        jenisCutiController,
-                        maxLines: 2,
-                        style: blackTextStyle.copyWith(
-                          fontSize: 16,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                    new Spacer(),
-                    Icon(
-                      Icons.keyboard_arrow_down_sharp,
-                      color: darkGreyColor,
-                    ),
-                  ],
-                ),
-              ),
+              preffixIcon: Icon(Iconsax.note_1),
+              readOnly: true,
+              hintText: "Jenis Cuti",
+              suffixIcon: Icon(Iconsax.arrow_bottom),
             ),
 
             const Gap(15),
-            // ....
 
-            GestureDetector(
-              onTap: () async => await datePickter(true),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(width: 1, color: darkGreyColor),
-                ),
-                padding: const EdgeInsets.all(15),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.date_range_outlined,
-                      color: darkGreyColor,
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      (pickDateDari.isEmpty)
-                          ? "Pilih tanggal"
-                          : "${DateFormat("dd MMMM yyyy", "id_ID").format(DateTime.parse(pickDateDari))}",
-                      style: blackTextStyle.copyWith(
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            if (pickDateDari.isNotEmpty) ...{
-              const Gap(15),
-              GestureDetector(
-                onTap: () async => await datePickter(false),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 1, color: darkGreyColor),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  padding: const EdgeInsets.all(15),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.date_range_outlined,
-                        color: darkGreyColor,
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        (pickDateSampaiDengan.isEmpty)
-                            ? "Sampai dengan"
-                            : "${DateFormat("dd MMMM yyyy", "id_ID").format(DateTime.parse(pickDateSampaiDengan))}",
-                        style: blackTextStyle.copyWith(
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            },
-
-            //....
-            const Gap(15),
-            TextField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(5),
-                  borderSide: BorderSide(width: 1, color: darkGreyColor),
-                ),
-                prefixIcon: Icon(Iconsax.activity),
-                hintText: "Alasan",
-                hintStyle: darkGreyTextStyle,
-              ),
-            ),
-            const Gap(15),
-
-            GestureDetector(
+            TextField1(
+              controller: date,
+              readOnly: true,
               onTap: () async {
-                dilegasi();
+                sd = await showDateRangePicker(
+                  context: context,
+                  firstDate: DateTime(DateTime.now().year),
+                  lastDate: DateTime(DateTime.now().year + 1),
+                );
+
+                firstDate =
+                    DateFormat("dd MMMM yyyy", "id_ID").format(sd!.start);
+                lastDate = DateFormat("dd MMMM yyyy", "id_ID").format(sd!.end);
+
+                date.text = "$firstDate - $lastDate";
+                setState(() {});
               },
-              child: Container(
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(width: 1, color: darkGreyColor),
-                ),
-                child: Row(
-                  children: [
-                    Icon(Iconsax.user),
-                    const Gap(10),
-                    SizedBox(
-                      width: Get.width * 0.6,
-                      child: Text(
-                        "Dilegasi ke (opsional)",
-                        maxLines: 2,
-                        style: blackTextStyle.copyWith(
-                          fontSize: 16,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                    new Spacer(),
-                    Icon(
-                      Icons.keyboard_arrow_down_sharp,
-                      color: darkGreyColor,
-                    ),
-                  ],
-                ),
-              ),
+              hintText: "Pilih tanggal",
+              preffixIcon: Icon(Iconsax.calendar_1),
             ),
-            // ....
+            const Gap(15),
+            TextField1(
+              preffixIcon: Icon(Iconsax.note),
+              hintText: "Alasan",
+            ),
+            const Gap(15),
+            TextField1(
+              hintText: "Dilegasi ke (opsional)",
+              preffixIcon: Icon(Iconsax.people),
+              suffixIcon: Icon(Iconsax.arrow_bottom),
+              onTap: () => dilegasi(),
+              readOnly: true,
+            ),
 
             // ..
             const Gap(15),
-            GestureDetector(
+            TextField1(
+              controller: fl,
+              hintText: "Input file (uk max. 10mb)",
+              readOnly: true,
+              preffixIcon: Icon(Iconsax.task_square),
               onTap: () async {
                 showModalBottomSheet(
                   context: context,
@@ -216,9 +126,12 @@ class _PengajuanCutiViewState extends State<PengajuanCutiView> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         GestureDetector(
-                          onTap: () async => imgPath(
-                              (await cameraC.pickImage(ImageSource.camera))
-                                  .path),
+                          onTap: () async {
+                            fl.text =
+                                (await cameraC.pickImage(ImageSource.camera))
+                                    .path;
+                            setState(() {});
+                          },
                           child: IconWidgetService(
                             Iconsax.camera,
                             "Kamera",
@@ -226,9 +139,12 @@ class _PengajuanCutiViewState extends State<PengajuanCutiView> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: () async => imgPath(
-                              (await cameraC.pickImage(ImageSource.gallery))
-                                  .path),
+                          onTap: () async {
+                            fl.text =
+                                (await cameraC.pickImage(ImageSource.gallery))
+                                    .path;
+                            setState(() {});
+                          },
                           child: IconWidgetService(
                             Iconsax.gallery,
                             "Galeri",
@@ -240,39 +156,6 @@ class _PengajuanCutiViewState extends State<PengajuanCutiView> {
                   ),
                 );
               },
-              child: Container(
-                width: Get.width,
-                decoration: BoxDecoration(
-                  border: Border.all(width: 1, color: darkGreyColor),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                padding: const EdgeInsets.all(15),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.file_copy_outlined,
-                      color: darkGreyColor,
-                    ),
-                    const SizedBox(width: 10),
-                    Obx(
-                      () => SizedBox(
-                        width: Get.width * 0.7,
-                        child: Text(
-                          (imgPath.value.isNotEmpty)
-                              ? imgPath.value.split("/").last
-                              : "Input file",
-                          maxLines: 2,
-                          style: blackTextStyle.copyWith(fontSize: 16),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            Text(
-              "ukuran maksimal file 10 MB",
-              style: darkGreyTextStyle,
             ),
             const SizedBox(height: 50),
             CustomButton(
@@ -307,7 +190,7 @@ class _PengajuanCutiViewState extends State<PengajuanCutiView> {
                   const SizedBox(width: 5),
                   Text(
                     "Dilegasi Ke",
-                    style: blackTextStyle.copyWith(
+                    style: normalTextStyle.copyWith(
                       fontWeight: semiBold,
                       fontSize: 18,
                     ),
@@ -346,12 +229,23 @@ class _PengajuanCutiViewState extends State<PengajuanCutiView> {
                   children: List.generate(
                     cutiC.tipeCuti.length,
                     (index) => ListTile(
+                      contentPadding: const EdgeInsets.all(0),
                       onTap: () {
                         jenisCutiController = cutiC.tipeCuti[index];
                         Get.back();
                       },
-                      title: Text("293 - Lucky Alma Aficionado Rigel"),
-                      subtitle: Text("Programmer"),
+                      title: Text(
+                        "293 - Lucky Alma Aficionado Rigel",
+                        style: normalTextStyle.copyWith(fontWeight: medium),
+                      ),
+                      subtitle: Text(
+                        "Programmer",
+                        style: normalTextStyle.copyWith(
+                          fontSize: 12,
+                          color: darkGreyColor,
+                        ),
+                      ),
+                      minLeadingWidth: 10,
                       leading: CircleAvatar(),
                     ),
                   ),
@@ -361,27 +255,6 @@ class _PengajuanCutiViewState extends State<PengajuanCutiView> {
           ),
         ),
       );
-
-  datePickter(bool isTrue) async {
-    DateTime? picker = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(3000),
-    );
-
-    if (picker != null) {
-      if (isTrue) {
-        setState(() {
-          pickDateDari = picker.toIso8601String();
-        });
-      } else {
-        setState(() {
-          pickDateSampaiDengan = picker.toIso8601String();
-        });
-      }
-    }
-  }
 
   jenisCuti() async => await showModalBottomSheet(
         context: context,
@@ -407,7 +280,7 @@ class _PengajuanCutiViewState extends State<PengajuanCutiView> {
                     const SizedBox(width: 5),
                     Text(
                       "Tipe cuti",
-                      style: blackTextStyle.copyWith(
+                      style: normalTextStyle.copyWith(
                         fontWeight: semiBold,
                         fontSize: 18,
                       ),
@@ -442,11 +315,15 @@ class _PengajuanCutiViewState extends State<PengajuanCutiView> {
                     children: List.generate(
                       cutiC.tipeCuti.length,
                       (index) => ListTile(
+                        contentPadding: const EdgeInsets.all(0),
                         onTap: () {
-                          jenisCutiController = cutiC.tipeCuti[index];
+                          si.text = cutiC.tipeCuti[index];
                           Get.back();
                         },
-                        title: Text(cutiC.tipeCuti[index]),
+                        title: Text(
+                          cutiC.tipeCuti[index],
+                          style: normalTextStyle,
+                        ),
                       ),
                     ),
                   ),
@@ -477,7 +354,7 @@ class CustomTextfield extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
-      style: blackTextStyle.copyWith(
+      style: normalTextStyle.copyWith(
         fontSize: 16,
       ),
       decoration: InputDecoration(

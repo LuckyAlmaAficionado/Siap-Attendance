@@ -55,30 +55,6 @@ class LocationsPageController extends GetxController {
     Get.toNamed(Routes.CAMERA_PAGE, arguments: status);
   }
 
-  // Future onPressButton() async {
-  //   List<Placemark> placemarks = await placemarkFromCoordinates(
-  //     this.position!.latitude,
-  //     this.position!.longitude,
-  //   );
-
-  //   Placemark placemark = placemarks.first;
-  //   String address =
-  //       '${placemark.street}, ${placemark.locality}, ${placemark.postalCode}, ${placemark.country}';
-  //   print(this.position!.latitude);
-  //   print(this.position!.longitude);
-  //   print(address);
-
-  //   // Model absensi
-  //   ModelAbsen model = ModelAbsen(
-  //     statusAbsensi: "",
-  //     latitude: this.position!.latitude,
-  //     longitude: this.position!.longitude,
-  //     alamat: address,
-  //   );
-
-  //   return model;
-  // }
-
   @override
   void onClose() {
     isStreamEnable(false);

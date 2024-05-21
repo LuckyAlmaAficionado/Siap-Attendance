@@ -143,65 +143,66 @@ class PermitActivityDetails extends StatelessWidget {
               child: Row(
                 children: [
                   // Map
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(color: blueColor),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                        ),
-                        child: FlutterMap(
-                          options: MapOptions(
-                            initialCenter: LatLng(
-                              double.parse(a.latKeluar!),
-                              double.parse(a.longKeluar!),
-                            ),
-                            initialZoom: 17,
-                            maxZoom: 18,
-                            minZoom: 17,
+                  if (a.latKeluar != null && a.longKeluar != null)
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(color: blueColor),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(10),
                           ),
-                          children: [
-                            TileLayer(
-                              urlTemplate:
-                                  'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                              subdomains: ['a', 'b', 'c'],
-                              maxZoom: 19,
+                          child: FlutterMap(
+                            options: MapOptions(
+                              initialCenter: LatLng(
+                                double.parse(a.latKeluar!),
+                                double.parse(a.longKeluar!),
+                              ),
+                              initialZoom: 17,
+                              maxZoom: 18,
+                              minZoom: 17,
                             ),
-                            MarkerLayer(
-                              markers: [
-                                Marker(
-                                  width: 45.0,
-                                  height: 45.0,
-                                  point: LatLng(
-                                    double.parse(a.latKeluar!),
-                                    double.parse(a.longKeluar!),
-                                  ),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      border: Border.all(
-                                          width: 2, color: whiteColor),
+                            children: [
+                              TileLayer(
+                                urlTemplate:
+                                    'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                subdomains: ['a', 'b', 'c'],
+                                maxZoom: 19,
+                              ),
+                              MarkerLayer(
+                                markers: [
+                                  Marker(
+                                    width: 45.0,
+                                    height: 45.0,
+                                    point: LatLng(
+                                      double.parse(a.latKeluar!),
+                                      double.parse(a.longKeluar!),
                                     ),
-                                    child: CircleAvatar(
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        child: Image.network(
-                                          "${m.u.value.user.avatar}",
-                                          fit: BoxFit.cover,
-                                          filterQuality: FilterQuality.high,
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            width: 2, color: whiteColor),
+                                      ),
+                                      child: CircleAvatar(
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          child: Image.network(
+                                            "${m.u.value.user.avatar}",
+                                            fit: BoxFit.cover,
+                                            filterQuality: FilterQuality.high,
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ],
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
 
                   // Gambar Orangnya
                   Expanded(

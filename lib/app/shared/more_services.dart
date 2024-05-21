@@ -18,45 +18,56 @@ class MoreServices extends StatelessWidget {
       ),
       content: Container(
         width: Get.width * 0.8,
-        height: Get.height * 0.4,
         color: Colors.white,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "MENU PENGAJUAN",
-              style: blackTextStyle.copyWith(
-                fontSize: 20,
-                fontWeight: bold,
+        child: LayoutBuilder(
+          builder: (context, constraints) => Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "MENU PENGAJUAN",
+                style: blackTextStyle.copyWith(
+                  fontSize: 20,
+                  fontWeight: bold,
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            _Cbutton(
-              () => Get.toNamed(Routes.CUTI_PAGE),
-              "Cuti",
-              Iconsax.receipt_item,
-            ),
-            _Cbutton(
-              () => Get.toNamed(Routes.TELAT_MASUK_PAGE),
-              "Istirahat Terlambat",
-              Iconsax.clock,
-            ),
-            _Cbutton(
-              () => Get.to(
-                PengajuanAbsensiView(),
-                transition: Transition.cupertino,
+              const SizedBox(height: 20),
+              _Cbutton(
+                () => Get.toNamed(Routes.CUTI_PAGE),
+                "Cuti",
+                Iconsax.receipt_item,
+                constraints.maxHeight,
               ),
-              "Absensi",
-              Iconsax.location,
-            ),
-            _Cbutton(() => null, "Perubahan Shift", Iconsax.clock),
-          ],
+              _Cbutton(
+                () => Get.toNamed(Routes.TELAT_MASUK_PAGE),
+                "Istirahat Terlambat",
+                Iconsax.clock,
+                constraints.maxHeight,
+              ),
+              _Cbutton(
+                () => Get.to(
+                  PengajuanAbsensiView(),
+                  transition: Transition.cupertino,
+                ),
+                "Absensi",
+                Iconsax.location,
+                constraints.maxHeight,
+              ),
+              _Cbutton(
+                () => null,
+                "Perubahan Shift",
+                Iconsax.clock,
+                constraints.maxHeight,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  _Cbutton(Function()? onTap, String title, IconData icons) => Container(
+  _Cbutton(Function()? onTap, String title, IconData icons, double height) =>
+      Container(
+        height: height * 0.1,
         margin: const EdgeInsets.only(top: 10),
         child: Material(
           borderRadius: BorderRadius.circular(20),

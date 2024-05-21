@@ -2,12 +2,15 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:talenta_app/app/controllers/model_controller.dart';
+import 'package:talenta_app/app/models/approval.dart';
 import 'package:talenta_app/app/models/karyawan.dart';
 import 'package:talenta_app/app/models/model_izin.dart';
 import 'package:talenta_app/app/models/user_absensi.dart';
@@ -44,6 +47,8 @@ class ApiController extends GetxController {
     "addPermit": "api/izin",
     "detailAttendance": "api/v1/absensi/detail",
     "attendance": "api/v1/user-absensi",
+    "fetchLatePermission": "api/v1/late",
+    "approvalRequest": "api/approval-requests",
   };
 
   // === save model data
@@ -60,6 +65,8 @@ class ApiController extends GetxController {
         "password": "$password",
       };
 
+      print(body);
+
       Uri url = Uri.parse("${BASE_URL}/${listApi["login"]}");
       final res = await http.post(
         url,
@@ -71,6 +78,9 @@ class ApiController extends GetxController {
 
       if (res.statusCode == 200) {
         final result = json.decode(res.body);
+
+        print(result);
+
         m.u(ModelLogin.fromJson(result).data);
 
         await fetchTodayAttendance();
@@ -84,7 +94,7 @@ class ApiController extends GetxController {
     } catch (e) {
       Get.dialog(ErrorAlert(
         msg: e.toString(),
-        methodName: "fetchUser | api_controller.dart",
+        methodName: "login | api_controller.dart",
       ));
     }
   }
@@ -282,8 +292,161 @@ class ApiController extends GetxController {
 
   // ===== Utils
 
+  calculateLateMinutes() async {
+    // Mendapatkan waktu istirahat (12:45) dalam bentuk TimeOfDay
+    final TimeOfDay restTime = TimeOfDay(hour: 12, minute: 45);
+
+    final TimeOfDay lateTime = TimeOfDay.fromDateTime(DateTime.now());
+
+    // Menghitung selisih waktu dalam menit
+    int lateMinutes = lateTime.hour * 60 +
+        lateTime.minute -
+        (restTime.hour * 60 + restTime.minute);
+
+    // Jika terlambat, pastikan nilai menit tidak kurang dari 0
+    if (lateMinutes < 0) {
+      lateMinutes = 0;
+    }
+
+    return lateMinutes;
+  }
+
   Future curLocations() async {
     return Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best);
+  }
+
+  // ==== Izin Terlambat
+
+  Future fetchLatePermission(String note) async {
+    log("==== fetchLatePermission ====");
+
+    try {
+      Uri url = Uri.parse("${BASE_URL}/${listApi['fetchLatePermission']}");
+      int r = calculateLateMinutes();
+
+      Position p = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best,
+      );
+
+      final body = {
+        "user_id": m.u.value.user.id,
+        "alasan": note,
+        "late_minutes": r,
+        "latitude": p.latitude.toString(),
+        "longitude": p.longitude.toString(),
+      };
+
+      var res = await http.post(url, body: body);
+
+      if (res.statusCode == 200) {}
+    } on HttpException catch (e) {
+      Get.dialog(ErrorAlert(
+          msg: e.toString(),
+          methodName: "fetchIzinTerlambat | api_controller.dart"));
+    }
+  }
+
+  // ==== Approval Izin
+
+  Future fetchApprovalByUserId() async {
+    try {
+      Uri url = Uri.parse(
+        "${BASE_URL}/${listApi['approvalRequest']}/${m.u.value.user.id}/id",
+      );
+
+      var req = await http.get(
+        url,
+        headers: {"Content-Type": "application/json"},
+      );
+
+      if (req.statusCode == 200) {
+        List js = json.decode(req.body);
+        List<Approval> listApp = js.map((e) => Approval.fromJson(e)).toList();
+        return listApp;
+      }
+      return null;
+    } on HttpException catch (e) {
+      Get.dialog(ErrorAlert(
+        msg: e.toString(),
+        methodName: "fetchApprovalRequest | api_controller.dart",
+      ));
+    }
+  }
+
+  Future approvalPermit() async {
+    log("==== approvalPermit ====");
+    try {
+      Uri url = Uri.parse(
+        "${BASE_URL}/${listApi['fetchApprovalRequest']}/ece7d79d-fd4f-4c37-b44e-9f03a77141a5/approve",
+      );
+
+      var res = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: json.encode({"approver": "user1@example.com"}),
+      );
+
+      if (res.statusCode == 200) {
+        return true;
+      }
+      return false;
+    } on HttpException catch (e) {
+      Get.dialog(ErrorAlert(
+          msg: e.toString(),
+          methodName: "approvalPermit | api_controller.dart"));
+    }
+  }
+
+  Future approvalRequest(String desc) async {
+    try {
+      Map<String, dynamic> body = {
+        "description": desc,
+        "userId": "${m.u.value.user.id}",
+        "approvers": [
+          "user1@example.com",
+          "user2@example.com",
+          "user3@example.com"
+        ]
+      };
+
+      var res = await http.post(
+          Uri.parse("$BASE_URL/${listApi['approvalRequest']}"),
+          body: json.encode(body),
+          headers: {"Content-Type": "application/json"});
+
+      if (res.statusCode == 200) {
+        Get.snackbar("success", "success to send approval request");
+        Get.off(() => MenuView(), transition: Transition.cupertino);
+      }
+      Get.snackbar("failed", "failed to send approval request");
+    } on HttpException catch (e) {
+      Get.dialog(ErrorAlert(
+        msg: e.toString(),
+        methodName: "approvalRequest | api_controller.dart",
+      ));
+    }
+  }
+
+  Future findApprovalById(String approvalId) async {
+    try {
+      Uri url = Uri.parse(
+        "${BASE_URL}/${listApi['approvalRequest']}/$approvalId",
+      );
+
+      final req = await http.get(url);
+
+      if (req.statusCode == 200) {
+        var js = json.decode(req.body);
+        Approval app = Approval.fromJson(js);
+        return app;
+      }
+      return null;
+    } on HttpException catch (e) {
+      Get.dialog(ErrorAlert(
+        msg: e.toString(),
+        methodName: "findApprovalByIdApproval | api_controller.dart",
+      ));
+    }
   }
 }

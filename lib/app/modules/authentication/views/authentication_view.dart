@@ -27,7 +27,7 @@ class AuthenticationView extends GetView<AuthController> {
               } else if (snapshot.hasData) {
                 var data = snapshot.data;
 
-                String email = data['email'] ?? "";
+                String email = data!['email'] ?? "";
                 String password = data['password'] ?? "";
 
                 if (email.isNotEmpty && password.isNotEmpty) {

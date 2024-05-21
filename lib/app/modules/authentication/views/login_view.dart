@@ -14,6 +14,7 @@ class LoginView extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     Get.put(AuthController());
+    Get.lazyPut(() => AuthController());
 
     return Scaffold(
       body: Container(
@@ -34,7 +35,7 @@ class LoginView extends GetView<AuthController> {
         child: ListView(
           physics: BouncingScrollPhysics(),
           children: [
-            Gap(context.height * 0.17),
+            SizedBox(height: context.height * 0.1),
             Image.asset(
               "assets/images/img_logo.png",
               width: 180,

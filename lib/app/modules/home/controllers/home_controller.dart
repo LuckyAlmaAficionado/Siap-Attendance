@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 
-import 'package:camera/camera.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:talenta_app/app/controllers/api_controller.dart';
@@ -53,6 +52,7 @@ class HomeController extends GetxController {
     }
   }
 
+  // Asynchronous function to validate a permission for a user. Returns a boolean value based on the validation result.
   Future validatorIzin() async {
     log("validatorIzin");
     var res = await http
