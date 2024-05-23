@@ -150,6 +150,9 @@ class ApiController extends GetxController {
     log("==== fetchTodayAttendance ====");
 
     try {
+      m.ci(null);
+      m.co(null);
+
       Uri url = Uri.parse(
         "${BASE_URL}/${listApi["todayAttendance"]}/${m.u.value.user.id}",
       );

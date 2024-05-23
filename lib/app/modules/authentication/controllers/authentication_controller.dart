@@ -10,6 +10,7 @@ import 'package:talenta_app/app/shared/error_alert.dart';
 import 'package:talenta_app/app/shared/loading/loading1.dart';
 import 'package:talenta_app/app/shared/utils.dart';
 
+import '../../../controllers/connection_controller.dart';
 import '../../home/views/menu_view.dart';
 
 class AuthController extends GetxController {
@@ -22,6 +23,7 @@ class AuthController extends GetxController {
   RxString status = "".obs;
 
   final sp = SharedPreferences.getInstance();
+  final connection = Get.put(ConnectionController());
 
   TextEditingController email = TextEditingController(
     text: "superAdmin@gmail.com",
@@ -64,7 +66,8 @@ class AuthController extends GetxController {
     sps.setString("password", password);
   }
 
-  Future<Map<String, dynamic>> checkEmailAndPassword() async {
+  Future<Map<String, dynamic>> checkEmailAndPassword(
+      BuildContext context) async {
     log("=== check email and password ===");
 
     SharedPreferences sps = await sp;
@@ -76,8 +79,8 @@ class AuthController extends GetxController {
         email.isNotEmpty &&
         password != null &&
         password.isNotEmpty) {
-      log("=== email: $email ====");
-      log("=== password: $password ====");
+      await connection.validatorConnection(context);
+
       return login(email, password).then((value) => {
             "email": email,
             "password": password,

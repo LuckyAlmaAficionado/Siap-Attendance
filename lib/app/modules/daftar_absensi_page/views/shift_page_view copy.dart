@@ -240,21 +240,19 @@ class _AbsensiPageViewState extends State<ShiftPageView> {
           Expanded(
             child: (true)
                 ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        width: 300,
-                        height: 230,
-                        child: Image.asset(
-                          "assets/images/img_shift.png",
-                          filterQuality: FilterQuality.high,
-                          fit: BoxFit.contain,
-                        ),
+                      Image.asset(
+                        "assets/icons/ic_nodata.png",
+                        width: 170,
+                        filterQuality: FilterQuality.high,
+                        fit: BoxFit.contain,
                       ),
                       Text(
                         "Belum ada pengajuan",
                         style: blackTextStyle.copyWith(
                           fontWeight: semiBold,
-                          fontSize: 20,
+                          fontSize: 16,
                         ),
                       ),
                       const SizedBox(height: 5),
@@ -262,7 +260,7 @@ class _AbsensiPageViewState extends State<ShiftPageView> {
                         "pengajuan penggantian shif Anda akan\ntampil di sini",
                         textAlign: TextAlign.center,
                         style: darkGreyTextStyle.copyWith(
-                          fontSize: 16,
+                          fontSize: 12,
                         ),
                       ),
                     ],

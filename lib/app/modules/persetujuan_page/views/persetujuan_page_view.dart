@@ -62,8 +62,8 @@ class PersetujuanPageView extends GetView<PersetujuanPageController> {
                       },
                       title: Text(
                         "Fachrun Wire Prana",
-                        style: blackTextStyle.copyWith(
-                          fontSize: 16,
+                        style: normalTextStyle.copyWith(
+                          fontSize: 14,
                           fontWeight: regular,
                         ),
                       ),
@@ -75,14 +75,14 @@ class PersetujuanPageView extends GetView<PersetujuanPageController> {
                             "Cuti Tahunan",
                             style: darkGreyTextStyle.copyWith(
                               fontWeight: extraLight,
-                              fontSize: 14,
+                              fontSize: 12,
                             ),
                           ),
                           Text(
                             "15 Apr - 17 Apr 2024 - 3 days",
                             style: darkGreyTextStyle.copyWith(
                               fontWeight: extraLight,
-                              fontSize: 14,
+                              fontSize: 12,
                             ),
                           ),
                         ],
@@ -94,15 +94,15 @@ class PersetujuanPageView extends GetView<PersetujuanPageController> {
                         children: [
                           Text(
                             "Pending",
-                            style: blackTextStyle.copyWith(
-                              fontSize: 16,
+                            style: normalTextStyle.copyWith(
+                              fontSize: 14,
                               fontWeight: regular,
                             ),
                           ),
                           Text(
                             "12 hours ago",
                             style: darkGreyTextStyle.copyWith(
-                              fontSize: 13,
+                              fontSize: 10,
                               fontWeight: extraLight,
                             ),
                           ),

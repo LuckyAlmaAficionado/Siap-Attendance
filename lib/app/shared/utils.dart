@@ -63,22 +63,22 @@ class Utils {
               children: [
                 Expanded(
                   child: Image.asset(
-                    'assets/images/img_onboarding1.png',
+                    'assets/icons/ic_information.png',
                   ),
                 ),
                 const Gap(10),
                 DefaultTextStyle(
                   style: normalTextStyle.copyWith(
+                    fontWeight: black,
                     color: blueColor,
-                    fontWeight: bold,
                     fontSize: 22,
                   ),
-                  child: Text("$title 🎉"),
+                  child: Text("$title"),
                 ),
                 const Gap(10),
                 DefaultTextStyle(
                   style: normalTextStyle.copyWith(
-                    fontWeight: regular,
+                    fontWeight: medium,
                     fontSize: 14,
                   ),
                   child: Text("$subTitle"),
@@ -262,7 +262,7 @@ class AlertExit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       contentPadding: const EdgeInsets.all(0),
       content: Container(
         width: context.width * 0.6,
@@ -275,8 +275,8 @@ class AlertExit extends StatelessWidget {
                 width: constraints.maxWidth,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
+                    topLeft: Radius.circular(5),
+                    topRight: Radius.circular(5),
                   ),
                   color: blueColor,
                 ),
@@ -286,7 +286,7 @@ class AlertExit extends StatelessWidget {
                   style: normalTextStyle.copyWith(
                     fontSize: 16,
                     color: whiteColor,
-                    fontWeight: medium,
+                    fontWeight: semiBold,
                   ),
                 ),
               ),

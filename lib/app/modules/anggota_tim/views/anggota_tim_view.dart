@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'package:talenta_app/app/shared/theme.dart';
@@ -138,7 +139,15 @@ class AnggotaTimView extends GetView<AnggotaTimController> {
                     width: Get.width,
                     child: Column(
                       children: [
-                        const Gap(30),
+                        Container(
+                          margin: const EdgeInsets.only(top: 15),
+                          decoration: BoxDecoration(
+                              color: Colors.grey.shade400,
+                              borderRadius: BorderRadius.circular(100)),
+                          width: context.width * 0.2,
+                          height: context.height * 0.005,
+                        ),
+                        const Gap(15),
                         Container(
                           width: Get.width,
                           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -188,31 +197,36 @@ class AnggotaTimView extends GetView<AnggotaTimController> {
                             itemCount: 7,
                             physics: BouncingScrollPhysics(),
                             itemBuilder: (context, index) {
+                              RxBool isChange = false.obs;
+
                               return Column(
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: ExpansionTile(
+                                      onExpansionChanged: (value) {
+                                        isChange.toggle();
+                                      },
                                       backgroundColor: whiteColor,
                                       children: [
                                         ListTile(
-                                          leading:
-                                              Icon(Icons.location_on_outlined),
+                                          leading: Icon(
+                                            Iconsax.clock,
+                                            color: Colors.green,
+                                          ),
                                           title: Row(
                                             children: [
                                               Text(
                                                 "08:06",
-                                                style:
-                                                    darkGreyTextStyle.copyWith(
-                                                  fontWeight: semiBold,
+                                                style: normalTextStyle.copyWith(
+                                                  fontWeight: regular,
                                                   fontSize: 14,
                                                 ),
                                               ),
                                               const Gap(10),
                                               Text(
-                                                "Clock In",
-                                                style:
-                                                    darkGreyTextStyle.copyWith(
+                                                "Clock-In",
+                                                style: normalTextStyle.copyWith(
                                                   fontWeight: semiBold,
                                                   fontSize: 14,
                                                 ),
@@ -221,23 +235,23 @@ class AnggotaTimView extends GetView<AnggotaTimController> {
                                           ),
                                         ),
                                         ListTile(
-                                          leading:
-                                              Icon(Icons.location_on_outlined),
+                                          leading: Icon(
+                                            Iconsax.clock,
+                                            color: Colors.red,
+                                          ),
                                           title: Row(
                                             children: [
                                               Text(
                                                 "16:51",
-                                                style:
-                                                    darkGreyTextStyle.copyWith(
-                                                  fontWeight: semiBold,
+                                                style: normalTextStyle.copyWith(
+                                                  fontWeight: regular,
                                                   fontSize: 14,
                                                 ),
                                               ),
                                               const Gap(10),
                                               Text(
-                                                "Clock Out",
-                                                style:
-                                                    darkGreyTextStyle.copyWith(
+                                                "Clock-Out",
+                                                style: normalTextStyle.copyWith(
                                                   fontWeight: semiBold,
                                                   fontSize: 14,
                                                 ),
@@ -247,7 +261,11 @@ class AnggotaTimView extends GetView<AnggotaTimController> {
                                         )
                                       ],
                                       leading: CircleAvatar(),
-                                      trailing: Icon(Icons.add_box_outlined),
+                                      trailing: Obx(() => Icon(
+                                            (isChange.value)
+                                                ? Iconsax.minus_square
+                                                : Iconsax.add_square,
+                                          )),
                                       title: Text(
                                         "Adhymas Fajar Sudrajad",
                                         style: GoogleFonts.outfit(

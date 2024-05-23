@@ -20,24 +20,37 @@ class CaptureAttendanceView extends StatefulWidget {
 class _CaptureAttendanceViewState extends State<CaptureAttendanceView> {
   final c = Get.put(CaptureAttendanceController());
   String status = '';
+  bool useFrontCamera = true;
+  double currentExposureOffset = 0.0; // Current exposure offset
+  double minExposureOffset = 0.0; // Minimum exposure offset
+  double maxExposureOffset = 0.0; // Maximum exposure offset
+  bool isTorchOn = false;
 
   @override
   void initState() {
     super.initState();
     // set status
     status = Get.arguments;
+    CameraDescription cameraDescription;
 
-    c.cameras.firstWhere(
+    cameraDescription = c.cameras.firstWhere(
       (element) => element.lensDirection == CameraLensDirection.front,
       orElse: () => c.cameras.first,
     );
 
     c.camController = CameraController(
-      c.cameras[0],
-      ResolutionPreset.ultraHigh,
+      cameraDescription,
+      ResolutionPreset.veryHigh,
+      enableAudio: false,
     );
 
-    c.camController.initialize().then((_) {
+    c.camController.initialize().then((_) async {
+      await c.camController.initialize();
+
+      // Get the exposure offset range
+      minExposureOffset = await c.camController.getMinExposureOffset();
+      maxExposureOffset = await c.camController.getMaxExposureOffset();
+
       if (!mounted) {
         return;
       }
@@ -56,6 +69,20 @@ class _CaptureAttendanceViewState extends State<CaptureAttendanceView> {
     });
   }
 
+  Future<void> _toggleTorch() async {
+    if (c.camController.value.flashMode == FlashMode.torch) {
+      await c.camController.setFlashMode(FlashMode.off);
+      setState(() {
+        isTorchOn = false;
+      });
+    } else {
+      await c.camController.setFlashMode(FlashMode.torch);
+      setState(() {
+        isTorchOn = true;
+      });
+    }
+  }
+
   @override
   void dispose() {
     c.camController.dispose();
@@ -66,6 +93,10 @@ class _CaptureAttendanceViewState extends State<CaptureAttendanceView> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+
+    if (!c.camController.value.isInitialized) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
     return Scaffold(
       body: SizedBox(
@@ -87,13 +118,34 @@ class _CaptureAttendanceViewState extends State<CaptureAttendanceView> {
                 padding: const EdgeInsets.all(15),
                 child: Column(
                   children: [
-                    Container(
-                      width: width * 0.2,
-                      height: height * 0.005,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        color: Colors.grey.shade400,
-                      ),
+                    Row(
+                      children: [
+                        const Icon(Icons.exposure),
+                        Expanded(
+                          child: Slider(
+                            value: currentExposureOffset,
+                            min: minExposureOffset,
+                            max: maxExposureOffset,
+                            onChanged: (value) async {
+                              setState(() {
+                                currentExposureOffset = value;
+                              });
+                              print(value);
+                              await c.camController.setExposureOffset(value);
+                            },
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: _toggleTorch,
+                          icon: isTorchOn
+                              ? Icon(Icons.light_mode,
+                                  color: Colors.amber.shade600)
+                              : Icon(
+                                  Icons.light_mode_outlined,
+                                  color: Colors.black,
+                                ),
+                        ),
+                      ],
                     ),
                     TextField1(
                       controller: c.noteC,

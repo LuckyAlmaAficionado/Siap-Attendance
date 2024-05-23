@@ -15,7 +15,7 @@ class AuthenticationView extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: controller.checkEmailAndPassword(),
+      future: controller.checkEmailAndPassword(context),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return SplashView();

@@ -107,99 +107,59 @@ class SettingView extends GetView<HomeController> {
             ),
           ),
           Container(
-            width: Get.width,
             margin: const EdgeInsets.symmetric(horizontal: 5),
-            decoration: BoxDecoration(
+            child: Material(
               color: whiteColor,
               borderRadius: BorderRadius.circular(5),
-            ),
-            child: Material(
-              elevation: 1,
-              color: whiteColor,
-              borderRadius: BorderRadius.circular(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      "Info Saya",
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Detail Informasi",
                       style: blackTextStyle.copyWith(
                         fontWeight: semiBold,
                         fontSize: 18,
                       ),
                     ),
-                  ),
-                  GestureDetector(
-                    // onTap: () => Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => InfoPersonalPageView(),
-                    //   ),
-                    // ),
-                    child: ListTileInfo(
-                      Icon(Iconsax.user),
-                      "Info personal",
+                    ListTile1(
+                      title: 'Info personal',
+                      prefixIcon: Iconsax.lock_1,
+                      suffixIcon: Iconsax.arrow_right_3,
                     ),
-                  ),
-                  GestureDetector(
-                    // onTap: () => Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => InfoPekerjaanView(),
-                    //   ),
-                    // ),
-                    child: ListTileInfo(
-                      Icon(Iconsax.personalcard),
-                      "Info pekerjaan",
+                    ListTile1(
+                      title: 'Info pekerjaan',
+                      prefixIcon: Iconsax.code,
+                      suffixIcon: Iconsax.arrow_right_3,
                     ),
-                  ),
-                  GestureDetector(
-                    // onTap: () => Get.to(
-                    //   InfoKontakDaruratView(),
-                    //   transition: Transition.fade,
-                    // ),
-                    child: ListTileInfo(
-                      Icon(Iconsax.information),
-                      "Info kontak darurat",
+                    ListTile1(
+                      title: 'Info kontak darurat',
+                      prefixIcon: Iconsax.lock_1,
+                      suffixIcon: Iconsax.arrow_right_3,
                     ),
-                  ),
-                  GestureDetector(
-                    // onTap: () => Get.to(
-                    //   InfoKeluargaViewView(),
-                    //   transition: Transition.cupertino,
-                    // ),
-                    child: ListTileInfo(
-                      Icon(Iconsax.people),
-                      "Info keluarga",
+                    ListTile1(
+                      title: 'Info keluarga',
+                      prefixIcon: Iconsax.code,
+                      suffixIcon: Iconsax.arrow_right_3,
                     ),
-                  ),
-                  GestureDetector(
-                    // onTap: () => Get.to(InfoPayrollView()),
-                    child: ListTileInfo(
-                      Icon(Iconsax.wallet),
-                      "Info payroll",
+                    ListTile1(
+                      title: 'Info Payroll',
+                      prefixIcon: Iconsax.lock_1,
+                      suffixIcon: Iconsax.arrow_right_3,
                     ),
-                  ),
-                  GestureDetector(
-                    // onTap: () => Get.to(FileSayaView()),
-                    child: ListTileInfo(
-                      Icon(Iconsax.folder),
-                      "File saya",
+                    ListTile1(
+                      title: 'File saya',
+                      prefixIcon: Iconsax.code,
+                      suffixIcon: Iconsax.arrow_right_3,
                     ),
-                  ),
-                  GestureDetector(
-                    // onTap: () => Get.to(
-                    //   PeringatanView(),
-                    //   transition: Transition.downToUp,
-                    // ),
-                    child: ListTileInfo(
-                      Icon(Iconsax.danger),
-                      "Peringatan",
+                    ListTile1(
+                      title: 'Peringatan',
+                      prefixIcon: Iconsax.code,
+                      suffixIcon: Iconsax.arrow_right_3,
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

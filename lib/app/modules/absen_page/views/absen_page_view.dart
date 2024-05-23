@@ -56,10 +56,10 @@ class AbsenPageView extends GetView<AbsenPageController> {
                 child: Row(
                   children: [
                     Text(
-                      "Daftar absensi",
+                      "Daftar Absensi",
                       style: normalTextStyle.copyWith(
                         fontWeight: semiBold,
-                        fontSize: 16,
+                        fontSize: 14,
                       ),
                     ),
                     new Spacer(),

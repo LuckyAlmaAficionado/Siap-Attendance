@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:talenta_app/app/controllers/api_controller.dart';
 
@@ -28,6 +30,14 @@ class CaptureAttendanceController extends GetxController {
     super.onClose();
   }
 
+  Future<XFile?> compress(File file) async {
+    return await FlutterImageCompress.compressAndGetFile(
+      file.absolute.path,
+      file.path + "${file.lengthSync()}.jpg",
+      quality: 40,
+    );
+  }
+
   Future capturePicture() async {
     XFile? picture = await camController.takePicture();
 
@@ -37,23 +47,19 @@ class CaptureAttendanceController extends GetxController {
   }
 
   Future<void> onSubmitButton(String status) async {
-    File picture = await capturePicture();
+    File picture = File((await compress(await capturePicture()))!.path);
 
     log("status: $status");
 
     switch (status) {
       case "argument-izin":
-        // Argument izin ...
-        a.permitApplication(noteC.text, picture);
-
+        await a.permitApplication(noteC.text, picture);
         break;
       case "argument-telat":
-        // Argument Telat ...
-
+        await a.approvalRequest(noteC.text);
         break;
       default:
-        // Default argument ...
-
+        await a.submitAttendance(noteC.text, picture);
         break;
     }
   }

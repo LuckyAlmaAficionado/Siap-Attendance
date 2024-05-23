@@ -22,10 +22,10 @@ class DetailPengumumanView extends GetView<DetailPengumumanController> {
                 "Crimirlaizing Palestine Solidarity Activism",
                 style: normalTextStyle.copyWith(
                   fontSize: 25,
-                  fontWeight: bold,
+                  fontWeight: extraBold,
                 ),
               ),
-              const Gap(15),
+              const Gap(10),
               Text(
                 "${DateFormat("dd MMM yyyy").format(DateTime.now())}",
                 style: normalTextStyle.copyWith(
@@ -33,7 +33,7 @@ class DetailPengumumanView extends GetView<DetailPengumumanController> {
                   color: darkGreyColor,
                 ),
               ),
-              const Gap(20),
+              const Gap(10),
               Row(
                 children: [
                   CircleAvatar(),
@@ -42,7 +42,7 @@ class DetailPengumumanView extends GetView<DetailPengumumanController> {
                     "Scott Jhonson",
                     style: normalTextStyle.copyWith(
                       fontWeight: bold,
-                      fontSize: 16,
+                      fontSize: 14,
                     ),
                   ),
                 ],

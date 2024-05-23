@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+
 import 'package:talenta_app/app/shared/theme.dart';
 
 class DetailPersetujuanPageView extends GetView {
@@ -41,15 +42,13 @@ class DetailPersetujuanPageView extends GetView {
                       "Time Off Request",
                       style: blackTextStyle.copyWith(
                         fontWeight: regular,
-                        fontSize: 14,
+                        fontSize: 12,
                       ),
                     ),
                     Text(
                       "01 Apr 2024 12:06",
                       style: blackTextStyle.copyWith(
-                        fontWeight: regular,
-                        fontSize: 14,
-                      ),
+                          fontWeight: regular, fontSize: 12),
                     ),
                   ],
                 ),
