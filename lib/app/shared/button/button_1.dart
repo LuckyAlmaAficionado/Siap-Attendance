@@ -24,14 +24,14 @@ class Button1 extends StatelessWidget {
           elevation: 0,
           backgroundColor: color ?? Colors.blue[900],
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(5),
           ),
         ),
         onPressed: onTap,
         child: Text(
           "$title",
           style: normalTextStyle.copyWith(
-            fontWeight: regular,
+            fontWeight: FontWeight.w300,
             fontSize: 14,
             color: Colors.white,
           ),

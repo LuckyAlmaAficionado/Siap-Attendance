@@ -2,8 +2,15 @@ import 'dart:math' show sin, cos, sqrt, atan2;
 
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:talenta_app/app/controllers/model_controller.dart';
 
 class LocationController extends GetxController {
+  @override
+  void onInit() {
+    Get.find<ModelController>().initCamera();
+    super.onInit();
+  }
+
   askingPermissions() async {
     bool serviceEnabled;
     LocationPermission permission;

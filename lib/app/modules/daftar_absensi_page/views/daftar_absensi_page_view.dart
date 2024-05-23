@@ -19,21 +19,33 @@ class DaftarAbsensiPageView extends GetView<DaftarAbsensiPageController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Daftar Absensi', style: appBarTextStyle),
+        elevation: 0,
+        backgroundColor: whiteColor,
+        title: Text(
+          'Daftar Absensi',
+          style: appBarTextStyle.copyWith(
+            color: blackColor,
+          ),
+        ),
         centerTitle: true,
+        iconTheme: IconThemeData(color: blackColor),
       ),
       body: Column(
         children: [
-          TabBar(
-            controller: controller.controller,
-            tabs: [
-              Tab(text: "Riwayat"),
-              Tab(text: "Absensi"),
-              Tab(text: "Shift"),
-            ],
-            unselectedLabelColor: darkGreyColor,
-            labelColor: blueColor,
-            labelStyle: normalTextStyle.copyWith(fontWeight: regular),
+          Material(
+            color: whiteColor,
+            elevation: 2,
+            child: TabBar(
+              controller: controller.controller,
+              tabs: [
+                Tab(text: "Riwayat"),
+                Tab(text: "Absensi"),
+                Tab(text: "Shift"),
+              ],
+              labelStyle: normalTextStyle.copyWith(fontWeight: regular),
+              unselectedLabelColor: darkGreyColor,
+              labelColor: blueColor,
+            ),
           ),
           Expanded(
             child: TabBarView(

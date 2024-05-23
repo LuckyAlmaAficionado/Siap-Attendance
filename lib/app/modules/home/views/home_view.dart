@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
@@ -12,6 +14,7 @@ import 'package:talenta_app/app/controllers/model_controller.dart';
 import 'package:talenta_app/app/shared/button/button_1.dart';
 import 'package:talenta_app/app/shared/more_services.dart';
 import 'package:talenta_app/app/shared/theme.dart';
+import 'package:talenta_app/app/shared/utils.dart';
 
 import '../../../controllers/date_controller.dart';
 import '../../../models/google_calendar.dart';
@@ -121,7 +124,7 @@ class HomeView extends GetView<HomeController> {
                           return Container();
                         },
                       ),
-                      const Gap(10),
+                      const Gap(6),
                       PanelAbsensi(),
                       const Gap(20),
                     ],
@@ -147,10 +150,9 @@ class Pengumuman extends StatelessWidget {
       width: Get.width,
       child: Column(
         children: [
-          const Gap(10),
           Container(
               width: Get.width,
-              height: context.height * 0.25,
+              height: context.height * 0.22,
               child: FutureBuilder(
                 future: holidayC.filterMonthAndYear(),
                 builder: (context, snapshot) {
@@ -161,9 +163,10 @@ class Pengumuman extends StatelessWidget {
                         4,
                         (index) => Container(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(5),
                           ),
-                          height: context.height * 0.25,
+                          height: context.height * 0.2,
+                          width: 320,
                           child: Shimmer.fromColors(
                             baseColor: Colors.grey[300]!,
                             highlightColor: Colors.grey[100]!,
@@ -175,7 +178,7 @@ class Pengumuman extends StatelessWidget {
                                   width: context.width * 0.75,
                                   margin: const EdgeInsets.all(10),
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(5),
                                     color: Colors.white,
                                   ),
                                 );
@@ -196,12 +199,13 @@ class Pengumuman extends StatelessWidget {
                             onTap: () => Get.toNamed(Routes.DETAIL_PENGUMUMAN),
                             child: Container(
                               width: 320,
+                              height: context.height * 0.20,
                               margin: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
                                 color: (index % 2 == 0 && index == 0)
                                     ? darkGreyColor
                                     : Colors.blue,
-                                borderRadius: BorderRadius.circular(10),
+                                borderRadius: BorderRadius.circular(5),
                               ),
                               child: Material(
                                 elevation: 2,
@@ -210,7 +214,7 @@ class Pengumuman extends StatelessWidget {
                                   children: [
                                     Container(
                                       width: Get.width,
-                                      height: context.height * 0.25,
+                                      height: context.height * 0.22,
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(10),
                                         child: ColorFiltered(
@@ -308,11 +312,11 @@ class PanelAbsensi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 5),
       width: Get.width,
       child: Material(
         elevation: 2,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(5),
         color: whiteColor,
         child: Column(
           children: [
@@ -320,10 +324,11 @@ class PanelAbsensi extends StatelessWidget {
                 ? Container(
                     width: Get.width,
                     margin: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                    padding: const EdgeInsets.all(10),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     decoration: BoxDecoration(
                       color: lightGreyColor,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: BorderRadius.circular(5),
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -355,7 +360,10 @@ class PanelAbsensi extends StatelessWidget {
                 : SizedBox(),
             Container(
               width: Get.width,
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 20,
+                vertical: 15,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -384,7 +392,7 @@ class PanelAbsensi extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const Gap(10),
+                      const Gap(5),
                       Expanded(
                         child: Container(
                           height: 40,
@@ -407,17 +415,19 @@ class PanelAbsensi extends StatelessWidget {
 }
 
 class ServiceWidget extends StatelessWidget {
-  const ServiceWidget({
+  ServiceWidget({
     super.key,
   });
+
+  ModelController m = Get.find<ModelController>();
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.only(top: 5, left: 5, right: 5),
       child: Material(
         elevation: 2,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(5),
         child: Container(
           width: context.width,
           decoration: BoxDecoration(
@@ -490,18 +500,18 @@ class ServiceWidget extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  Get.toNamed(Routes.ANGGOTA_TIM);
-                  // if (!controller.authC.jabatan!.nama!
-                  //     .toLowerCase()
-                  //     .contains("manager")) {
-                  //   Utils().informationUtils(
-                  //     'Akses diperlukan',
-                  //     "Anda tidak memiliki akses untuk fitur ini",
-                  //     false,
-                  //   );
-                  //   return;
-                  // }
-                  // Get.toNamed(Routes.ANGGOTA_TIM);
+                  switch (m.u.value.user.manager) {
+                    case "1":
+                      Get.toNamed(Routes.ANGGOTA_TIM);
+                      break;
+                    default:
+                      Utils().informationUtils(
+                        'Akses diperlukan',
+                        "Anda tidak memiliki akses untuk fitur ini",
+                        false,
+                      );
+                      break;
+                  }
                 },
                 child: IconWidgetService(
                   Iconsax.user,
@@ -525,45 +535,47 @@ class PanelIzin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 5),
       width: Get.width,
       child: Material(
         elevation: 2,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(5),
         color: whiteColor,
-        child: Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                color: lightGreyColor,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              padding: const EdgeInsets.all(10),
-              child: Row(
-                children: [
-                  Icon(Iconsax.danger),
-                  const Gap(10),
-                  Text(
-                    "Anda belum izin kembali",
-                    style: normalTextStyle.copyWith(
-                      fontSize: 12,
-                      color: redColor,
+        child: Padding(
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                  color: lightGreyColor,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Row(
+                  children: [
+                    Icon(Iconsax.danger, color: redColor),
+                    const Gap(5),
+                    Text(
+                      "Anda belum izin kembali",
+                      style: normalTextStyle.copyWith(
+                        fontSize: 12,
+                        color: blackColor,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            Container(
-              height: 40,
-              margin: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-              width: context.width,
-              child: Button1(
-                title: "Izin Kembali",
-                onTap: () => Get.toNamed(Routes.IZIN_KEMBALI_PAGE),
-              ),
-            )
-          ],
+              Container(
+                height: 40,
+                margin: const EdgeInsets.only(top: 15),
+                width: context.width,
+                child: Button1(
+                  title: "Izin Kembali",
+                  onTap: () => Get.toNamed(Routes.IZIN_KEMBALI_PAGE),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -10,15 +10,6 @@ import 'package:talenta_app/app/shared/theme.dart';
 
 import '../../../controllers/version_controller.dart';
 import '../../../shared/utils.dart';
-import '../../akun_services/info_saya/info_pekerjaan_view.dart';
-import '../../akun_services/info_saya/info_personal_page_view.dart';
-import '../../akun_services/info_saya/views/file_saya_view.dart';
-import '../../akun_services/info_saya/views/info_keluarga_view_view.dart';
-import '../../akun_services/info_saya/views/info_kontak_darurat_view.dart';
-import '../../akun_services/info_saya/views/info_payroll_view.dart';
-import '../../akun_services/info_saya/views/peringatan_view.dart';
-import '../../akun_services/pengaturan/views/ubah_kata_sandi_view.dart';
-import '../../authentication/views/pin_view.dart';
 
 // ignore: must_be_immutable
 class SettingView extends GetView<HomeController> {
@@ -117,10 +108,10 @@ class SettingView extends GetView<HomeController> {
           ),
           Container(
             width: Get.width,
-            margin: const EdgeInsets.symmetric(horizontal: 10),
+            margin: const EdgeInsets.symmetric(horizontal: 5),
             decoration: BoxDecoration(
               color: whiteColor,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(5),
             ),
             child: Material(
               elevation: 1,
@@ -135,78 +126,74 @@ class SettingView extends GetView<HomeController> {
                     child: Text(
                       "Info Saya",
                       style: blackTextStyle.copyWith(
-                        fontWeight: medium,
+                        fontWeight: semiBold,
                         fontSize: 18,
                       ),
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => InfoPersonalPageView(),
-                      ),
-                    ),
+                    // onTap: () => Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => InfoPersonalPageView(),
+                    //   ),
+                    // ),
                     child: ListTileInfo(
                       Icon(Iconsax.user),
                       "Info personal",
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => InfoPekerjaanView(),
-                      ),
-                    ),
+                    // onTap: () => Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => InfoPekerjaanView(),
+                    //   ),
+                    // ),
                     child: ListTileInfo(
                       Icon(Iconsax.personalcard),
                       "Info pekerjaan",
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => Get.to(
-                      InfoKontakDaruratView(),
-                      transition: Transition.fade,
-                    ),
+                    // onTap: () => Get.to(
+                    //   InfoKontakDaruratView(),
+                    //   transition: Transition.fade,
+                    // ),
                     child: ListTileInfo(
                       Icon(Iconsax.information),
                       "Info kontak darurat",
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => Get.to(
-                      InfoKeluargaViewView(),
-                      transition: Transition.cupertino,
-                    ),
+                    // onTap: () => Get.to(
+                    //   InfoKeluargaViewView(),
+                    //   transition: Transition.cupertino,
+                    // ),
                     child: ListTileInfo(
                       Icon(Iconsax.people),
                       "Info keluarga",
                     ),
                   ),
-                  // ListTileInfo(
-                  //   Icon(Icons.school_outlined),
-                  //   "Pendidikan dan pengalaman",
-                  // ),
                   GestureDetector(
-                    onTap: () => Get.to(InfoPayrollView()),
+                    // onTap: () => Get.to(InfoPayrollView()),
                     child: ListTileInfo(
                       Icon(Iconsax.wallet),
                       "Info payroll",
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => Get.to(FileSayaView()),
+                    // onTap: () => Get.to(FileSayaView()),
                     child: ListTileInfo(
                       Icon(Iconsax.folder),
                       "File saya",
                     ),
                   ),
                   GestureDetector(
-                    onTap: () => Get.to(
-                      PeringatanView(),
-                      transition: Transition.downToUp,
-                    ),
+                    // onTap: () => Get.to(
+                    //   PeringatanView(),
+                    //   transition: Transition.downToUp,
+                    // ),
                     child: ListTileInfo(
                       Icon(Iconsax.danger),
                       "Peringatan",
@@ -216,91 +203,70 @@ class SettingView extends GetView<HomeController> {
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          const Gap(5),
           Container(
-            width: Get.width,
-            margin: const EdgeInsets.symmetric(horizontal: 10),
+            margin: const EdgeInsets.symmetric(horizontal: 5),
             child: Material(
               color: whiteColor,
-              elevation: 1,
-              borderRadius: BorderRadius.circular(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
+              borderRadius: BorderRadius.circular(5),
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
                       "Pengaturan",
                       style: blackTextStyle.copyWith(
-                        fontWeight: medium,
+                        fontWeight: semiBold,
                         fontSize: 18,
                       ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => UbahKataSandiView(),
-                      ),
+                    ListTile1(
+                      title: 'Ubah kata sandi',
+                      prefixIcon: Iconsax.lock_1,
+                      suffixIcon: Iconsax.arrow_right_3,
                     ),
-                    child: ListTileInfo(
-                      Icon(Iconsax.lock),
-                      "Ubah kata sandi",
+                    ListTile1(
+                      title: 'PIN',
+                      prefixIcon: Iconsax.code,
+                      suffixIcon: Iconsax.arrow_right_3,
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () async => Get.to(
-                      () => PinView(),
-                      arguments:
-                          (await Get.put(AuthController()).hiveCheckPin() !=
-                                  null)
-                              ? (status != "remove-pin-code")
-                                  ? "login"
-                                  : "remove-pin-code"
-                              : "set-password",
-                    ),
-                    child: ListTileInfo(
-                      Icon(Iconsax.code_circle),
-                      "PIN",
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
-          const Gap(10),
+          const Gap(5),
           Container(
-            width: Get.width,
-            margin: const EdgeInsets.symmetric(horizontal: 10),
+            margin: const EdgeInsets.symmetric(horizontal: 5),
             child: Material(
-              elevation: 1,
               color: whiteColor,
-              borderRadius: BorderRadius.circular(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 10),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Text(
-                      "Lainnya",
+              borderRadius: BorderRadius.circular(5),
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Logout",
                       style: blackTextStyle.copyWith(
-                        fontWeight: medium,
+                        fontWeight: semiBold,
                         fontSize: 18,
                       ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () => Get.dialog(AlertExit()),
-                    child: ListTileInfo(Icon(Iconsax.logout), "Keluar"),
-                  ),
-                ],
+                    ListTile1(
+                      title: 'Keluar',
+                      prefixIcon: Iconsax.logout,
+                      suffixIcon: Iconsax.arrow_right_3,
+                      colors: redColor,
+                      onTap: () => Get.dialog(AlertExit()),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-          const Gap(10),
+          const Gap(5),
           FutureBuilder(
             future: Get.put(VersionController()).androidAppsVersion(),
             builder: (context, snapshot) {
@@ -333,6 +299,50 @@ class SettingView extends GetView<HomeController> {
         ),
       ),
       trailing: Icon(Icons.navigate_next_outlined),
+    );
+  }
+}
+
+class ListTile1 extends StatelessWidget {
+  const ListTile1({
+    super.key,
+    required this.title,
+    this.onTap,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.colors,
+  });
+
+  final String title;
+  final Function()? onTap;
+  final IconData? prefixIcon;
+  final IconData? suffixIcon;
+  final Color? colors;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: EdgeInsets.all(0),
+      onTap: onTap,
+      leading: prefixIcon != null
+          ? Icon(
+              prefixIcon,
+              color: colors ?? darkGreyColor,
+            )
+          : null,
+      title: Text(
+        title,
+        style: normalTextStyle.copyWith(
+          fontWeight: light,
+          color: colors ?? blackColor,
+        ),
+      ),
+      trailing: suffixIcon != null
+          ? Icon(
+              suffixIcon,
+              color: colors ?? darkGreyColor,
+            )
+          : null,
     );
   }
 }

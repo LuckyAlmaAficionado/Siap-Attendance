@@ -9,12 +9,11 @@ import 'package:talenta_app/app/shared/textfield/textfield_1.dart';
 import '../../../shared/button/button_1.dart';
 
 class LoginView extends GetView<AuthController> {
-  const LoginView({Key? key}) : super(key: key);
+  LoginView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Get.put(AuthController());
-    Get.lazyPut(() => AuthController());
+    final controller = Get.put(AuthController());
 
     return Scaffold(
       body: Container(
@@ -48,7 +47,7 @@ class LoginView extends GetView<AuthController> {
               child: Material(
                 elevation: 5,
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(5),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Column(

@@ -6,28 +6,24 @@ import 'package:talenta_app/app/shared/button/button_1.dart';
 import 'package:talenta_app/app/shared/theme.dart';
 
 class AlertOutRange extends StatelessWidget {
-  const AlertOutRange({super.key});
+  const AlertOutRange({super.key, required this.status});
+
+  final String status;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       content: Container(
-        width: context.width * 0.6,
-        height: context.width * 0.7,
+        width: context.width * 0.9,
+        height: context.width * 0.3,
         child: Column(
           children: [
-            Image.asset(
-              "assets/images/img_onboarding1.png",
-              width: 160,
-              height: 160,
-            ),
-            const Gap(10),
             Text(
               "PERINGATAN",
               style: normalTextStyle.copyWith(
                 color: redColor,
-                fontSize: 22,
+                fontSize: 18,
                 fontWeight: semiBold,
               ),
             ),
@@ -53,9 +49,10 @@ class AlertOutRange extends StatelessWidget {
                   child: SizedBox(
                       height: 40,
                       child: Button1(
-                        title: "Tetap Absen",
+                        title: "Absen",
                         color: redColor,
-                        onTap: () => Get.offNamed(Routes.CAMERA_PAGE),
+                        onTap: () =>
+                            Get.offNamed(Routes.CAMERA_PAGE, arguments: status),
                       )),
                 ),
               ],

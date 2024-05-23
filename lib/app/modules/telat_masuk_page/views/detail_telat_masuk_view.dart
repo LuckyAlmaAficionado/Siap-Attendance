@@ -22,6 +22,8 @@ class _DetailTelatMasukViewState extends State<DetailTelatMasukView> {
   void initState() {
     super.initState();
     approval = Get.arguments as Approval;
+    approval.approvals
+        .sort((a, b) => a.approverOrder.compareTo(b.approverOrder));
   }
 
   @override
@@ -120,7 +122,7 @@ class _DetailTelatMasukViewState extends State<DetailTelatMasukView> {
                     title: StepperText(
                         (index == 0)
                             ? "Pengajuan di ajukan untuk Masuk Terlambat"
-                            : "Mengunggu disetujui oleh ${approval.approvals[(approval.approvals.length - 1) - (index - 1)].approver}",
+                            : "${approval.approvals[index - 1].approved ? "Disetujui" : "Menunggu"} disetujui oleh ${approval.approvals[index - 1].approver}",
                         textStyle: normalTextStyle),
                     subtitle: StepperText("02 Apr 2024 10:19",
                         textStyle: normalTextStyle),

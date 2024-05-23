@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:talenta_app/app/modules/authentication/views/login_view.dart';
 
 import '../modules/absen_page/bindings/absen_page_binding.dart';
 import '../modules/absen_page/views/absen_page_view.dart';
@@ -61,6 +62,11 @@ class AppPages {
       name: _Paths.CAMERA_PAGE,
       page: () => CameraPageView(),
       binding: CameraPageBinding(),
+    ),
+    GetPage(
+      name: _Paths.LOGIN,
+      page: () => LoginView(),
+      binding: AuthenticationBinding(),
     ),
     GetPage(
       name: _Paths.ABSEN_PAGE,

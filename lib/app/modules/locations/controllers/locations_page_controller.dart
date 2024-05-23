@@ -48,7 +48,7 @@ class LocationsPageController extends GetxController {
     );
 
     if (!result) {
-      await Get.dialog(AlertOutRange());
+      await Get.dialog(AlertOutRange(status: status));
       return;
     }
 

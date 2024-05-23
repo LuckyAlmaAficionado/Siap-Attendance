@@ -28,8 +28,19 @@ class CameraPageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    cameraC = CameraController(camera, ResolutionPreset.max);
+
+    cameraC = CameraController(
+      camera,
+      ResolutionPreset.high,
+      enableAudio: false,
+    );
     initializeControllerFuture = cameraC.initialize();
+  }
+
+  @override
+  void onClose() {
+    cameraC.dispose();
+    super.onClose();
   }
 
   void setCamera(CameraDescription camera) {

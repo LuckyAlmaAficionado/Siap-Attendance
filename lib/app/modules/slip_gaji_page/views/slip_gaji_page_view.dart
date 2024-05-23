@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:talenta_app/app/shared/theme.dart';
 
@@ -99,7 +100,7 @@ class SlipGajiPageView extends GetView<SlipGajiPageController> {
                               CircleAvatar(
                                 radius: 25,
                                 backgroundColor: lightGreyColor,
-                                child: controller.data.user.avatar!.isEmpty
+                                child: T
                                     ? Icon(Iconsax.user)
                                     : ClipRRect(
                                         borderRadius:
@@ -110,7 +111,7 @@ class SlipGajiPageView extends GetView<SlipGajiPageController> {
                                               loadingProgress == null
                                                   ? child
                                                   : CircularProgressIndicator(),
-                                          "${controller.data.user.avatar}",
+                                          "",
                                         ),
                                       ),
                               ),

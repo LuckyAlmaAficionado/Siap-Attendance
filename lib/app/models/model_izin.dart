@@ -11,12 +11,12 @@ String izinToJson(Izin data) => json.encode(data.toJson());
 class Izin {
   int status;
   String message;
-  List<ModelIzin> data;
+  List<ModelIzin>? data;
 
   Izin({
     required this.status,
     required this.message,
-    required this.data,
+    this.data,
   });
 
   factory Izin.fromJson(Map<String, dynamic> json) => Izin(
@@ -29,7 +29,7 @@ class Izin {
   Map<String, dynamic> toJson() => {
         "status": status,
         "message": message,
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "data": List<dynamic>.from(data!.map((x) => x.toJson())),
       };
 }
 

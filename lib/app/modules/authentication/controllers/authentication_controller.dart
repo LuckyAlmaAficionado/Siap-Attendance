@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -29,10 +31,11 @@ class AuthController extends GetxController {
   );
 
   // === controller
-  final api = Get.put(ApiController());
+  late final ApiController api;
 
   @override
   void onInit() async {
+    api = Get.put(ApiController());
     super.onInit();
   }
 
@@ -46,30 +49,42 @@ class AuthController extends GetxController {
   // ============= HIVE ACCOUNT ===============
 
   Future login(String email, String password) async {
-    await api.login(email, password).then((value) => (value)
-        ? Get.off(() => MenuView(), transition: Transition.cupertino)
+    await api.login(email, password).then((value) async => (value)
+        ? {
+            await saveEmailAndPassword(email, password),
+            Get.off(() => MenuView(), transition: Transition.cupertino)
+          }
         : Utils().snackbarC("Failed", "email or password false", false));
   }
 
   Future saveEmailAndPassword(String email, String password) async {
+    log('=== saveEmailAndPassword ===');
     SharedPreferences sps = await sp;
     sps.setString("email", email);
     sps.setString("password", password);
   }
 
   Future<Map<String, dynamic>> checkEmailAndPassword() async {
+    log("=== check email and password ===");
+
     SharedPreferences sps = await sp;
 
-    String email = sps.getString("email").toString();
-    String password = sps.getString("password").toString();
+    String? email = sps.getString("email");
+    String? password = sps.getString("password");
 
-    if (!email.isNotEmpty && !password.isNotEmpty) {
+    if (email != null &&
+        email.isNotEmpty &&
+        password != null &&
+        password.isNotEmpty) {
+      log("=== email: $email ====");
+      log("=== password: $password ====");
       return login(email, password).then((value) => {
             "email": email,
             "password": password,
           });
     }
 
+    log("=== auto login false ===");
     return {
       "email": null,
       "password": null,
@@ -78,10 +93,7 @@ class AuthController extends GetxController {
 
   Future hiveRemoveEmailAndPassword() async {
     SharedPreferences sps = await sp;
-
-    sps.remove("email");
-    sps.remove("password");
-
+    sps.clear();
     await hiveRemovePin();
   }
 

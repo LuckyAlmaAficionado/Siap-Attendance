@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+
 import 'package:talenta_app/app/modules/authentication/views/login_view.dart';
+import 'package:talenta_app/app/modules/authentication/views/pin_view.dart';
 import 'package:talenta_app/app/modules/authentication/views/splash_view.dart';
 import 'package:talenta_app/app/shared/theme.dart';
 
-import '../../akun_services/pengaturan/views/pin_view.dart';
 import '../../home/views/menu_view.dart';
 import '../controllers/authentication_controller.dart';
 
@@ -14,50 +15,35 @@ class AuthenticationView extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: Future.delayed(const Duration(seconds: 2)),
+      future: controller.checkEmailAndPassword(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return SplashView();
-        } else if (snapshot.connectionState == ConnectionState.done) {
-          return FutureBuilder(
-            future: controller.checkEmailAndPassword(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return SplashView();
-              } else if (snapshot.hasData) {
-                var data = snapshot.data;
+        } else if (snapshot.hasData) {
+          var data = snapshot.data;
 
-                String email = data!['email'] ?? "";
-                String password = data['password'] ?? "";
+          String email = data!['email'] ?? "";
+          String password = data['password'] ?? "";
 
-                if (email.isNotEmpty && password.isNotEmpty) {
-                  return FutureBuilder(
-                    future: controller.hiveCheckPin(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return SplashView();
-                      } else if (snapshot.hasData) {
-                        return PinView();
-                      } else if (snapshot.connectionState ==
-                          ConnectionState.done) {
-                        return MenuView();
-                      }
-
-                      return ErrorWidget();
-                    },
-                  );
-                } else {
-                  return LoginView();
+          if (email.isNotEmpty && password.isNotEmpty) {
+            return FutureBuilder(
+              future: controller.hiveCheckPin(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return SplashView();
+                } else if (snapshot.hasData) {
+                  return PinView();
+                } else if (snapshot.connectionState == ConnectionState.done) {
+                  return MenuView();
                 }
-              }
-              return ErrorWidget();
-            },
-          );
-
-          // return LoginView();
-        } else {
-          return ErrorWidget();
+                return ErrorWidget();
+              },
+            );
+          } else {
+            return LoginView();
+          }
         }
+        return ErrorWidget();
       },
     );
   }

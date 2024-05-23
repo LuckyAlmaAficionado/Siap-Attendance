@@ -45,9 +45,9 @@ TextStyle normalTextStyle = GoogleFonts.plusJakartaSans(
 
 // ... TEXTSTYLE APPBAR
 TextStyle appBarTextStyle = normalTextStyle.copyWith(
-  fontWeight: regular,
+  fontWeight: semiBold,
   color: whiteColor,
-  fontSize: 18,
+  fontSize: 16,
 );
 
 // .. FONTWEIGHT

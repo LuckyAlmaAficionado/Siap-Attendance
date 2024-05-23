@@ -1,17 +1,11 @@
 import 'dart:developer';
 
-import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:talenta_app/app/controllers/api_controller.dart';
 
 import 'package:talenta_app/app/controllers/model_controller.dart';
 import 'package:talenta_app/app/models/users.dart';
-import 'package:talenta_app/app/modules/home/views/home_view.dart';
-import 'package:talenta_app/app/modules/home/views/karyawan_view.dart';
-import 'package:talenta_app/app/modules/home/views/notification_view.dart';
-import 'package:talenta_app/app/modules/home/views/setting_view.dart';
 
 import '../../../controllers/version_controller.dart';
 import '../../../models/karyawan.dart';
@@ -28,16 +22,11 @@ class HomeController extends GetxController {
   RxInt btmNavIndex = 0.obs;
   RxBool isIzin = false.obs;
 
+  late bool isManager = false;
+
   ModelData u = Get.find<ModelController>().u.value;
   final m = Get.put(ModelController());
   final a = Get.put(ApiController());
-
-  RxList<Widget> widget = <Widget>[
-    HomeView(),
-    KaryawanView(),
-    NotificationView(),
-    SettingView(),
-  ].obs;
 
   @override
   void onInit() async {
@@ -55,8 +44,7 @@ class HomeController extends GetxController {
   // Asynchronous function to validate a permission for a user. Returns a boolean value based on the validation result.
   Future validatorIzin() async {
     log("validatorIzin");
-    var res = await http
-        .get(Uri.parse("http://192.168.5.9:8080/api/izin/${u.user.id}"));
+    var res = await http.get(Uri.parse("${a.BASE_URL}/api/izin/${u.user.id}"));
 
     if (res.statusCode == 200) {
       isIzin(bool.parse(res.body));
@@ -87,5 +75,6 @@ class HomeController extends GetxController {
   Future onRefresh() async {
     await a.fetchTodayAttendance();
     await a.fetchDetailAttendance();
+    await validatorIzin();
   }
 }

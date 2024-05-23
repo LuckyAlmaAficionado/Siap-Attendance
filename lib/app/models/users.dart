@@ -104,7 +104,7 @@ class ModelUser {
         email: json["email"],
         avatar: json["avatar"],
         nama: json["nama"],
-        tanggalLahir: json["tanggalLahir"],
+        tanggalLahir: json["tanggalLahir"] ?? "",
         tempatLahir: json["tempatLahir"],
         telepon: json["telepon"],
         alamat: json["alamat"],

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:talenta_app/app/controllers/api_controller.dart';
@@ -263,7 +264,7 @@ class _RiwayatPageViewState extends State<RiwayatPageView> {
                   ShowDetailAbsensi(context, index, clockin, clockout);
                 },
                 icon: Icon(
-                  Icons.keyboard_arrow_right_outlined,
+                  Iconsax.arrow_right_3,
                   color: darkGreyColor,
                 ),
               ),

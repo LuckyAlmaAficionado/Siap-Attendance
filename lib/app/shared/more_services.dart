@@ -18,19 +18,12 @@ class MoreServices extends StatelessWidget {
       ),
       content: Container(
         width: Get.width * 0.8,
+        height: Get.width * 0.8,
         color: Colors.white,
         child: LayoutBuilder(
           builder: (context, constraints) => Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                "MENU PENGAJUAN",
-                style: blackTextStyle.copyWith(
-                  fontSize: 20,
-                  fontWeight: bold,
-                ),
-              ),
-              const SizedBox(height: 20),
               _Cbutton(
                 () => Get.toNamed(Routes.CUTI_PAGE),
                 "Cuti",
@@ -67,7 +60,7 @@ class MoreServices extends StatelessWidget {
 
   _Cbutton(Function()? onTap, String title, IconData icons, double height) =>
       Container(
-        height: height * 0.1,
+        height: height * 0.19,
         margin: const EdgeInsets.only(top: 10),
         child: Material(
           borderRadius: BorderRadius.circular(20),

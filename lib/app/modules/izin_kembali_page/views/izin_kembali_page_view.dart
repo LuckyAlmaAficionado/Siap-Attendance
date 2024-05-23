@@ -86,7 +86,6 @@ class IzinKembaliPageView extends GetView<IzinKembaliPageController> {
                     },
                   );
                 }
-
                 return Container(
                   child: Center(
                     child: Image.asset("assets/images/img_onboarding1.png"),
@@ -95,17 +94,16 @@ class IzinKembaliPageView extends GetView<IzinKembaliPageController> {
               },
             ),
           ),
-          if (m.ci.value.id != null)
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Button1(
-                title: (homeC.isIzin.value) ? "Izin Kembali" : "Izin Keluar",
-                onTap: () => Get.toNamed(
-                  Routes.LOCATIONS_PAGE,
-                  arguments: "argument-izin",
-                ),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Button1(
+              title: (homeC.isIzin.value) ? "Izin Kembali" : "Izin Keluar",
+              onTap: () => Get.toNamed(
+                Routes.LOCATIONS_PAGE,
+                arguments: "argument-izin",
               ),
             ),
+          ),
         ],
       ),
     );
@@ -220,7 +218,7 @@ class PermitActivityDetails extends StatelessWidget {
                               loadingProgress == null
                                   ? child
                                   : Center(child: CircularProgressIndicator()),
-                          "http://192.168.5.9:8080/api/fileSystem/${a.imageKeluar}",
+                          "${Get.put(ApiController()).BASE_URL}/api/fileSystem/${a.imageKeluar}",
                           filterQuality: FilterQuality.high,
                           fit: BoxFit.fitWidth,
                         ),
@@ -315,7 +313,7 @@ class PermitActivityDetails extends StatelessWidget {
                               loadingProgress == null
                                   ? child
                                   : Center(child: CircularProgressIndicator()),
-                          "http://192.168.5.9:8080/api/fileSystem/${a.imageMasuk}",
+                          "${Get.put(ApiController()).BASE_URL}/api/fileSystem/${a.imageMasuk}",
                           filterQuality: FilterQuality.high,
                           fit: BoxFit.fitWidth,
                         ),

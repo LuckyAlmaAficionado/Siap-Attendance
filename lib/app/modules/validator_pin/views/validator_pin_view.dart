@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:talenta_app/app/controllers/authentication_controller.dart';
 import 'package:talenta_app/app/shared/utils.dart';
 
 import '../../../shared/theme.dart';
@@ -186,9 +185,7 @@ class ValidatorPinView extends GetView<ValidatorPinController> {
                           child: InkWell(
                             onTap: () {
                               if (index == 0) {
-                                if (Get.find<AuthenticationController>()
-                                    .isAuthenticationOn
-                                    .value) {
+                                if (true) {
                                   controller.checkLocalAuthentication(argument);
                                 } else {
                                   Utils().snackbarC(

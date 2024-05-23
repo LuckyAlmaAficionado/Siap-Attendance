@@ -36,8 +36,9 @@ class ApiController extends GetxController {
     super.onClose();
   }
 
-  // final BASE_URL = ""; // production
-  final BASE_URL = "http://192.168.5.9:8080"; // dummy
+  final BASE_URL =
+      "https://andioffset-siap-production.up.railway.app"; // production
+  // final BASE_URL = "http://192.168.5.9:8080"; // dummy
 
   final Map<String, String> listApi = {
     "login": "api/v1/auth/login",
@@ -65,8 +66,6 @@ class ApiController extends GetxController {
         "password": "$password",
       };
 
-      print(body);
-
       Uri url = Uri.parse("${BASE_URL}/${listApi["login"]}");
       final res = await http.post(
         url,
@@ -74,15 +73,9 @@ class ApiController extends GetxController {
         body: json.encode(body),
       );
 
-      print(res.statusCode);
-
       if (res.statusCode == 200) {
         final result = json.decode(res.body);
-
-        print(result);
-
         m.u(ModelLogin.fromJson(result).data);
-
         await fetchTodayAttendance();
         await fetchPermitByUserId();
 
@@ -252,7 +245,10 @@ class ApiController extends GetxController {
 
       if (res.statusCode == 200) {
         Get.back();
-        Get.off(() => MenuView(), transition: Transition.cupertino);
+        fetchPermitByUserId().then((value) => Get.offAll(
+              () => MenuView(),
+              transition: Transition.cupertino,
+            ));
       }
     } catch (e) {
       Get.dialog(ErrorAlert(
@@ -274,6 +270,10 @@ class ApiController extends GetxController {
 
       if (res.statusCode == 200) {
         final result = json.decode(res.body);
+        if (result['data'] == null) {
+          return null;
+        }
+
         List dt = result['data'];
         List<ModelIzin> mi = dt.map((e) => ModelIzin.fromJson(e)).toList();
         log("==== End fetchPermitByUserId ====");
@@ -285,7 +285,7 @@ class ApiController extends GetxController {
       return null;
     } on HttpException catch (e) {
       Get.dialog(ErrorAlert(
-          msg: e.toString(),
+          msg: e.message,
           methodName: "fetchTodayAttendance | api_controller.dart"));
     }
   }
@@ -401,13 +401,9 @@ class ApiController extends GetxController {
   Future approvalRequest(String desc) async {
     try {
       Map<String, dynamic> body = {
-        "description": desc,
+        "description": "Mengurus kartu XL yang ribet",
         "userId": "${m.u.value.user.id}",
-        "approvers": [
-          "user1@example.com",
-          "user2@example.com",
-          "user3@example.com"
-        ]
+        "approvers": ["manager", "personalia"]
       };
 
       var res = await http.post(
@@ -417,7 +413,8 @@ class ApiController extends GetxController {
 
       if (res.statusCode == 200) {
         Get.snackbar("success", "success to send approval request");
-        Get.off(() => MenuView(), transition: Transition.cupertino);
+        Get.offAll(() => MenuView(), transition: Transition.cupertino);
+        return;
       }
       Get.snackbar("failed", "failed to send approval request");
     } on HttpException catch (e) {

@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:talenta_app/app/controllers/api_controller.dart';
 
 import 'package:talenta_app/app/controllers/model_controller.dart';
 import 'package:talenta_app/app/models/user_absensi.dart';
@@ -17,6 +19,7 @@ class DetailClockInView extends GetView {
   Widget build(BuildContext context) {
     ModelAbsensi? absen = Get.arguments as ModelAbsensi?;
     final ModelController m = Get.find<ModelController>();
+    final ApiController a = Get.put(ApiController());
 
     if (absen == null) {
       // If absen is null, handle gracefully (e.g., show error message)
@@ -85,8 +88,21 @@ class DetailClockInView extends GetView {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(100),
                                       child: Image.network(
-                                        // "https://yt3.ggpht.com/ERDsampD88U7cvmuqz1jXcpxIqiekRxIUIcf09z9h1riUdlIu_-E43SkLcB6fzWRj9oGg3oM=s108-c-k-c0x00ffffff-no-rj",
                                         "${m.u.value.user.avatar}",
+                                        errorBuilder:
+                                            (context, error, stackTrace) =>
+                                                Icon(
+                                          Iconsax.image,
+                                          color: whiteColor,
+                                        ),
+                                        loadingBuilder:
+                                            (context, child, loadingProgress) =>
+                                                loadingProgress == null
+                                                    ? child
+                                                    : Center(
+                                                        child:
+                                                            CircularProgressIndicator(),
+                                                      ),
                                         fit: BoxFit.cover,
                                         filterQuality: FilterQuality.high,
                                       ),
@@ -107,11 +123,15 @@ class DetailClockInView extends GetView {
                       width: Get.width,
                       child: Image.network(
                         headers: {"Authorization": "Bearer ${m.u.value.token}"},
+                        errorBuilder: (context, error, stackTrace) => Icon(
+                          Iconsax.image,
+                          color: whiteColor,
+                        ),
                         loadingBuilder: (context, child, loadingProgress) =>
                             loadingProgress == null
                                 ? child
                                 : Center(child: CircularProgressIndicator()),
-                        "http://192.168.5.9:8080/api/fileSystem/${absen.image}",
+                        "${a.BASE_URL}/api/fileSystem/${absen.image}",
                         filterQuality: FilterQuality.high,
                         fit: BoxFit.fitWidth,
                       ),

@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:talenta_app/app/modules/home/controllers/home_controller.dart';
+import 'package:talenta_app/app/modules/home/views/home_view.dart';
+import 'package:talenta_app/app/modules/home/views/karyawan_view.dart';
+import 'package:talenta_app/app/modules/home/views/notification_view.dart';
+import 'package:talenta_app/app/modules/home/views/setting_view.dart';
 import 'package:talenta_app/app/shared/theme.dart';
 
 class MenuView extends GetView<HomeController> {
@@ -12,9 +16,17 @@ class MenuView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     Get.lazyPut(() => HomeController());
+    // List<Widget> widget = [HomeView(), KaryawanView(), NotificationView(), SettingView()];
+    RxList<Widget> widget = <Widget>[
+      HomeView(),
+      if (controller.u.user.manager == "1") KaryawanView(),
+      NotificationView(),
+      SettingView(),
+    ].obs;
+
     return Scaffold(
       backgroundColor: Colors.blue.shade100,
-      body: Obx(() => controller.widget[controller.btmNavIndex.value]),
+      body: Obx(() => widget[controller.btmNavIndex.value]),
       bottomNavigationBar: Obx(
         () => CustomNavigationBar(
             currentIndex: controller.btmNavIndex.value,
@@ -27,7 +39,7 @@ class MenuView extends GetView<HomeController> {
                 ),
                 icon: Icon(
                   Iconsax.home_2,
-                  color: Colors.black12,
+                  color: Colors.black38,
                 ),
                 selectedTitle: Text(
                   "Home",
@@ -35,27 +47,28 @@ class MenuView extends GetView<HomeController> {
                 ),
                 title: Text(
                   "Home",
-                  style: normalTextStyle.copyWith(color: Colors.black12),
+                  style: normalTextStyle.copyWith(color: Colors.black38),
                 ),
               ),
-              CustomNavigationBarItem(
-                selectedIcon: Icon(
-                  Iconsax.people,
-                  color: Colors.blue,
+              if (controller.m.u.value.user.manager == "1")
+                CustomNavigationBarItem(
+                  selectedIcon: Icon(
+                    Iconsax.people,
+                    color: Colors.blue,
+                  ),
+                  icon: Icon(
+                    Iconsax.people,
+                    color: Colors.black38,
+                  ),
+                  selectedTitle: Text(
+                    "Employee",
+                    style: normalTextStyle.copyWith(color: Colors.blue),
+                  ),
+                  title: Text(
+                    "Employee",
+                    style: normalTextStyle.copyWith(color: Colors.black38),
+                  ),
                 ),
-                icon: Icon(
-                  Iconsax.people,
-                  color: Colors.black12,
-                ),
-                selectedTitle: Text(
-                  "Employee",
-                  style: normalTextStyle.copyWith(color: Colors.blue),
-                ),
-                title: Text(
-                  "Employee",
-                  style: normalTextStyle.copyWith(color: Colors.black12),
-                ),
-              ),
               CustomNavigationBarItem(
                 selectedIcon: Icon(
                   Iconsax.message,
@@ -63,7 +76,7 @@ class MenuView extends GetView<HomeController> {
                 ),
                 icon: Icon(
                   Iconsax.message,
-                  color: Colors.black12,
+                  color: Colors.black38,
                 ),
                 selectedTitle: Text(
                   "Inbox",
@@ -74,7 +87,7 @@ class MenuView extends GetView<HomeController> {
                 title: Text(
                   "Inbox",
                   style: normalTextStyle.copyWith(
-                    color: Colors.black12,
+                    color: Colors.black38,
                   ),
                 ),
               ),
@@ -85,7 +98,7 @@ class MenuView extends GetView<HomeController> {
                 ),
                 icon: Icon(
                   Iconsax.personalcard,
-                  color: Colors.black12,
+                  color: Colors.black38,
                 ),
                 selectedTitle: Text(
                   "Settings",
@@ -96,7 +109,7 @@ class MenuView extends GetView<HomeController> {
                 title: Text(
                   "Settings",
                   style: normalTextStyle.copyWith(
-                    color: Colors.black12,
+                    color: Colors.black38,
                   ),
                 ),
               )
