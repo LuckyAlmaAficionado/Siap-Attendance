@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:talenta_app/app/modules/authentication/views/login_view.dart';
 
 import '../modules/absen_page/bindings/absen_page_binding.dart';
 import '../modules/absen_page/views/absen_page_view.dart';
@@ -7,8 +6,9 @@ import '../modules/anggota_tim/bindings/anggota_tim_binding.dart';
 import '../modules/anggota_tim/views/anggota_tim_view.dart';
 import '../modules/authentication/bindings/authentication_binding.dart';
 import '../modules/authentication/views/authentication_view.dart';
-import '../modules/camera_page/bindings/camera_page_binding.dart';
-import '../modules/camera_page/views/camera_page_view.dart';
+import '../modules/authentication/views/login_view.dart';
+import '../modules/capture_attendance/bindings/capture_attendance_binding.dart';
+import '../modules/capture_attendance/views/capture_attendance_view.dart';
 import '../modules/cuti_page/bindings/cuti_page_binding.dart';
 import '../modules/cuti_page/views/cuti_page_view.dart';
 import '../modules/daftar_absensi_page/bindings/daftar_absensi_page_binding.dart';
@@ -57,11 +57,6 @@ class AppPages {
     GetPage(
       name: "/detail-info-absensi-view",
       page: () => DetailInfoAbsensiView(),
-    ),
-    GetPage(
-      name: _Paths.CAMERA_PAGE,
-      page: () => CameraPageView(),
-      binding: CameraPageBinding(),
     ),
     GetPage(
       name: _Paths.LOGIN,
@@ -142,6 +137,11 @@ class AppPages {
       name: _Paths.HOME,
       page: () => const HomeView(),
       binding: HomeBinding(),
+    ),
+    GetPage(
+      name: _Paths.CAPTURE_ATTENDANCE,
+      page: () => const CaptureAttendanceView(),
+      binding: CaptureAttendanceBinding(),
     ),
   ];
 }

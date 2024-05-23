@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:talenta_app/app/routes/app_pages.dart';
 import 'package:talenta_app/app/shared/button/button_1.dart';
 import 'package:talenta_app/app/shared/theme.dart';
+
+import '../../modules/capture_attendance/views/capture_attendance_view.dart';
 
 class AlertOutRange extends StatelessWidget {
   const AlertOutRange({super.key, required this.status});
@@ -49,11 +50,15 @@ class AlertOutRange extends StatelessWidget {
                   child: SizedBox(
                       height: 40,
                       child: Button1(
-                        title: "Absen",
-                        color: redColor,
-                        onTap: () =>
-                            Get.offNamed(Routes.CAMERA_PAGE, arguments: status),
-                      )),
+                          title: "Absen",
+                          color: redColor,
+                          onTap: () => Get.to(
+                                () => CaptureAttendanceView(),
+                                transition: Transition.cupertino,
+                                arguments: status,
+                              )
+                          // Get.offNamed(Routes.CAMERA_PAGE, arguments: status),
+                          )),
                 ),
               ],
             )

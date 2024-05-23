@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:hexcolor/hexcolor.dart';
+import 'package:iconsax/iconsax.dart';
 
 import 'package:talenta_app/app/modules/home/controllers/home_controller.dart';
 import 'package:talenta_app/app/shared/alert/alert-detail-inbox.dart';
@@ -106,21 +107,22 @@ class NoAccessPanel extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            width: 300,
-            height: 300,
+            width: 200,
+            height: 200,
             child: Image.asset(
-              "assets/images/img_onboarding1.png",
+              "assets/icons/ic_noaccess.png",
               filterQuality: FilterQuality.high,
               fit: BoxFit.fill,
             ),
           ),
           const Gap(40),
           Text(
-            "Anda tidak memiliki\nakses untuk ini",
+            "Need Access Requirements",
             textAlign: TextAlign.center,
             style: normalTextStyle.copyWith(
               fontSize: 18,
-              fontWeight: medium,
+              color: redColor,
+              fontWeight: semiBold,
             ),
           ),
         ],
@@ -256,10 +258,10 @@ class NotificationPanel extends StatelessWidget {
         return ListTile(
           onTap: () => Get.to(
             DetailInboxView(),
-            transition: Transition.downToUp,
+            transition: Transition.cupertino,
           ),
           minVerticalPadding: 10,
-          trailing: Icon(Icons.navigate_next_sharp),
+          trailing: Icon(Iconsax.arrow_right_3),
           leading: CircleAvatar(
             backgroundColor: darkGreyColor,
           ),
@@ -275,7 +277,7 @@ class NotificationPanel extends StatelessWidget {
             style: normalTextStyle.copyWith(
               fontWeight: regular,
               color: darkGreyColor,
-              fontSize: 12,
+              fontSize: 10,
             ),
           ),
         );

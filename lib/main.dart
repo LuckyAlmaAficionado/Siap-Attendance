@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -9,6 +10,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 
 import 'package:talenta_app/app/controllers/model_controller.dart';
+import 'package:talenta_app/app/modules/capture_attendance/controllers/capture_attendance_controller.dart';
 
 import 'app/routes/app_pages.dart';
 
@@ -23,6 +25,7 @@ Future<void> main() async {
 
   await initializeDateFormatting("id_ID", null);
   await Get.put(ModelController(), permanent: true);
+  Get.put(CaptureAttendanceController()).cameras(await availableCameras());
 
   runApp(const MyApp());
 }

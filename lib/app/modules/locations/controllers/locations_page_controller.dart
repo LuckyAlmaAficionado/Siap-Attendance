@@ -4,6 +4,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
 import 'package:talenta_app/app/controllers/locations_controller.dart';
+import 'package:talenta_app/app/modules/capture_attendance/views/capture_attendance_view.dart';
 import 'package:talenta_app/app/routes/app_pages.dart';
 import 'package:talenta_app/app/shared/alert/alert-out-range.dart';
 
@@ -52,7 +53,12 @@ class LocationsPageController extends GetxController {
       return;
     }
 
-    Get.toNamed(Routes.CAMERA_PAGE, arguments: status);
+    // Get.toNamed(Routes.CAMERA_PAGE, arguments: status);
+    Get.to(
+      () => CaptureAttendanceView(),
+      transition: Transition.cupertino,
+      arguments: status,
+    );
   }
 
   @override

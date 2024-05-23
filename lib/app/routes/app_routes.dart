@@ -7,7 +7,6 @@ abstract class Routes {
   static const SLIDER_PAGE = _Paths.SLIDER_PAGE;
   static const SIGN_IN_PAGE = _Paths.SIGN_IN_PAGE;
   static const DASHBOARD_PAGE = _Paths.DASHBOARD_PAGE;
-  static const CAMERA_PAGE = _Paths.CAMERA_PAGE;
   static const ABSEN_PAGE = _Paths.ABSEN_PAGE;
   static const DAFTAR_ABSENSI_PAGE = _Paths.DAFTAR_ABSENSI_PAGE;
   static const CUTI_PAGE = _Paths.CUTI_PAGE;
@@ -27,6 +26,7 @@ abstract class Routes {
   static const LOGIN = _Paths.LOGIN;
   static const AUTHENTICATION = _Paths.AUTHENTICATION;
   static const ATTENDANCE = _Paths.ATTENDANCE;
+  static const CAPTURE_ATTENDANCE = _Paths.CAPTURE_ATTENDANCE;
 }
 
 abstract class _Paths {
@@ -35,7 +35,6 @@ abstract class _Paths {
   static const SLIDER_PAGE = '/slider-page';
   static const SIGN_IN_PAGE = '/sign-in-page';
   static const DASHBOARD_PAGE = '/dashboard-page';
-  static const CAMERA_PAGE = '/camera-page';
   static const ABSEN_PAGE = '/absen-page';
   static const DAFTAR_ABSENSI_PAGE = '/daftar-absensi-page';
   static const CUTI_PAGE = '/cuti-page';
@@ -55,4 +54,5 @@ abstract class _Paths {
   static const LOGIN = '/login';
   static const AUTHENTICATION = '/authentication';
   static const ATTENDANCE = '/attendance';
+  static const CAPTURE_ATTENDANCE = '/capture-attendance';
 }
