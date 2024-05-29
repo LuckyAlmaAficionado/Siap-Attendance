@@ -43,20 +43,27 @@ class AuthController extends GetxController {
 
   @override
   void onClose() async {
-    email.dispose();
-    password.dispose();
     super.onClose();
   }
 
   // ============= HIVE ACCOUNT ===============
 
   Future login(String email, String password) async {
+    Get.dialog(
+      barrierDismissible: false,
+      Center(child: CircularProgressIndicator()),
+    );
+
     await api.login(email, password).then((value) async => (value)
         ? {
             await saveEmailAndPassword(email, password),
+            Get.back(),
             Get.off(() => MenuView(), transition: Transition.cupertino)
           }
-        : Utils().snackbarC("Failed", "email or password false", false));
+        : {
+            Get.back(),
+            Utils().snackbarC("Failed", "email or password false", false),
+          });
   }
 
   Future saveEmailAndPassword(String email, String password) async {
@@ -66,8 +73,7 @@ class AuthController extends GetxController {
     sps.setString("password", password);
   }
 
-  Future<Map<String, dynamic>> checkEmailAndPassword(
-      BuildContext context) async {
+  Future<Map<String, dynamic>> checkEmailAndPassword() async {
     log("=== check email and password ===");
 
     SharedPreferences sps = await sp;
@@ -79,7 +85,7 @@ class AuthController extends GetxController {
         email.isNotEmpty &&
         password != null &&
         password.isNotEmpty) {
-      await connection.validatorConnection(context);
+      await connection.validatorConnection();
 
       return login(email, password).then((value) => {
             "email": email,

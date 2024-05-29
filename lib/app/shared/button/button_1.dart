@@ -22,17 +22,18 @@ class Button1 extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           elevation: 0,
-          backgroundColor: color ?? Colors.blue[900],
+          backgroundColor: color ?? Colors.pink,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(100),
           ),
         ),
         onPressed: onTap,
         child: Text(
           "$title",
           style: normalTextStyle.copyWith(
-            fontWeight: FontWeight.w300,
-            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            fontSize: 12,
+            letterSpacing: 0.8,
             color: Colors.white,
           ),
         ),

@@ -1,24 +1,28 @@
+// To parse this JSON data, do
+//
+//     final user = userFromJson(jsonString);
+
 import 'dart:convert';
 
-ModelLogin userFromJson(String str) => ModelLogin.fromJson(json.decode(str));
+User userFromJson(String str) => User.fromJson(json.decode(str));
 
-String userToJson(ModelLogin data) => json.encode(data.toJson());
+String userToJson(User data) => json.encode(data.toJson());
 
-class ModelLogin {
-  int status;
-  String message;
-  ModelData data;
+class User {
+  int? status;
+  String? message;
+  ModelUser data;
 
-  ModelLogin({
-    required this.status,
-    required this.message,
+  User({
+    this.status,
+    this.message,
     required this.data,
   });
 
-  factory ModelLogin.fromJson(Map<String, dynamic> json) => ModelLogin(
+  factory User.fromJson(Map<String, dynamic> json) => User(
         status: json["status"],
         message: json["message"],
-        data: ModelData.fromJson(json["data"]),
+        data: ModelUser.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -28,37 +32,10 @@ class ModelLogin {
       };
 }
 
-class ModelData {
-  String token;
-  String? divisi;
-  String? jabatan;
-  ModelUser user;
-
-  ModelData({
-    required this.token,
-    this.divisi,
-    this.jabatan,
-    required this.user,
-  });
-
-  factory ModelData.fromJson(Map<String, dynamic> json) => ModelData(
-        token: json["token"],
-        divisi: json["divisi"] ?? "",
-        jabatan: json["jabatan"] ?? "",
-        user: ModelUser.fromJson(json["user"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "token": token,
-        "divisi": divisi,
-        "jabatan": jabatan,
-        "user": user.toJson(),
-      };
-}
-
 class ModelUser {
   String? id;
   String? email;
+  dynamic password;
   String? avatar;
   String? nama;
   dynamic tanggalLahir;
@@ -69,17 +46,18 @@ class ModelUser {
   String? statusPernikahan;
   String? golDarah;
   String? agama;
-  String? cabangId;
-  String? divisiId;
-  String? jabatanId;
+  String? cabang;
+  String? divisi;
+  String? jabatan;
   String? status;
   String? superAdmin;
   String? manager;
-  String? username;
+  String? token;
 
   ModelUser({
     this.id,
     this.email,
+    this.password,
     this.avatar,
     this.nama,
     this.tanggalLahir,
@@ -90,21 +68,22 @@ class ModelUser {
     this.statusPernikahan,
     this.golDarah,
     this.agama,
-    this.cabangId,
-    this.divisiId,
-    this.jabatanId,
+    this.cabang,
+    this.divisi,
+    this.jabatan,
     this.status,
     this.superAdmin,
     this.manager,
-    this.username,
+    this.token,
   });
 
   factory ModelUser.fromJson(Map<String, dynamic> json) => ModelUser(
         id: json["id"],
         email: json["email"],
+        password: json["password"],
         avatar: json["avatar"],
         nama: json["nama"],
-        tanggalLahir: json["tanggalLahir"] ?? "",
+        tanggalLahir: json["tanggalLahir"],
         tempatLahir: json["tempatLahir"],
         telepon: json["telepon"],
         alamat: json["alamat"],
@@ -112,18 +91,19 @@ class ModelUser {
         statusPernikahan: json["statusPernikahan"],
         golDarah: json["golDarah"],
         agama: json["agama"],
-        cabangId: json["cabangId"],
-        divisiId: json["divisiId"],
-        jabatanId: json["jabatanId"],
+        cabang: json["cabang"],
+        divisi: json["divisi"],
+        jabatan: json["jabatan"],
         status: json["status"],
         superAdmin: json["superAdmin"],
         manager: json["manager"],
-        username: json["username"],
+        token: json["token"],
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "email": email,
+        "password": password,
         "avatar": avatar,
         "nama": nama,
         "tanggalLahir": tanggalLahir,
@@ -134,12 +114,12 @@ class ModelUser {
         "statusPernikahan": statusPernikahan,
         "golDarah": golDarah,
         "agama": agama,
-        "cabangId": cabangId,
-        "divisiId": divisiId,
-        "jabatanId": jabatanId,
+        "cabang": cabang,
+        "divisi": divisi,
+        "jabatan": jabatan,
         "status": status,
         "superAdmin": superAdmin,
         "manager": manager,
-        "username": username,
+        "token": token,
       };
 }

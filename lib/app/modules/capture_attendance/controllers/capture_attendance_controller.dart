@@ -1,12 +1,15 @@
-import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+
+import 'package:camera/camera.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
+
 import 'package:talenta_app/app/controllers/api_controller.dart';
+import 'package:uuid/uuid.dart';
 
 class CaptureAttendanceController extends GetxController {
   RxList<CameraDescription> cameras = <CameraDescription>[].obs;
@@ -46,20 +49,54 @@ class CaptureAttendanceController extends GetxController {
     }
   }
 
+  Future<File> _saveImage(File image) async {
+    var uuid = Uuid();
+
+    final directory = await getApplicationDocumentsDirectory();
+    final String path = directory.path;
+    final String fileName = "${uuid.v1()}.jpg";
+    final File localImage = await image.copy('$path/$fileName');
+    print("Gambar disimpan di: ${localImage.path}");
+
+    return localImage;
+  }
+
+  Future<dynamic> loadImage(String name) async {
+    if (name.contains("/")) {
+      name = name.split("/").last;
+    }
+
+    print("name: $name");
+
+    final directory = await getApplicationDocumentsDirectory();
+    final String path = directory.path;
+
+    final String fileName = "$name"; // Nama file yang diinginkan
+    final File localImage = File('$path/$fileName');
+
+    if (await localImage.exists()) {
+      return localImage;
+    }
+    return null;
+  }
+
   Future<void> onSubmitButton(String status) async {
     File picture = File((await compress(await capturePicture()))!.path);
 
+    File localImage = await _saveImage(picture); // save image to fileSystem
+
     log("status: $status");
+    log(localImage.path.split("/").last);
 
     switch (status) {
       case "argument-izin":
-        await a.permitApplication(noteC.text, picture);
+        await a.permitApplication(noteC.text, localImage);
         break;
       case "argument-telat":
         await a.approvalRequest(noteC.text);
         break;
       default:
-        await a.submitAttendance(noteC.text, picture);
+        await a.submitAttendance(noteC.text, localImage);
         break;
     }
   }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -53,18 +54,17 @@ class _NotificationViewState extends State<NotificationView>
                       "Inbox",
                       style: normalTextStyle.copyWith(
                         fontWeight: semiBold,
-                        fontSize: 30,
+                        fontSize: 26,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 20),
                   TabBar(
                     indicatorColor: blueColor,
                     dividerColor: lightGreyColor,
                     enableFeedback: true,
                     controller: tabController,
                     labelColor: blueColor,
-                    labelStyle: normalTextStyle.copyWith(fontSize: 15),
+                    labelStyle: GoogleFonts.outfit(fontSize: 14),
                     unselectedLabelColor: darkGreyColor,
                     tabs: [
                       Tab(child: Text('Notifikasi')),
@@ -80,7 +80,7 @@ class _NotificationViewState extends State<NotificationView>
               controller: tabController,
               children: [
                 NotificationPanel(controller: controller),
-                (controller.u.user.manager == "1")
+                (controller.u.manager == "1")
                     ? PersetujuanTabBar(controller: controller)
                     : NoAccessPanel(),
               ],

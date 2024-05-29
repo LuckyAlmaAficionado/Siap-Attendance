@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -12,9 +13,12 @@ import 'package:http/http.dart' as http;
 import 'package:talenta_app/app/controllers/model_controller.dart';
 import 'package:talenta_app/app/models/approval.dart';
 import 'package:talenta_app/app/models/karyawan.dart';
+import 'package:talenta_app/app/models/locations.dart';
 import 'package:talenta_app/app/models/model_izin.dart';
 import 'package:talenta_app/app/models/user_absensi.dart';
 import 'package:talenta_app/app/models/users.dart';
+import 'package:talenta_app/app/modules/authentication/views/login_view.dart';
+import 'package:talenta_app/app/shared/button/button_1.dart';
 import 'package:talenta_app/app/shared/detail_absen.dart';
 import 'package:talenta_app/app/shared/error_alert.dart';
 
@@ -36,9 +40,11 @@ class ApiController extends GetxController {
     super.onClose();
   }
 
-  final BASE_URL =
-      "https://andioffset-siap-production.up.railway.app"; // production
-  // final BASE_URL = "http://192.168.5.9:8080"; // dummy
+  // production
+  // final BASE_URL = "https://andioffset-siap-production.up.railway.app";
+
+  // dummy
+  final BASE_URL = "http://192.168.5.9:8000";
 
   final Map<String, String> listApi = {
     "login": "api/v1/auth/login",
@@ -50,11 +56,34 @@ class ApiController extends GetxController {
     "attendance": "api/v1/user-absensi",
     "fetchLatePermission": "api/v1/late",
     "approvalRequest": "api/approval-requests",
+    "locations": "api/v1/attendance"
   };
 
   // === save model data
 
   final m = Get.find<ModelController>();
+
+  // ===== Locations
+  Future getLocations() async {
+    log("=== getLocations ===");
+    try {
+      Uri url = Uri.parse(
+          "$BASE_URL/${listApi['locations']}?userId=${m.u.value!.id}");
+      final res = await http.post(url);
+
+      if (res.statusCode == 200) {
+        final result = json.decode(res.body);
+        List temp = result['data'];
+        List data = temp.map((e) => e['attendance']).toList();
+        return data.map((e) => ModelLocations.fromJson(e)).toList();
+      }
+    } on HttpException catch (e) {
+      Get.dialog(ErrorAlert(
+        msg: e.message,
+        methodName: "getLocations | api_controller.dart",
+      ));
+    }
+  }
 
   // ===
   Future login(String email, String password) async {
@@ -67,15 +96,33 @@ class ApiController extends GetxController {
       };
 
       Uri url = Uri.parse("${BASE_URL}/${listApi["login"]}");
-      final res = await http.post(
-        url,
-        headers: {"Content-Type": "application/json"},
-        body: json.encode(body),
-      );
+      final res = await http
+          .post(
+            url,
+            headers: {"Content-Type": "application/json"},
+            body: json.encode(body),
+          )
+          .timeout(
+            const Duration(seconds: 3),
+            onTimeout: () async => await Get.dialog(AlertDialog(
+              content: Container(
+                child: Column(
+                  children: [
+                    Text("Timeout"),
+                    Button1(
+                      title: "Coba Lagi",
+                      onTap: () => Get.to(() => LoginView(),
+                          transition: Transition.cupertino),
+                    ),
+                  ],
+                ),
+              ),
+            )),
+          );
 
       if (res.statusCode == 200) {
         final result = json.decode(res.body);
-        m.u(ModelLogin.fromJson(result).data);
+        m.u(ModelUser.fromJson(result['data']));
         await fetchTodayAttendance();
         await fetchPermitByUserId();
 
@@ -104,6 +151,7 @@ class ApiController extends GetxController {
         m.k.sort((a, b) => a.name!.compareTo(b.name!));
 
         log("==== End fetchAllEmployee ====");
+        return;
       }
       log("==== End fetchAllEmployee Error ====");
     } catch (e) {
@@ -120,12 +168,12 @@ class ApiController extends GetxController {
 
     try {
       Uri url = Uri.parse(
-        "${BASE_URL}/${listApi["detailAttendance"]}/${m.u.value.user.id}",
+        "${BASE_URL}/${listApi["detailAttendance"]}/${m.u.value!.id}",
       );
 
       final res = await http.get(
         url,
-        headers: {"Authorization": "Bearer ${m.u.value.token}"},
+        headers: {"Authorization": "Bearer ${m.u.value!.token}"},
       );
 
       if (res.statusCode == 200) {
@@ -154,7 +202,7 @@ class ApiController extends GetxController {
       m.co(null);
 
       Uri url = Uri.parse(
-        "${BASE_URL}/${listApi["todayAttendance"]}/${m.u.value.user.id}",
+        "${BASE_URL}/${listApi["todayAttendance"]}/${m.u.value!.id}",
       );
       final res = await http.post(url);
 
@@ -178,6 +226,8 @@ class ApiController extends GetxController {
   }
 
   Future submitAttendance(String note, File img) async {
+    log("--- submit attendance ---");
+
     try {
       final url = Uri.parse("$BASE_URL/${listApi['attendance']}");
 
@@ -188,7 +238,7 @@ class ApiController extends GetxController {
         img.path,
       ));
 
-      req.headers.addAll({"Authorizaation": "Bearer ${m.u.value.token}"});
+      req.headers.addAll({"Authorizaation": "Bearer ${m.u.value!.token}"});
 
       // Get current location
       Position p = await Geolocator.getCurrentPosition(
@@ -205,7 +255,7 @@ class ApiController extends GetxController {
       String add =
           "${pm.street}, ${pm.locality}, ${pm.postalCode}, ${pm.country}";
 
-      req.fields['user_absensi_id'] = m.u.value.user.id!;
+      req.fields['user_absensi_id'] = m.u.value!.id!;
       req.fields['lang'] = "${p.longitude}";
       req.fields['lat'] = "${p.latitude}";
       req.fields['address'] = add;
@@ -239,7 +289,7 @@ class ApiController extends GetxController {
 
       Position p = await curLocations();
 
-      req.fields['user_id'] = m.u.value.user.id!;
+      req.fields['user_id'] = m.u.value!.id!;
       req.fields['alasan'] = note.isEmpty ? "" : note;
       req.fields['latitude'] = "${p.latitude}";
       req.fields['longitude'] = "${p.longitude}";
@@ -267,7 +317,7 @@ class ApiController extends GetxController {
     try {
       Uri url = Uri.parse("${BASE_URL}/${listApi['permit']}");
 
-      final body = {"user_id": m.u.value.user.id};
+      final body = {"user_id": m.u.value!.id};
 
       final res = await http.post(url, body: body);
 
@@ -333,7 +383,7 @@ class ApiController extends GetxController {
       );
 
       final body = {
-        "user_id": m.u.value.user.id,
+        "user_id": m.u.value!.id,
         "alasan": note,
         "late_minutes": r,
         "latitude": p.latitude.toString(),
@@ -355,7 +405,7 @@ class ApiController extends GetxController {
   Future fetchApprovalByUserId() async {
     try {
       Uri url = Uri.parse(
-        "${BASE_URL}/${listApi['approvalRequest']}/${m.u.value.user.id}/id",
+        "${BASE_URL}/${listApi['approvalRequest']}/${m.u.value!.id}/id",
       );
 
       var req = await http.get(
@@ -405,7 +455,7 @@ class ApiController extends GetxController {
     try {
       Map<String, dynamic> body = {
         "description": "Mengurus kartu XL yang ribet",
-        "userId": "${m.u.value.user.id}",
+        "userId": "${m.u.value!.id}",
         "approvers": ["manager", "personalia"]
       };
 

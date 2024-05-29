@@ -6,6 +6,7 @@ import 'package:iconsax/iconsax.dart';
 
 import 'package:talenta_app/app/modules/authentication/controllers/authentication_controller.dart';
 import 'package:talenta_app/app/modules/home/controllers/home_controller.dart';
+import 'package:talenta_app/app/shared/images/images.dart';
 import 'package:talenta_app/app/shared/theme.dart';
 
 import '../../../controllers/version_controller.dart';
@@ -50,11 +51,11 @@ class SettingView extends GetView<HomeController> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '${controller.u.user.nama}',
+                          '${controller.u.nama}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: blackTextStyle.copyWith(
-                            fontWeight: semiBold,
+                            fontWeight: medium,
                             fontSize: 16,
                           ),
                         ),
@@ -77,30 +78,10 @@ class SettingView extends GetView<HomeController> {
                       ],
                     ),
                   ),
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundColor: darkGreyColor,
-                    child: (controller.u.user.avatar!.isEmpty)
-                        ? Icon(Iconsax.user, color: whiteColor)
-                        : ClipRRect(
-                            borderRadius: BorderRadius.circular(100),
-                            child: Image.network(
-                              "${controller.u.user.avatar}",
-                              errorBuilder: (context, error, stackTrace) =>
-                                  Icon(
-                                Iconsax.user,
-                                color: Colors.white,
-                              ),
-                              loadingBuilder: (context, child,
-                                      loadingProgress) =>
-                                  loadingProgress == null
-                                      ? child
-                                      : Padding(
-                                          padding: const EdgeInsets.all(10),
-                                          child: CircularProgressIndicator(),
-                                        ),
-                            ),
-                          ),
+                  SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: ImageNetwork(url: controller.u.avatar!),
                   ),
                 ],
               ),
@@ -125,37 +106,37 @@ class SettingView extends GetView<HomeController> {
                     ),
                     ListTile1(
                       title: 'Info personal',
-                      prefixIcon: Iconsax.lock_1,
+                      prefixIcon: Iconsax.personalcard,
                       suffixIcon: Iconsax.arrow_right_3,
                     ),
                     ListTile1(
                       title: 'Info pekerjaan',
-                      prefixIcon: Iconsax.code,
+                      prefixIcon: Iconsax.activity,
                       suffixIcon: Iconsax.arrow_right_3,
                     ),
                     ListTile1(
                       title: 'Info kontak darurat',
-                      prefixIcon: Iconsax.lock_1,
+                      prefixIcon: Iconsax.information,
                       suffixIcon: Iconsax.arrow_right_3,
                     ),
                     ListTile1(
                       title: 'Info keluarga',
-                      prefixIcon: Iconsax.code,
+                      prefixIcon: Iconsax.people,
                       suffixIcon: Iconsax.arrow_right_3,
                     ),
                     ListTile1(
                       title: 'Info Payroll',
-                      prefixIcon: Iconsax.lock_1,
+                      prefixIcon: Iconsax.card,
                       suffixIcon: Iconsax.arrow_right_3,
                     ),
                     ListTile1(
                       title: 'File saya',
-                      prefixIcon: Iconsax.code,
+                      prefixIcon: Iconsax.task_square,
                       suffixIcon: Iconsax.arrow_right_3,
                     ),
                     ListTile1(
                       title: 'Peringatan',
-                      prefixIcon: Iconsax.code,
+                      prefixIcon: Iconsax.danger,
                       suffixIcon: Iconsax.arrow_right_3,
                     ),
                   ],

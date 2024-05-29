@@ -57,7 +57,7 @@ class TextField1 extends StatelessWidget {
           borderSide: BorderSide(width: 1, color: blueColor),
         ),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(width: 0.5, color: Colors.grey.shade400),
           borderRadius: BorderRadius.circular(5),
         ),
       ),

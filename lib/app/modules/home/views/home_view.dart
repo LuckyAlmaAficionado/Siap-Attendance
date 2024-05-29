@@ -12,6 +12,7 @@ import 'package:shimmer/shimmer.dart';
 
 import 'package:talenta_app/app/controllers/model_controller.dart';
 import 'package:talenta_app/app/shared/button/button_1.dart';
+import 'package:talenta_app/app/shared/images/images.dart';
 import 'package:talenta_app/app/shared/more_services.dart';
 import 'package:talenta_app/app/shared/theme.dart';
 import 'package:talenta_app/app/shared/utils.dart';
@@ -27,21 +28,9 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     Get.lazyPut(() => HomeController());
     return Scaffold(
+      backgroundColor: Colors.grey.shade100,
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            end: Alignment.topLeft,
-            begin: Alignment.bottomRight,
-            colors: [
-              Colors.blue.shade100,
-              Colors.blue.shade100,
-              Colors.blue.shade100,
-              Colors.white,
-              Colors.white,
-              Colors.white,
-            ],
-          ),
-        ),
+        decoration: BoxDecoration(),
         child: RefreshIndicator(
           onRefresh: controller.onRefresh,
           child: CustomScrollView(
@@ -56,14 +45,10 @@ class HomeView extends GetView<HomeController> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      CircleAvatar(
-                        radius: 25,
-                        child: (controller.u.user.avatar!.isEmpty)
-                            ? Icon(Icons.person)
-                            : ClipRRect(
-                                borderRadius: BorderRadius.circular(100),
-                                child: Image.network(controller.u.user.avatar!),
-                              ),
+                      SizedBox(
+                        width: 45,
+                        height: 45,
+                        child: ImageNetwork(url: controller.u.avatar!),
                       ),
                       const Gap(10),
                       Container(
@@ -71,7 +56,7 @@ class HomeView extends GetView<HomeController> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "${controller.u.user.nama}",
+                              "${controller.u.nama}",
                               style: normalTextStyle,
                             ),
                             Text(
@@ -86,8 +71,12 @@ class HomeView extends GetView<HomeController> {
                       ),
                       new Spacer(),
                       IconButton(
-                        onPressed: () {},
-                        icon: Icon(Iconsax.notification, color: blackColor),
+                        onPressed: () async {
+                          await controller.a.getLocations();
+                          // Get.put(CaptureAttendanceController()).loadImage(
+                          //     "1c913910-21d8-1ff6-a458-8b8bb778ddf1.jpg");
+                        },
+                        icon: Icon(Iconsax.notification, color: Colors.black54),
                       )
                     ],
                   ),
@@ -102,7 +91,8 @@ class HomeView extends GetView<HomeController> {
                 child: Obx(
                   () => Column(
                     children: [
-                      Pengumuman(),
+                      Announcement(),
+                      const Gap(15),
                       ServiceWidget(),
                       FutureBuilder(
                         future: controller.validatorIzin(),
@@ -113,7 +103,7 @@ class HomeView extends GetView<HomeController> {
                             if (v) {
                               return Column(
                                 children: [
-                                  const Gap(5),
+                                  const Gap(15),
                                   PanelIzin(),
                                 ],
                               );
@@ -124,7 +114,7 @@ class HomeView extends GetView<HomeController> {
                           return Container();
                         },
                       ),
-                      const Gap(6),
+                      const Gap(15),
                       PanelAbsensi(),
                       const Gap(20),
                     ],
@@ -134,6 +124,73 @@ class HomeView extends GetView<HomeController> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class Announcement extends StatelessWidget {
+  Announcement({super.key});
+
+  final controller = Get.put(HomeController());
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: context.width,
+      height: 160,
+      color: Colors.white,
+      child: Stack(
+        children: [
+          Positioned(
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            child: CarouselSlider(
+              items: List.generate(
+                3,
+                (index) => Container(
+                  margin: const EdgeInsets.symmetric(vertical: 5),
+                  decoration: BoxDecoration(),
+                  child: ImageNetwork(
+                    borderRadius: 0,
+                    url:
+                        "https://t4.ftcdn.net/jpg/05/57/46/03/360_F_557460386_dKs9K9peVkWWi6VpnMFIKGciQJzRyCX6.jpg",
+                  ),
+                ),
+              ).toList(),
+              options: CarouselOptions(
+                viewportFraction: 1,
+                onPageChanged: (index, reason) => controller.curIndex(index),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 10,
+            right: 20,
+            child: Obx(
+              () => Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(
+                  3,
+                  (index) => AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    margin: const EdgeInsets.symmetric(horizontal: 3),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      color: (controller.curIndex == index)
+                          ? Colors.white
+                          : Colors.black.withOpacity(0.4),
+                    ),
+                    width: controller.curIndex == index ? 20 : 5,
+                    height: 5,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -312,11 +369,11 @@ class PanelAbsensi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 15),
       width: Get.width,
       child: Material(
-        elevation: 2,
-        borderRadius: BorderRadius.circular(5),
+        elevation: 0,
+        borderRadius: BorderRadius.circular(15),
         color: whiteColor,
         child: Column(
           children: [
@@ -334,22 +391,29 @@ class PanelAbsensi extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Icon(Iconsax.danger, color: Colors.red),
-                        const Gap(10),
+                        const Gap(5),
                         RichText(
                           text: TextSpan(
                             text: "Anda belum ",
-                            style: blackTextStyle,
+                            style: normalTextStyle.copyWith(
+                              fontSize: 12,
+                            ),
                             children: [
                               TextSpan(
                                 text: (m.ci.value.id == null)
-                                    ? "clock in"
-                                    : "clock out",
-                                style: blackTextStyle.copyWith(
-                                    fontWeight: semiBold),
+                                    ? " Clock-In "
+                                    : " Clock-Out ",
+                                style: normalTextStyle.copyWith(
+                                  fontWeight: semiBold,
+                                  fontSize: 12,
+                                  color: Colors.red,
+                                ),
                               ),
                               TextSpan(
                                 text: " hari ini.",
-                                style: blackTextStyle,
+                                style: normalTextStyle.copyWith(
+                                  fontSize: 12,
+                                ),
                               )
                             ],
                           ),
@@ -424,17 +488,16 @@ class ServiceWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 5, left: 5, right: 5),
+      padding: const EdgeInsets.only(top: 5, left: 15, right: 15),
       child: Material(
-        elevation: 2,
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(15),
         child: Container(
           width: context.width,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: whiteColor,
           ),
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.all(0),
           child: Wrap(
             alignment: WrapAlignment.spaceBetween,
             children: [
@@ -500,7 +563,7 @@ class ServiceWidget extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: () {
-                  switch (m.u.value.user.manager) {
+                  switch (m.u.value!.manager) {
                     case "1":
                       Get.toNamed(Routes.ANGGOTA_TIM);
                       break;
@@ -514,7 +577,7 @@ class ServiceWidget extends StatelessWidget {
                   }
                 },
                 child: IconWidgetService(
-                  Iconsax.user,
+                  Iconsax.people,
                   "Tim Anda",
                   HexColor("3883F7"),
                 ),
@@ -535,11 +598,10 @@ class PanelIzin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 5),
+      margin: const EdgeInsets.symmetric(horizontal: 15),
       width: Get.width,
       child: Material(
-        elevation: 2,
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(15),
         color: whiteColor,
         child: Padding(
           padding: const EdgeInsets.all(15),
@@ -589,19 +651,25 @@ Container IconWidgetService(IconData icons, String title, Color colors) {
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Material(
-          elevation: 5,
-          borderRadius: BorderRadius.circular(100),
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(shape: BoxShape.circle, color: colors),
-            child: Icon(icons, size: 25, color: whiteColor),
+        Container(
+          padding: const EdgeInsets.all(7),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.grey.shade100,
+          ),
+          child: Icon(
+            icons,
+            size: 23,
+            color: Colors.black54,
           ),
         ),
         const SizedBox(height: 10),
         Text(
           title,
-          style: blackTextStyle.copyWith(fontSize: 11, fontWeight: regular),
+          style: blackTextStyle.copyWith(
+            fontSize: 11,
+            fontWeight: regular,
+          ),
         ),
       ],
     ),

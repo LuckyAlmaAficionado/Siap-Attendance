@@ -1,250 +1,250 @@
-import 'dart:convert';
-import 'dart:isolate';
+// import 'dart:convert';
+// import 'dart:isolate';
 
-import 'package:dio/dio.dart';
-import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:dio/dio.dart';
+// import 'package:get/get.dart';
+// import 'package:http/http.dart' as http;
+// import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:talenta_app/app/models/user_absensi.dart';
-import 'package:talenta_app/app/models/users.dart';
-import 'package:talenta_app/app/modules/home/views/menu_view.dart';
-import 'package:talenta_app/app/routes/app_pages.dart';
-import 'package:talenta_app/app/shared/utils.dart';
+// import 'package:talenta_app/app/models/user_absensi.dart';
+// import 'package:talenta_app/app/modules/home/views/menu_view.dart';
+// import 'package:talenta_app/app/routes/app_pages.dart';
+// import 'package:talenta_app/app/shared/utils.dart';
 
-class AuthenticationController extends GetxController {
-  final _prefs = SharedPreferences.getInstance();
-  final dio = Dio();
+// class AuthenticationController extends GetxController {
+//   final _prefs = SharedPreferences.getInstance();
 
-  RxBool isNeededPinWhenOpenApps = false.obs;
-  RxBool isAuthenticationOn = false.obs;
-  RxBool isPinActivated = false.obs;
-  RxBool autoLoginC = false.obs;
-  RxString pin = "".obs;
-  String token = "";
-  Rx<ModelAbsensi?> clockInEntry = Rx<ModelAbsensi?>(null);
-  Rx<ModelAbsensi?> clockOutEntry = Rx<ModelAbsensi?>(null);
-  Rx<ModelLogin?> data = Rx<ModelLogin?>(null);
-  // String BASE_URL = "https://andioffset-siap-production.up.railway.app";
-  String BASE_URL = "http://192.168.5.9:8080";
-  RxList<ModelAbsensi> listUserAbsensi = <ModelAbsensi>[].obs;
-  RxString jabatan = "".obs;
-  late bool isSuperAdmin = true;
+//   Dio dio = Dio();
 
-  @override
-  void onInit() async {
-    super.onInit();
-    // await autoLoginIsTrue();
-    // await validatorPIN();
-    // Get.put(DateController()).fetchHolidayDate();
-    // validatorPIN();
-  }
+//   RxBool isNeededPinWhenOpenApps = false.obs;
+//   RxBool isAuthenticationOn = false.obs;
+//   RxBool isPinActivated = false.obs;
+//   RxBool autoLoginC = false.obs;
+//   RxString pin = "".obs;
+//   String token = "";
+//   Rx<ModelAbsensi?> clockInEntry = Rx<ModelAbsensi?>(null);
+//   Rx<ModelAbsensi?> clockOutEntry = Rx<ModelAbsensi?>(null);
+//   // Rx<ModelLogin?> data = Rx<ModelLogin?>(null);
+//   // String BASE_URL = "https://andioffset-siap-production.up.railway.app";
+//   String BASE_URL = "http://192.168.5.9:8080";
+//   RxList<ModelAbsensi> listUserAbsensi = <ModelAbsensi>[].obs;
+//   RxString jabatan = "".obs;
+//   late bool isSuperAdmin = true;
 
-  Future fetchDetailAbsensi() async {
-    try {
-      if (token.isNotEmpty) {
-        final res = await http.get(
-          Uri.parse(
-              "$BASE_URL/api/v1/absensi/detail/${data.value!.data.user.id}"),
-          headers: {"Authorization": "Bearer $token"},
-        );
+//   @override
+//   void onInit() async {
+//     super.onInit();
+//     // await autoLoginIsTrue();
+//     // await validatorPIN();
+//     // Get.put(DateController()).fetchHolidayDate();
+//     // validatorPIN();
+//   }
 
-        print(res.statusCode);
+//   Future fetchDetailAbsensi() async {
+//     try {
+//       if (token.isNotEmpty) {
+//         final res = await http.get(
+//           Uri.parse(
+//               "$BASE_URL/api/v1/absensi/detail/${data.value!.data.user.id}"),
+//           headers: {"Authorization": "Bearer $token"},
+//         );
 
-        if (res.statusCode == 200) {
-          List temp = json.decode(res.body);
+//         print(res.statusCode);
 
-          return listUserAbsensi(List<ModelAbsensi>.from(
-              temp.map((e) => ModelAbsensi.fromJson(e))));
-        }
-      } else {
-        return listUserAbsensi.clear();
-      }
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
+//         if (res.statusCode == 200) {
+//           List temp = json.decode(res.body);
 
-  Future autoLoginIsTrue() async {
-    try {
-      SharedPreferences pref = await _prefs;
-      if (pref.containsKey("email") && pref.containsKey("password")) {
-        await fetchUser(pref.getString("email")!, pref.getString("password")!);
-        await fetchDataAbsensi(data.value!.data.user.id!);
-        // await fetchDetailAbsensi();
-        autoLoginC(true);
-        return true;
-      }
-      return false;
-    } catch (e) {}
-  }
+//           return listUserAbsensi(List<ModelAbsensi>.from(
+//               temp.map((e) => ModelAbsensi.fromJson(e))));
+//         }
+//       } else {
+//         return listUserAbsensi.clear();
+//       }
+//     } catch (e) {
+//       throw Exception(e);
+//     }
+//   }
 
-  Future<void> autoLogin() async {
-    SharedPreferences pref = await _prefs;
-    if (pref.containsKey("email") && pref.containsKey("password")) {
-      String sharedEmail = pref.getString("email")!;
-      String sharedPassword = pref.getString("password")!;
-      signIn(sharedEmail, sharedPassword);
-    }
-  }
+//   Future autoLoginIsTrue() async {
+//     try {
+//       SharedPreferences pref = await _prefs;
+//       if (pref.containsKey("email") && pref.containsKey("password")) {
+//         await fetchUser(pref.getString("email")!, pref.getString("password")!);
+//         await fetchDataAbsensi(data.value!.data.user.id!);
+//         // await fetchDetailAbsensi();
+//         autoLoginC(true);
+//         return true;
+//       }
+//       return false;
+//     } catch (e) {}
+//   }
 
-  Future<void> saveAccount(String email, String password) async {
-    SharedPreferences pref = await _prefs;
-    pref.setString("email", email);
-    pref.setString("password", password);
-  }
+//   Future<void> autoLogin() async {
+//     SharedPreferences pref = await _prefs;
+//     if (pref.containsKey("email") && pref.containsKey("password")) {
+//       String sharedEmail = pref.getString("email")!;
+//       String sharedPassword = pref.getString("password")!;
+//       signIn(sharedEmail, sharedPassword);
+//     }
+//   }
 
-  Future<bool> isUserLoggedIn() async {
-    SharedPreferences pref = await _prefs;
-    return pref.containsKey('token');
-  }
+//   Future<void> saveAccount(String email, String password) async {
+//     SharedPreferences pref = await _prefs;
+//     pref.setString("email", email);
+//     pref.setString("password", password);
+//   }
 
-  Future signIn(String email, String password) async {
-    try {
-      print("=== masuk kesini ===");
-      bool result = await fetchUser(email, password);
+//   Future<bool> isUserLoggedIn() async {
+//     SharedPreferences pref = await _prefs;
+//     return pref.containsKey('token');
+//   }
 
-      if (result) {
-        fetchDataAbsensi(data.value!.data.user.id!).then((value) {
-          Get.back();
-          Get.off(() => MenuView());
-        });
-      } else {
-        Get.back();
-        Utils().snackbarC("Oh Tidak!", "Password atau Email salah", false);
-      }
-    } catch (e) {}
-  }
+//   Future signIn(String email, String password) async {
+//     try {
+//       print("=== masuk kesini ===");
+//       bool result = await fetchUser(email, password);
 
-  Future fetchUser(String email, String password) async {
-    try {
-      Map<String, dynamic> body = {"email": "$email", "password": "$password"};
+//       if (result) {
+//         fetchDataAbsensi(data.value!.data.user.id!).then((value) {
+//           Get.back();
+//           Get.off(() => MenuView());
+//         });
+//       } else {
+//         Get.back();
+//         Utils().snackbarC("Oh Tidak!", "Password atau Email salah", false);
+//       }
+//     } catch (e) {}
+//   }
 
-      final res = await dio.post("$BASE_URL/api/v1/auth/login", data: body);
+//   Future fetchUser(String email, String password) async {
+//     try {
+//       Map<String, dynamic> body = {"email": "$email", "password": "$password"};
 
-      if (res.statusCode == 200) {
-        data(ModelLogin.fromJson(res.data));
-        jabatan(data.value!.data.jabatan);
-        this.token = data.value!.data.token;
+//       final res = await dio.post("$BASE_URL/api/v1/auth/login", data: body);
 
-        saveAccount(email, password);
-        return true;
-      } else {
-        return false;
-      }
-    } catch (e) {}
-  }
+//       if (res.statusCode == 200) {
+//         // data(ModelLogin.fromJson(res.data));
+//         jabatan(data.value!.data.jabatan);
+//         this.token = data.value!.data.token;
 
-  Future<void> fetchDataAbsensi(String userId) async {
-    try {
-      final response = await http.post(
-        Uri.parse("$BASE_URL/api/v1/absensi/$userId"),
-        headers: {"Authorization": "Bearer $token"},
-      );
+//         saveAccount(email, password);
+//         return true;
+//       } else {
+//         return false;
+//       }
+//     } catch (e) {}
+//   }
 
-      if (response.statusCode == 204) {
-        clockInEntry.value = null;
-        clockOutEntry.value = null;
-      } else if (response.statusCode == 200) {
-        List<ModelAbsensi> req = await Isolate.run(() {
-          List<dynamic> responseData = jsonDecode(response.body);
-          return responseData.map((e) => ModelAbsensi.fromJson(e)).toList();
-        });
+//   Future<void> fetchDataAbsensi(String userId) async {
+//     try {
+//       final response = await http.post(
+//         Uri.parse("$BASE_URL/api/v1/absensi/$userId"),
+//         headers: {"Authorization": "Bearer $token"},
+//       );
 
-        clockInEntry.value =
-            req.firstWhereOrNull((element) => element.type == "clockin");
-        clockOutEntry.value =
-            req.firstWhereOrNull((element) => element.type == "clockout");
-      } else {
-        print("Failed to fetch data: ${response.statusCode}");
-        clockInEntry.value = null;
-        clockOutEntry.value = null;
-      }
-    } catch (e) {
-      print("Error fetching data: $e");
-    }
-  }
+//       if (response.statusCode == 204) {
+//         clockInEntry.value = null;
+//         clockOutEntry.value = null;
+//       } else if (response.statusCode == 200) {
+//         List<ModelAbsensi> req = await Isolate.run(() {
+//           List<dynamic> responseData = jsonDecode(response.body);
+//           return responseData.map((e) => ModelAbsensi.fromJson(e)).toList();
+//         });
 
-  fetchDataUser() async {
-    final response = await dio.get("$BASE_URL/api/v1/auth/detail");
+//         clockInEntry.value =
+//             req.firstWhereOrNull((element) => element.type == "clockin");
+//         clockOutEntry.value =
+//             req.firstWhereOrNull((element) => element.type == "clockout");
+//       } else {
+//         print("Failed to fetch data: ${response.statusCode}");
+//         clockInEntry.value = null;
+//         clockOutEntry.value = null;
+//       }
+//     } catch (e) {
+//       print("Error fetching data: $e");
+//     }
+//   }
 
-    if (response.statusCode == 200) {
-      List<dynamic> responseData = response.data;
-      responseData.map((item) => ModelLogin.fromJson(item)).toList();
-    }
-  }
+//   fetchDataUser() async {
+//     final response = await dio.get("$BASE_URL/api/v1/auth/detail");
 
-  Future<bool> validatorPIN() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+//     if (response.statusCode == 200) {
+//       List<dynamic> responseData = response.data;
+//       // responseData.map((item) => ModelLogin.fromJson(item)).toList();
+//     }
+//   }
 
-    bool? isNeededPinWhenOpenAppsValue =
-        prefs.getBool('isNeededPinWhenOpenApps');
-    bool? isOauthenticationOnValue = prefs.getBool("isAuthenticationOn");
-    bool? isPinActivatedValue = prefs.getBool('isPinActivated');
-    String? pinValue = prefs.getString('pin');
+//   Future<bool> validatorPIN() async {
+//     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if (isPinActivatedValue != null &&
-        isNeededPinWhenOpenAppsValue != null &&
-        pinValue != null) {
-      isNeededPinWhenOpenApps(isNeededPinWhenOpenAppsValue);
-      isAuthenticationOn(isOauthenticationOnValue);
-      isPinActivated(isPinActivatedValue);
-      pin(pinValue);
+//     bool? isNeededPinWhenOpenAppsValue =
+//         prefs.getBool('isNeededPinWhenOpenApps');
+//     bool? isOauthenticationOnValue = prefs.getBool("isAuthenticationOn");
+//     bool? isPinActivatedValue = prefs.getBool('isPinActivated');
+//     String? pinValue = prefs.getString('pin');
 
-      return isNeededPinWhenOpenAppsValue;
-    } else {
-      initializedValidator();
-      return false;
-    }
-  }
+//     if (isPinActivatedValue != null &&
+//         isNeededPinWhenOpenAppsValue != null &&
+//         pinValue != null) {
+//       isNeededPinWhenOpenApps(isNeededPinWhenOpenAppsValue);
+//       isAuthenticationOn(isOauthenticationOnValue);
+//       isPinActivated(isPinActivatedValue);
+//       pin(pinValue);
 
-  void initializedValidatorAuthentication() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool("isAuthenticationOn", !isAuthenticationOn.value);
-    validatorPIN();
-  }
+//       return isNeededPinWhenOpenAppsValue;
+//     } else {
+//       initializedValidator();
+//       return false;
+//     }
+//   }
 
-  void initializedValidator() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isNeededPinWhenOpenApps', false);
-    prefs.setBool("isAuthenticationOn", false);
-    prefs.setBool('isPinActivated', false);
-    prefs.setString('pin', "");
-    validatorPIN();
-  }
+//   void initializedValidatorAuthentication() async {
+//     SharedPreferences prefs = await SharedPreferences.getInstance();
+//     prefs.setBool("isAuthenticationOn", !isAuthenticationOn.value);
+//     validatorPIN();
+//   }
 
-  Future<void> savePin(String pin) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isPinActivated', true);
-    prefs.setBool('isNeededPinWhenOpenApps', isNeededPinWhenOpenApps.value);
-    prefs.setString('pin', pin);
-    validatorPIN();
-  }
+//   void initializedValidator() async {
+//     SharedPreferences prefs = await SharedPreferences.getInstance();
+//     prefs.setBool('isNeededPinWhenOpenApps', false);
+//     prefs.setBool("isAuthenticationOn", false);
+//     prefs.setBool('isPinActivated', false);
+//     prefs.setString('pin', "");
+//     validatorPIN();
+//   }
 
-  Future<bool> getPin(String pin) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? storedPin = prefs.getString('pin');
-    return storedPin == pin;
-  }
+//   Future<void> savePin(String pin) async {
+//     SharedPreferences prefs = await SharedPreferences.getInstance();
+//     prefs.setBool('isPinActivated', true);
+//     prefs.setBool('isNeededPinWhenOpenApps', isNeededPinWhenOpenApps.value);
+//     prefs.setString('pin', pin);
+//     validatorPIN();
+//   }
 
-  Future<void> resetPin() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.clear();
-    initializedValidator();
-  }
+//   Future<bool> getPin(String pin) async {
+//     SharedPreferences prefs = await SharedPreferences.getInstance();
+//     String? storedPin = prefs.getString('pin');
+//     return storedPin == pin;
+//   }
 
-  Future<void> usePinWhenOpenApp() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool(
-        'isNeededPinWhenOpenApps', isNeededPinWhenOpenApps.toggle().value);
-    prefs.setBool('isPinActivated', isPinActivated.value);
-    prefs.setString('pin', pin.value);
-    validatorPIN();
-  }
+//   Future<void> resetPin() async {
+//     SharedPreferences prefs = await SharedPreferences.getInstance();
+//     prefs.clear();
+//     initializedValidator();
+//   }
 
-  validatorPinWhenOpenApps() {
-    (isNeededPinWhenOpenApps.value)
-        ? Get.toNamed(Routes.VALIDATOR_PIN)
-        : Get.toNamed(Routes.DASHBOARD_PAGE);
-  }
-}
+//   Future<void> usePinWhenOpenApp() async {
+//     SharedPreferences prefs = await SharedPreferences.getInstance();
+//     prefs.setBool(
+//         'isNeededPinWhenOpenApps', isNeededPinWhenOpenApps.toggle().value);
+//     prefs.setBool('isPinActivated', isPinActivated.value);
+//     prefs.setString('pin', pin.value);
+//     validatorPIN();
+//   }
+
+//   validatorPinWhenOpenApps() {
+//     (isNeededPinWhenOpenApps.value)
+//         ? Get.toNamed(Routes.VALIDATOR_PIN)
+//         : Get.toNamed(Routes.DASHBOARD_PAGE);
+//   }
+// }

@@ -36,89 +36,96 @@ class _LocationsPageViewState extends State<LocationsPageView> {
     return Scaffold(
       body: Stack(
         children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Expanded(
-                child: StreamBuilder<Position>(
-                  stream: controller.locationStream,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return LoadingDialog(
-                          text: "Tunggu Sebentar Yaa...", icon: Icons.abc);
-                    } else if (snapshot.hasData) {
-                      final position = snapshot.data!;
+          SizedBox(
+            height: context.height * 1,
+            child: StreamBuilder<Position>(
+              stream: controller.locationStream,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return LoadingDialog(
+                      text: "Tunggu Sebentar Yaa...", icon: Icons.abc);
+                } else if (snapshot.hasData) {
+                  final position = snapshot.data!;
 
-                      return FlutterMap(
-                        options: MapOptions(
-                          maxZoom: 18,
-                          minZoom: 17,
-                          keepAlive: false,
-                          applyPointerTranslucencyToLayers: true,
-                          initialCenter: LatLng(
-                            position.latitude,
-                            position.longitude,
-                          ),
-                          initialZoom: 17,
-                          interactionOptions: InteractionOptions(
-                            enableMultiFingerGestureRace: false,
-                            enableScrollWheel: false,
-                            debugMultiFingerGestureWinner: false,
-                            cursorKeyboardRotationOptions:
-                                CursorKeyboardRotationOptions.disabled(),
-                          ),
-                        ),
-                        children: [
-                          TileLayer(
-                            urlTemplate:
-                                'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                            maxZoom: 19,
-                          ),
-
-                          CurrentLocationLayer(
-                            alignPositionOnUpdate: AlignOnUpdate.always,
-                            alignDirectionOnUpdate: AlignOnUpdate.never,
-                            style: LocationMarkerStyle(
-                              showHeadingSector: false,
-                              marker: DefaultLocationMarker(
-                                child: m.u.value.user.avatar!.isNotEmpty
-                                    ? ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        child: Image.network(
-                                            "${m.u.value.user.avatar}"),
-                                      )
-                                    : Icon(Iconsax.user),
-                              ),
-                              markerSize: const Size(40, 40),
-                              markerDirection: MarkerDirection.top,
-                            ),
-                          ), // <
-                        ],
-                      );
-                    } else {
-                      return SizedBox(); // Kasus lain, tampilkan widget kosong
-                    }
-                  },
-                ),
-              ),
-              Container(
-                width: Get.width,
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(color: lightGreyColor),
-                child: LayoutBuilder(
-                  builder: (context, constraints) => Column(
-                    children: [
-                      Button1(
-                        title: "Lanjutkan Absensi",
-                        onTap: () async =>
-                            await controller.checkCurrentLocation(status),
+                  return FlutterMap(
+                    options: MapOptions(
+                      maxZoom: 18,
+                      minZoom: 17,
+                      keepAlive: false,
+                      applyPointerTranslucencyToLayers: true,
+                      initialCenter: LatLng(
+                        position.latitude,
+                        position.longitude,
                       ),
+                      initialZoom: 17,
+                      interactionOptions: InteractionOptions(
+                        enableMultiFingerGestureRace: false,
+                        enableScrollWheel: false,
+                        debugMultiFingerGestureWinner: false,
+                        cursorKeyboardRotationOptions:
+                            CursorKeyboardRotationOptions.disabled(),
+                      ),
+                    ),
+                    children: [
+                      TileLayer(
+                        urlTemplate:
+                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        maxZoom: 19,
+                      ),
+
+                      CurrentLocationLayer(
+                        alignPositionOnUpdate: AlignOnUpdate.always,
+                        alignDirectionOnUpdate: AlignOnUpdate.never,
+                        style: LocationMarkerStyle(
+                          showHeadingSector: false,
+                          marker: DefaultLocationMarker(
+                            child: m.u.value!.avatar!.isNotEmpty
+                                ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: Image.network(
+                                      "${m.u.value!.avatar}",
+                                    ),
+                                  )
+                                : Icon(Iconsax.user),
+                          ),
+                          markerSize: const Size(40, 40),
+                          markerDirection: MarkerDirection.top,
+                        ),
+                      ), // <
                     ],
-                  ),
+                  );
+                } else {
+                  return SizedBox(); // Kasus lain, tampilkan widget kosong
+                }
+              },
+            ),
+          ),
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: Container(
+              width: Get.width,
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
                 ),
               ),
-            ],
+              child: LayoutBuilder(
+                builder: (context, constraints) => Column(
+                  children: [
+                    Button1(
+                      title: "Lanjutkan Absensi",
+                      onTap: () async =>
+                          await controller.checkCurrentLocation(status),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
           Positioned(
             top: 60,
@@ -137,7 +144,7 @@ class _LocationsPageViewState extends State<LocationsPageView> {
                     child: IconButton(
                       onPressed: () => Get.back(),
                       icon: Icon(
-                        Icons.arrow_back,
+                        Iconsax.arrow_left,
                         color: blackColor,
                       ),
                     ),
@@ -157,7 +164,7 @@ class _LocationsPageViewState extends State<LocationsPageView> {
                           setState(() {});
                         },
                         icon: Icon(
-                          Iconsax.refresh,
+                          Icons.refresh_rounded,
                           color: blackColor,
                         ),
                       ),

@@ -1,14 +1,18 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
+import 'package:talenta_app/app/controllers/api_controller.dart';
 import 'package:talenta_app/app/controllers/locations_controller.dart';
-import 'package:talenta_app/app/modules/capture_attendance/views/capture_attendance_view.dart';
-import 'package:talenta_app/app/shared/alert/alert-out-range.dart';
+import 'package:talenta_app/app/models/locations.dart';
+
+import '../../../shared/alert/alert-out-range.dart';
 
 class LocationsPageController extends GetxController {
   final locations = Get.put(LocationController());
+  final a = Get.put(ApiController());
 
   RxBool isStreamEnable = false.obs;
   RxDouble turns = 0.0.obs;
@@ -39,25 +43,37 @@ class LocationsPageController extends GetxController {
 
   Future checkCurrentLocation(String status) async {
     // Module lokasi dalam range atau tidak
-    final result = locations.isWithinRange(
-      this.position!.latitude,
-      this.position!.longitude,
-      -7.774941,
-      110.395375,
-      50,
-    );
+    double latitude = 0.0;
+    double longitude = 0.0;
 
-    if (!result) {
+    // Todo: BUAT VALIDASI UNTUK CEK LOKASI LIST
+    List<ModelLocations> validator = await a.getLocations();
+
+    latitude = this.position!.latitude;
+    longitude = this.position!.longitude;
+
+    log("validator: $validator");
+    log("latitude: $latitude");
+    log("longitude: $longitude");
+
+    var result = validator.singleWhere((element) => locations.isWithinRange(
+          latitude,
+          longitude,
+          double.parse(element.lat),
+          double.parse(element.lng),
+          element.radius.toDouble(),
+        ));
+
+    if (result.locName.isEmpty) {
       await Get.dialog(AlertOutRange(status: status));
       return;
     }
 
-    // Get.toNamed(Routes.CAMERA_PAGE, arguments: status);
-    Get.to(
-      () => CaptureAttendanceView(),
-      transition: Transition.cupertino,
-      arguments: status,
-    );
+    // Get.to(
+    //   () => CaptureAttendanceView(),
+    //   transition: Transition.cupertino,
+    //   arguments: status,
+    // );
   }
 
   @override

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 
@@ -52,13 +53,13 @@ class _AbsensiPageViewState extends State<AbsensiPageView> {
                         height: 50,
                         padding: const EdgeInsets.symmetric(horizontal: 15),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(5),
                           border: Border.all(width: 1, color: darkGreyColor),
                         ),
                         child: Row(
                           children: [
                             Icon(
-                              Icons.calendar_month,
+                              Iconsax.calendar_1,
                               color: darkGreyColor,
                             ),
                             const SizedBox(width: 10),
@@ -71,7 +72,7 @@ class _AbsensiPageViewState extends State<AbsensiPageView> {
                             ),
                             new Spacer(),
                             Icon(
-                              Icons.arrow_drop_down_outlined,
+                              Iconsax.arrow_bottom,
                               color: darkGreyColor,
                             ),
                           ],
@@ -106,8 +107,9 @@ class _AbsensiPageViewState extends State<AbsensiPageView> {
                                           'Filter',
                                           textAlign: TextAlign.center,
                                           style: normalTextStyle.copyWith(
-                                              fontWeight: semiBold,
-                                              fontSize: 16),
+                                            fontWeight: semiBold,
+                                            fontSize: 16,
+                                          ),
                                         ),
                                       ),
                                       Icon(
@@ -239,12 +241,12 @@ class _AbsensiPageViewState extends State<AbsensiPageView> {
                         width: Get.width * 0.15 - 10,
                         height: 50,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(width: 1, color: darkGreyColor),
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(width: 1, color: Colors.black38),
                         ),
                         child: Center(
                           child: Icon(
-                            Icons.filter_alt_outlined,
+                            Iconsax.filter,
                             color: darkGreyColor,
                           ),
                         ),
@@ -277,24 +279,18 @@ class _AbsensiPageViewState extends State<AbsensiPageView> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "${DateFormat("dd MMM yyyy").format(DateTime.now())}",
-                                        style: normalTextStyle.copyWith(
-                                          fontWeight: regular,
-                                          fontSize: 16,
-                                        ),
-                                      ),
+                                          "${DateFormat("dd MMMM yyyy", "id_ID").format(DateTime.now())}",
+                                          style: normalTextStyle.copyWith(
+                                            fontWeight: regular,
+                                            fontSize: 14,
+                                          )),
                                       const Gap(5),
                                       Text(
                                         "Clock In pada ${DateFormat("dd MMM yyyy, HH:MM").format(DateTime.now())}",
-                                        style: normalTextStyle
-                                            .copyWith(
-                                              color: darkGreyColor,
-                                              fontSize: 14,
-                                            )
-                                            .copyWith(
-                                              fontWeight: regular,
-                                              fontSize: 14,
-                                            ),
+                                        style: normalTextStyle.copyWith(
+                                          color: darkGreyColor,
+                                          fontSize: 12,
+                                        ),
                                       ),
                                       Text(
                                         "Disetujui",
@@ -312,7 +308,6 @@ class _AbsensiPageViewState extends State<AbsensiPageView> {
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 10),
                               new Divider(
                                 thickness: 1,
                                 color: darkGreyColor.withAlpha(100),

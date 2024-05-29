@@ -37,6 +37,10 @@ class DaftarAbsensiPageView extends GetView<DaftarAbsensiPageController> {
             elevation: 2,
             child: TabBar(
               controller: controller.controller,
+              splashBorderRadius: BorderRadius.only(
+                topLeft: Radius.circular(10),
+                topRight: Radius.circular(10),
+              ),
               tabs: [
                 Tab(text: "Riwayat"),
                 Tab(text: "Absensi"),

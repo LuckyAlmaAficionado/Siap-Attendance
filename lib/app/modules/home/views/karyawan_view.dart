@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
+
 import 'package:talenta_app/app/modules/home/controllers/home_controller.dart';
+import 'package:talenta_app/app/shared/images/images.dart';
+import 'package:talenta_app/app/shared/textfield/textfield_1.dart';
 
 import '../../../models/karyawan.dart';
 import '../../../routes/app_pages.dart';
@@ -27,87 +29,72 @@ class _KaryawanViewState extends State<KaryawanView> {
 
   @override
   void initState() {
-    scrollController.addListener(() {
-      if (scrollController.position.userScrollDirection ==
-          ScrollDirection.reverse) {
-        if (widget.isVisible != true) {
-          setState(() {
-            widget.isVisible = true;
-          });
-        }
-      } else {
-        if (widget.isVisible != false) {
-          setState(() {
-            widget.isVisible = false;
-          });
-        }
-      }
-      if (scrollController.position.userScrollDirection ==
-          ScrollDirection.forward) {
-        if (widget.isVisible != false) {
-          setState(() {
-            widget.isVisible = false;
-          });
-        }
-      } else {
-        if (widget.isVisible != true) {
-          setState(() {
-            widget.isVisible = true;
-          });
-        }
-      }
-    });
+    // scrollController.addListener(() {
+    //   if (scrollController.position.userScrollDirection ==
+    //       ScrollDirection.reverse) {
+    //     if (widget.isVisible != true) {
+    //       setState(() {
+    //         widget.isVisible = true;
+    //       });
+    //     }
+    //   } else {
+    //     if (widget.isVisible != false) {
+    //       setState(() {
+    //         widget.isVisible = false;
+    //       });
+    //     }
+    //   }
+    //   if (scrollController.position.userScrollDirection ==
+    //       ScrollDirection.forward) {
+    //     if (widget.isVisible != false) {
+    //       setState(() {
+    //         widget.isVisible = false;
+    //       });
+    //     }
+    //   } else {
+    //     if (widget.isVisible != true) {
+    //       setState(() {
+    //         widget.isVisible = true;
+    //       });
+    //     }
+    //   }
+    // });
     super.initState();
+  }
+
+  findEmployeeByName(value) {
+    if (value.length == 0) {
+      controller.sortingKaryawan.clear();
+    } else {
+      controller.sortingKaryawan(controller.karyawan
+          .where((element) =>
+              element.name![0].toLowerCase() == value[0].toLowerCase())
+          .where((element) =>
+              element.name!.substring(1, value.length).toLowerCase() ==
+              value.substring(1, value.length).toLowerCase())
+          .toList());
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
-        title: Text(
-          'Karyawan',
-          style: appBarTextStyle,
-        ),
-        backgroundColor: blueColor,
-        centerTitle: true,
+        backgroundColor: whiteColor,
+        toolbarHeight: 0,
+        elevation: 2,
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(70),
+          preferredSize: Size.fromHeight(100),
           child: Container(
-            height: 45,
-            margin: const EdgeInsets.all(20),
-            child: TextField(
-              controller: searchC,
-              onChanged: (value) {
-                if (value.length == 0) {
-                  controller.sortingKaryawan.clear();
-                } else {
-                  controller.sortingKaryawan(controller.karyawan
-                      .where((element) =>
-                          element.name![0].toLowerCase() ==
-                          value[0].toLowerCase())
-                      .where((element) =>
-                          element.name!
-                              .substring(1, value.length)
-                              .toLowerCase() ==
-                          value.substring(1, value.length).toLowerCase())
-                      .toList());
-                }
-              },
-              decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-                filled: true,
-                fillColor: whiteColor,
-                hintText: "Cari Karyawan",
-                hintStyle: darkGreyTextStyle,
-                prefixIcon: Icon(
-                  Icons.search,
-                  color: darkGreyColor,
-                ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.circular(100),
-                ),
+            color: Colors.white,
+            padding: const EdgeInsets.all(20),
+            child: TextField1(
+              hintText: "Cari karyawan",
+              preffixIcon: Icon(
+                Iconsax.search_normal_1,
               ),
+              onChanged: findEmployeeByName,
             ),
           ),
         ),
@@ -115,70 +102,79 @@ class _KaryawanViewState extends State<KaryawanView> {
       body: Obx(
         () => (controller.karyawan.isEmpty)
             ? Center(child: CircularProgressIndicator())
-            : ListView.builder(
-                controller: scrollController,
-                itemCount: (controller.sortingKaryawan.length == 0)
-                    ? controller.karyawan.length
-                    : controller.sortingKaryawan.length,
-                itemBuilder: (context, index) {
-                  Karyawan model = (controller.sortingKaryawan.length == 0)
-                      ? controller.karyawan[index]
-                      : controller.sortingKaryawan[index];
+            : ListView(
+                children: [
+                  SizedBox(
+                    height: context.height * 0.75,
+                    child: ListView.builder(
+                      controller: scrollController,
+                      itemCount: (controller.sortingKaryawan.length == 0)
+                          ? controller.karyawan.length
+                          : controller.sortingKaryawan.length,
+                      itemBuilder: (context, index) {
+                        Karyawan model =
+                            (controller.sortingKaryawan.length == 0)
+                                ? controller.karyawan[index]
+                                : controller.sortingKaryawan[index];
 
-                  return ListTile(
-                    onTap: () =>
-                        Get.toNamed(Routes.DETAIL_KARYAWAN, arguments: model),
-                    title: Text(
-                      "${model.name}",
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: blackTextStyle.copyWith(
-                          fontSize: 14, fontWeight: medium),
-                    ),
-                    subtitle: Text(
-                      "${model.jabatan}",
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: darkGreyTextStyle.copyWith(
-                        fontWeight: regular,
-                        fontSize: 12,
-                      ),
-                    ),
-                    leading: CircleAvatar(
-                      child: SizedBox(
-                        width: 80,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child: Image.network(
-                            loadingBuilder: (context, child, loadingProgress) =>
-                                loadingProgress == null
-                                    ? child
-                                    : Center(
-                                        child: CircularProgressIndicator()),
-                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTWyYPE-EuYCKkmAIcnHHQP5clEGWDBetgbIOJ3fruNiA&s",
-                            filterQuality: FilterQuality.high,
-                            fit: BoxFit.cover,
+                        return Container(
+                          margin: const EdgeInsets.only(top: 1),
+                          child: ListTile(
+                            tileColor: whiteColor,
+                            onTap: () => Get.toNamed(Routes.DETAIL_KARYAWAN,
+                                arguments: model),
+                            title: Text(
+                              "${model.name}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: blackTextStyle.copyWith(
+                                  fontSize: 14, fontWeight: medium),
+                            ),
+                            subtitle: Text(
+                              "${model.jabatan}",
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: darkGreyTextStyle.copyWith(
+                                fontWeight: regular,
+                                fontSize: 12,
+                              ),
+                            ),
+                            leading: CircleAvatar(
+                              child: SizedBox(
+                                width: 80,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: ImageNetwork(url: model.avatar!),
+                                ),
+                              ),
+                            ),
+                            trailing: Container(
+                              width: 100,
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(
+                                      Iconsax.call_calling,
+                                      color: Colors.black26,
+                                    ),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(
+                                      Iconsax.messages_2,
+                                      color: Colors.black26,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
+                        );
+                      },
                     ),
-                    trailing: Container(
-                      width: 100,
-                      child: Row(
-                        children: [
-                          IconButton(
-                            onPressed: () {},
-                            icon: Icon(Iconsax.call),
-                          ),
-                          IconButton(
-                            onPressed: () {},
-                            icon: Icon(Iconsax.message),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+                  ),
+                ],
               ),
       ),
       floatingActionButton: AnimatedSlide(

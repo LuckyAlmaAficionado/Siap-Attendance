@@ -6,15 +6,13 @@ import 'package:talenta_app/app/shared/theme.dart';
 import 'package:talenta_app/app/shared/utils.dart';
 
 class ConnectionController extends GetxController {
-  validatorConnection(BuildContext context) async {
+  validatorConnection() async {
     bool result = await InternetConnectionChecker().hasConnection;
     if (result == true) {
       print('YAY! Free cute dog pics!');
     } else {
-      showModalBottomSheet(
-        context: context,
-        isDismissible: false,
-        builder: (context) => Container(
+      Get.bottomSheet(
+        Container(
           width: Get.width,
           height: 300,
           child: Column(

@@ -20,25 +20,25 @@ Color blackColor = Colors.black;
 Color greenColor = Colors.green;
 Color greenColor1 = HexColor("91C789");
 
-// TextStyle normalTextStyle = GoogleFonts.nunito(color: Colors.black);
+// TextStyle normalTextStyle = GoogleFonts.outfit(color: Colors.black);
 
-TextStyle blackTextStyle = GoogleFonts.nunito(color: Colors.black);
+TextStyle blackTextStyle = GoogleFonts.outfit(color: Colors.black);
 
-TextStyle greenTextStyle = GoogleFonts.nunito(color: greenColor);
+TextStyle greenTextStyle = GoogleFonts.outfit(color: greenColor);
 
-TextStyle whiteTextStyle = GoogleFonts.nunito(color: Colors.white);
+TextStyle whiteTextStyle = GoogleFonts.outfit(color: Colors.white);
 
-TextStyle lightGreyTextStyle = GoogleFonts.nunito(color: lightGreyColor);
+TextStyle lightGreyTextStyle = GoogleFonts.outfit(color: lightGreyColor);
 
-TextStyle darkGreyTextStyle = GoogleFonts.nunito(color: darkGreyColor);
+TextStyle darkGreyTextStyle = GoogleFonts.outfit(color: darkGreyColor);
 
-TextStyle lightBlueTextStyle = GoogleFonts.nunito(color: lightBlueColor);
+TextStyle lightBlueTextStyle = GoogleFonts.outfit(color: lightBlueColor);
 
-TextStyle blueTextStyle = GoogleFonts.nunito(color: Colors.blue[800]);
+TextStyle blueTextStyle = GoogleFonts.outfit(color: Colors.blue[800]);
 
-TextStyle redTextStyle = GoogleFonts.nunito(color: Colors.red);
+TextStyle redTextStyle = GoogleFonts.outfit(color: Colors.red);
 
-TextStyle normalTextStyle = GoogleFonts.plusJakartaSans(
+TextStyle normalTextStyle = GoogleFonts.outfit(
   color: blackColor,
   fontSize: 14,
 );
@@ -47,6 +47,7 @@ TextStyle normalTextStyle = GoogleFonts.plusJakartaSans(
 TextStyle appBarTextStyle = normalTextStyle.copyWith(
   fontWeight: semiBold,
   color: whiteColor,
+  letterSpacing: 1,
   fontSize: 16,
 );
 

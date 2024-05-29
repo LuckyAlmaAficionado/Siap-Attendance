@@ -11,6 +11,7 @@ import 'package:talenta_app/app/models/model_izin.dart';
 import 'package:talenta_app/app/modules/home/controllers/home_controller.dart';
 import 'package:talenta_app/app/routes/app_pages.dart';
 import 'package:talenta_app/app/shared/button/button_1.dart';
+import 'package:talenta_app/app/shared/images/images.dart';
 import 'package:talenta_app/app/shared/theme.dart';
 
 import '../controllers/izin_kembali_page_controller.dart';
@@ -26,8 +27,22 @@ class IzinKembaliPageView extends GetView<IzinKembaliPageController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Aktivitas Izin", style: appBarTextStyle),
-        centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 6,
+        shadowColor: Colors.white38,
+        title: Text(
+          "Aktivitas Izin",
+          style: appBarTextStyle.copyWith(color: Colors.black),
+        ),
+        iconTheme: IconThemeData(color: Colors.black),
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: Icon(Icons.keyboard_arrow_left_outlined, color: Colors.black),
+        ),
+        centerTitle: false,
+        titleSpacing: 0,
       ),
       body: Column(
         children: [
@@ -58,7 +73,7 @@ class IzinKembaliPageView extends GetView<IzinKembaliPageController> {
                           backgroundColor: whiteColor,
                           PermitActivityDetails(
                             a: a,
-                            t: m.u.value.user.id!,
+                            t: m.u.value!.id!,
                           ),
                         ),
                         title: Text(
@@ -186,7 +201,7 @@ class PermitActivityDetails extends StatelessWidget {
                                           borderRadius:
                                               BorderRadius.circular(100),
                                           child: Image.network(
-                                            "${m.u.value.user.avatar}",
+                                            "${m.u.value!.avatar}",
                                             fit: BoxFit.cover,
                                             filterQuality: FilterQuality.high,
                                           ),
@@ -206,22 +221,11 @@ class PermitActivityDetails extends StatelessWidget {
                   Expanded(
                     child: Container(
                       width: Get.width,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(10),
-                        ),
-                        child: Image.network(
-                          headers: {
-                            "Authorization": "Bearer ${m.u.value.token}"
-                          },
-                          loadingBuilder: (context, child, loadingProgress) =>
-                              loadingProgress == null
-                                  ? child
-                                  : Center(child: CircularProgressIndicator()),
-                          "${Get.put(ApiController()).BASE_URL}/api/fileSystem/${a.imageKeluar}",
-                          filterQuality: FilterQuality.high,
-                          fit: BoxFit.fitWidth,
-                        ),
+                      child: ImageNetwork(
+                        boxFit: BoxFit.fitWidth,
+                        borderRadius: 0,
+                        url:
+                            "${Get.put(ApiController()).BASE_URL}/api/fileSystem/${a.imageKeluar}",
                       ),
                     ),
                   )
@@ -286,7 +290,7 @@ class PermitActivityDetails extends StatelessWidget {
                                         borderRadius:
                                             BorderRadius.circular(100),
                                         child: Image.network(
-                                          "${m.u.value.user.avatar}",
+                                          "${m.u.value!.avatar}",
                                           fit: BoxFit.cover,
                                           filterQuality: FilterQuality.high,
                                         ),
@@ -307,7 +311,7 @@ class PermitActivityDetails extends StatelessWidget {
                         width: Get.width,
                         child: Image.network(
                           headers: {
-                            "Authorization": "Bearer ${m.u.value.token}"
+                            "Authorization": "Bearer ${m.u.value!.token}"
                           },
                           loadingBuilder: (context, child, loadingProgress) =>
                               loadingProgress == null

@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:talenta_app/app/controllers/api_controller.dart';
 
+import 'package:talenta_app/app/controllers/api_controller.dart';
 import 'package:talenta_app/app/controllers/model_controller.dart';
 import 'package:talenta_app/app/models/user_absensi.dart';
+import 'package:talenta_app/app/shared/images/images.dart';
 import 'package:talenta_app/app/shared/theme.dart';
 
 // ignore: must_be_immutable
@@ -87,24 +87,8 @@ class DetailClockInView extends GetView {
                                   child: CircleAvatar(
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(100),
-                                      child: Image.network(
-                                        "${m.u.value.user.avatar}",
-                                        errorBuilder:
-                                            (context, error, stackTrace) =>
-                                                Icon(
-                                          Iconsax.image,
-                                          color: whiteColor,
-                                        ),
-                                        loadingBuilder:
-                                            (context, child, loadingProgress) =>
-                                                loadingProgress == null
-                                                    ? child
-                                                    : Center(
-                                                        child:
-                                                            CircularProgressIndicator(),
-                                                      ),
-                                        fit: BoxFit.cover,
-                                        filterQuality: FilterQuality.high,
+                                      child: ImageNetwork(
+                                        url: m.u.value!.avatar!,
                                       ),
                                     ),
                                   ),
@@ -121,20 +105,10 @@ class DetailClockInView extends GetView {
                   Expanded(
                     child: Container(
                       width: Get.width,
-                      child: Image.network(
-                        headers: {"Authorization": "Bearer ${m.u.value.token}"},
-                        errorBuilder: (context, error, stackTrace) => Icon(
-                          Iconsax.image,
-                          color: whiteColor,
-                        ),
-                        loadingBuilder: (context, child, loadingProgress) =>
-                            loadingProgress == null
-                                ? child
-                                : Center(child: CircularProgressIndicator()),
-                        "${a.BASE_URL}/api/fileSystem/${absen.image}",
-                        filterQuality: FilterQuality.high,
-                        fit: BoxFit.fitWidth,
-                      ),
+                      child: ImageNetwork(
+                          borderRadius: 0,
+                          boxFit: BoxFit.fitWidth,
+                          url: "${a.BASE_URL}/api/fileSystem/${absen.image}"),
                     ),
                   )
                 ],

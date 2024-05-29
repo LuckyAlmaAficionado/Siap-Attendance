@@ -1,7 +1,8 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
+import 'package:dio/dio.dart';
 import 'package:get/get.dart';
+
 import 'package:talenta_app/app/models/google_calendar.dart';
 import 'package:talenta_app/app/shared/error_alert.dart';
 
@@ -15,8 +16,9 @@ class DateController extends GetxController {
     final currentYear = DateTime.now().year;
 
     final currentMonthEvents = result.where((event) {
-      final startDate = event.start.date;
-      return startDate.month == currentMonth && startDate.year == currentYear;
+      final date = event.start.date;
+
+      return date.month == currentMonth && date.year == currentYear;
     }).toList();
 
     // Urutkan acara-acara berdasarkan tanggal mulai
@@ -39,6 +41,7 @@ class DateController extends GetxController {
 
       if (res.statusCode == 200) {
         List temp = res.data['items'];
+
         result = temp.map((e) => GoogleCalendarModel.fromJson(e)).toList();
 
         holidays = result.map((element) {

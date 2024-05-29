@@ -28,14 +28,14 @@ class StatusPersetujuanView extends GetView {
                 ),
                 const Gap(10),
                 Text(
-                  '${m.u.value.user.nama}',
+                  '${m.u.value!.nama}',
                   style: whiteTextStyle.copyWith(
                     fontWeight: semiBold,
                     fontSize: 18,
                   ),
                 ),
                 Text(
-                  "${m.u.value.jabatan}",
+                  "${m.u.value!.jabatan}",
                   style: whiteTextStyle,
                 ),
                 const Gap(20),

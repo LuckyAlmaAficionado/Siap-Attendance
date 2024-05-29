@@ -48,7 +48,7 @@ class _DetailTelatMasukViewState extends State<DetailTelatMasukView> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(100),
                       child: Image.network(
-                        "${m.u.value.user.avatar}",
+                        "${m.u.value!.avatar}",
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -56,14 +56,14 @@ class _DetailTelatMasukViewState extends State<DetailTelatMasukView> {
                 ),
                 const Gap(10),
                 Text(
-                  '${m.u.value.user.nama}',
+                  '${m.u.value!.nama}',
                   style: whiteTextStyle.copyWith(
                     fontWeight: semiBold,
                     fontSize: 18,
                   ),
                 ),
                 Text(
-                  "${m.u.value.jabatan}",
+                  "${m.u.value!.jabatan}",
                   style: whiteTextStyle,
                 ),
                 const Gap(20),

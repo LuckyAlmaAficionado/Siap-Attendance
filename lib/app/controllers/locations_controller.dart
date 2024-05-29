@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:math' show sin, cos, sqrt, atan2;
 
 import 'package:geolocator/geolocator.dart';
@@ -74,7 +75,12 @@ class LocationController extends GetxController {
   bool isWithinRange(double userLatitude, double userLongitude,
       double targetLatitude, double targetLongitude, double maxDistance) {
     double distance = calculateDistance(
-        userLatitude, userLongitude, targetLatitude, targetLongitude);
+      userLatitude,
+      userLongitude,
+      targetLatitude,
+      targetLongitude,
+    );
+
     return distance <= maxDistance;
   }
 }

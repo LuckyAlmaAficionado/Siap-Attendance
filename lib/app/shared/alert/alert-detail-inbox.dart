@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:talenta_app/app/shared/theme.dart';
 
@@ -46,7 +48,9 @@ class DetailInboxView extends GetView {
                         ),
                         Text(
                           "Attendance Request Approved",
-                          style: normalTextStyle,
+                          style: normalTextStyle.copyWith(
+                            fontSize: 12,
+                          ),
                         ),
                         Text(
                           '${DateFormat("dd MMM yyyy   hh:MM", "id_ID").format(DateTime.now())}',
@@ -79,12 +83,12 @@ class DetailInboxView extends GetView {
                                 Row(
                                   children: [
                                     CircleAvatar(),
-                                    const SizedBox(width: 15),
+                                    const SizedBox(width: 10),
                                     Text(
                                       "Maria Setiawati Purbaningtyas",
                                       style: normalTextStyle.copyWith(
-                                        fontWeight: semiBold,
-                                        fontSize: 16,
+                                        fontWeight: medium,
+                                        fontSize: 14,
                                       ),
                                     ),
                                     new Spacer(),
@@ -94,6 +98,7 @@ class DetailInboxView extends GetView {
                                     ),
                                   ],
                                 ),
+                                const Gap(10),
                                 Padding(
                                   padding: const EdgeInsets.all(6.0),
                                   child: Row(
@@ -178,7 +183,7 @@ class DetailInboxView extends GetView {
                         },
                       );
                     },
-                    icon: Icon(Icons.account_circle_outlined),
+                    icon: Icon(Iconsax.personalcard),
                   )
                 ],
               ),
@@ -186,12 +191,12 @@ class DetailInboxView extends GetView {
                 height: Get.height * 0.05,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Text(
                   "Your request attendance, check in on 18 Mar 2024 at 07:53 for 18 Mar 2024 has been approved. Reason: pertama kali pake berbakat",
                   style: normalTextStyle.copyWith(
                     fontWeight: extraLight,
-                    fontSize: 13,
+                    fontSize: 12,
                   ),
                 ),
               ),

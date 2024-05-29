@@ -22,9 +22,10 @@ class HomeController extends GetxController {
   RxInt btmNavIndex = 0.obs;
   RxBool isIzin = false.obs;
 
+  RxInt curIndex = 0.obs;
   late bool isManager = false;
 
-  ModelData u = Get.find<ModelController>().u.value;
+  ModelUser u = Get.find<ModelController>().u.value!;
   final m = Get.put(ModelController());
   final a = Get.put(ApiController());
 
@@ -33,7 +34,7 @@ class HomeController extends GetxController {
     super.onInit();
     await validatorIzin();
 
-    if (u.user.manager == "1") await a.fetchAllEmployee();
+    if (u.manager == "1") await a.fetchAllEmployee();
 
     String curVersion = await versionC.androidAppsVersion();
     if (curVersion != "1.1.7") {
@@ -44,7 +45,7 @@ class HomeController extends GetxController {
   // Asynchronous function to validate a permission for a user. Returns a boolean value based on the validation result.
   Future validatorIzin() async {
     log("validatorIzin");
-    var res = await http.get(Uri.parse("${a.BASE_URL}/api/izin/${u.user.id}"));
+    var res = await http.get(Uri.parse("${a.BASE_URL}/api/izin/${u.id}"));
 
     if (res.statusCode == 200) {
       isIzin(bool.parse(res.body));
