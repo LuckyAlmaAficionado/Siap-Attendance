@@ -18,8 +18,13 @@ class CutiPageView extends GetView<CutiPageController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cuti', style: appBarTextStyle),
+        title: Text(
+          'Cuti',
+          style: appBarTextStyle.copyWith(color: blackColor),
+        ),
+        iconTheme: IconThemeData(color: blackColor),
         centerTitle: true,
+        backgroundColor: whiteColor,
       ),
       body: Column(
         children: [
@@ -43,8 +48,8 @@ class CutiPageView extends GetView<CutiPageController> {
                         : Center(
                             child: Text(
                               "Tidak ada data cuti",
-                              style: blackTextStyle.copyWith(
-                                fontWeight: regular,
+                              style: normalTextStyle.copyWith(
+                                fontWeight: medium,
                                 fontSize: 14,
                               ),
                             ),
@@ -54,17 +59,13 @@ class CutiPageView extends GetView<CutiPageController> {
                   TabBar(
                     controller: controller.controller,
                     unselectedLabelColor: darkGreyColor,
-                    labelStyle: blueTextStyle.copyWith(
-                      fontWeight: medium,
-                      fontSize: 14,
+                    labelStyle: normalTextStyle.copyWith(
+                      fontWeight: semiBold,
+                      fontSize: 13,
                     ),
                     tabs: [
-                      Tab(
-                        child: Text("Pengajuan"),
-                      ),
-                      Tab(
-                        child: Text("Delegasi"),
-                      )
+                      Tab(child: Text("Pengajuan")),
+                      Tab(child: Text("Delegasi"))
                     ],
                   ),
                 ],

@@ -16,6 +16,9 @@ import 'package:talenta_app/app/models/karyawan.dart';
 import 'package:talenta_app/app/models/locations.dart';
 import 'package:talenta_app/app/models/model_izin.dart';
 import 'package:talenta_app/app/models/user_absensi.dart';
+import 'package:talenta_app/app/models/user_job.dart';
+import 'package:talenta_app/app/models/user_schedule_setting_model.dart';
+import 'package:talenta_app/app/models/user_shift_setting_model.dart';
 import 'package:talenta_app/app/models/users.dart';
 import 'package:talenta_app/app/modules/authentication/views/login_view.dart';
 import 'package:talenta_app/app/shared/button/button_1.dart';
@@ -45,19 +48,61 @@ class ApiController extends GetxController {
 
   // dummy
   final BASE_URL = "http://192.168.5.9:8000";
+  // final BASE_URL = "http://192.168.71.195:8000";
 
   final Map<String, String> listApi = {
-    "login": "api/v1/auth/login",
-    "fetchAllEmployee": "api/v1/all-users",
-    "todayAttendance": "api/v1/absensi",
-    "permit": "api/izin/find",
-    "addPermit": "api/izin",
-    "detailAttendance": "api/v1/absensi/detail",
-    "attendance": "api/v1/user-absensi",
+    "login": "api/v1/auth/login", //  
+    "fetchAllEmployee": "api/v1/all-users", // done
+    "todayAttendance": "api/v1/absensi", // done
+    "permit": "api/izin/find", // not fix yet
+    "addPermit": "api/izin", // not fix yet
+    "detailAttendance": "api/v1/absensi/detail", // done
+    "attendance": "api/v1/attendance", // done
     "fetchLatePermission": "api/v1/late",
     "approvalRequest": "api/approval-requests",
-    "locations": "api/v1/attendance"
+    "userJob": "api/v1/user-job",
   };
+
+  // ==== detail information job
+  Future fetchUserJob() async {
+    m.job.value = UserJobModel();
+    try {
+      Uri url = Uri.parse("$BASE_URL/${listApi["userJob"]}/${m.u.value!.id}");
+      print(url);
+      final req = await http.get(url);
+
+      if (req.statusCode == 200) {
+        final result = json.decode(req.body);
+        UserJobModel userJob = UserJobModel.fromJson(result);
+        m.job(userJob);
+
+        // set approval
+        approvalSetId(
+          userJob.approvalAbsensi!,
+          userJob.approvalIstirahatTelat!,
+          userJob.approvalIzinKembali!,
+          userJob.approvalLembur!,
+          userJob.approvalShift!,
+        );
+
+        return userJob;
+      }
+    } on HttpException catch (e) {
+      Get.dialog(ErrorAlert(
+        msg: e.message,
+        methodName: "fetchUserJob | api_controller.dart",
+      ));
+    }
+  }
+
+  approvalSetId(String absensi, String istirahatTelat, String izinKembali,
+      String lembur, String shifts) {
+    m.apprAbsensi = absensi;
+    m.apprIstirahatTelat = istirahatTelat;
+    m.apprIzinKembali = izinKembali;
+    m.apprLembur = lembur;
+    m.apprShift = shifts;
+  }
 
   // === save model data
 
@@ -67,12 +112,15 @@ class ApiController extends GetxController {
   Future getLocations() async {
     log("=== getLocations ===");
     try {
-      Uri url = Uri.parse(
-          "$BASE_URL/${listApi['locations']}?userId=${m.u.value!.id}");
-      final res = await http.post(url);
+      print(m.u.value!.id);
+      Uri url = Uri.parse("$BASE_URL/api/v1/locations/${m.u.value!.id}/id");
+      final res = await http.get(url);
+
+      print(res.statusCode);
 
       if (res.statusCode == 200) {
         final result = json.decode(res.body);
+        print(result);
         List temp = result['data'];
         List data = temp.map((e) => e['attendance']).toList();
         return data.map((e) => ModelLocations.fromJson(e)).toList();
@@ -87,6 +135,8 @@ class ApiController extends GetxController {
 
   // ===
   Future login(String email, String password) async {
+    m.u.value = ModelUser();
+
     try {
       log("==== Start Login ====");
 
@@ -123,6 +173,7 @@ class ApiController extends GetxController {
       if (res.statusCode == 200) {
         final result = json.decode(res.body);
         m.u(ModelUser.fromJson(result['data']));
+        m.userId = m.u.value!.id.toString();
         await fetchTodayAttendance();
         await fetchPermitByUserId();
 
@@ -173,11 +224,12 @@ class ApiController extends GetxController {
 
       final res = await http.get(
         url,
-        headers: {"Authorization": "Bearer ${m.u.value!.token}"},
+        // headers: {"Authorization": "Bearer ${m.u.value!.token}"},
       );
 
       if (res.statusCode == 200) {
         List result = json.decode(res.body);
+        print(result.map((e) => ModelAbsensi.fromJson(e)).toList());
         m.a(result.map((e) => ModelAbsensi.fromJson(e)).toList());
 
         log("==== End fetchDetailAttendance ====");
@@ -201,17 +253,25 @@ class ApiController extends GetxController {
       m.ci(null);
       m.co(null);
 
-      Uri url = Uri.parse(
-        "${BASE_URL}/${listApi["todayAttendance"]}/${m.u.value!.id}",
+      Uri url = Uri.parse("${BASE_URL}/${listApi["attendance"]}/details");
+      log(DateTime.now().toString());
+      final res = await http.post(
+        url,
+        body: {
+          "users_id": m.u.value!.id,
+          "time": DateTime.now().toString(),
+        },
       );
-      final res = await http.post(url);
 
+      log("status: ${res.statusCode}");
+      log("status: ${res.body}");
       if (res.statusCode == 200) {
         final List result = json.decode(res.body);
         List<ModelAbsensi> req =
             result.map((e) => ModelAbsensi.fromJson(e)).toList();
-        m.ci(req.firstWhereOrNull((element) => element.type == "clockin"));
-        m.co(req.firstWhereOrNull((element) => element.type == "clockout"));
+        req.forEach((element) => element.type);
+        m.ci(req.firstWhereOrNull((element) => element.type == "Clock-In"));
+        m.co(req.firstWhereOrNull((element) => element.type == "Clock-Out"));
       } else {
         m.ci(null);
         m.co(null);
@@ -225,7 +285,7 @@ class ApiController extends GetxController {
     }
   }
 
-  Future submitAttendance(String note, File img) async {
+  Future submitAttendance(String note, File img, String status) async {
     log("--- submit attendance ---");
 
     try {
@@ -234,7 +294,7 @@ class ApiController extends GetxController {
       var req = http.MultipartRequest("POST", url);
 
       req.files.add(await http.MultipartFile.fromPath(
-        "image",
+        "images",
         img.path,
       ));
 
@@ -260,6 +320,7 @@ class ApiController extends GetxController {
       req.fields['lat'] = "${p.latitude}";
       req.fields['address'] = add;
       req.fields['catatan'] = note.isEmpty ? "" : note;
+      req.fields["localDate"] = DateTime.now().toString();
 
       var res = await req.send();
 
@@ -267,9 +328,19 @@ class ApiController extends GetxController {
         await fetchTodayAttendance();
         await fetchPermitByUserId();
 
-        Get.to(() => DetailAbsenView(status: true));
+        Get.to(
+          () => DetailAbsenView(
+            status: true,
+            stat: status,
+          ),
+        );
       }
-      Get.to(() => DetailAbsenView(status: false));
+      Get.to(
+        () => DetailAbsenView(
+          status: false,
+          stat: "",
+        ),
+      );
     } on HttpException catch (e) {
       Get.dialog(ErrorAlert(
         msg: e.message,
@@ -498,5 +569,58 @@ class ApiController extends GetxController {
         methodName: "findApprovalByIdApproval | api_controller.dart",
       ));
     }
+  }
+
+  // ======== fetch shifts
+
+  Future fetchSchedule() async {
+    try {
+      Uri url = Uri.parse("${BASE_URL}/api/v1/schedule/${m.userId}/id");
+      final req = await http.get(url);
+
+      if (req.statusCode == 200) {
+        var js = json.decode(req.body);
+        m.startDate = js["startDate"];
+        UserScheduleSettingModel s =
+            UserScheduleSettingModel.fromJson(js["schedule"]);
+        m.scheduleId = s.id!;
+      }
+    } on HttpException catch (e) {
+      Get.dialog(ErrorAlert(
+        msg: e.message,
+        methodName: "fetchShifts | api_controller.dart",
+      ));
+    }
+  }
+
+  Future fetchShifts() async {
+    await fetchSchedule();
+    log("=== fetchShifts ===");
+
+    try {
+      Uri url = Uri.parse("${BASE_URL}/api/v1/shifts-assign");
+      final req = await http.post(url, body: {
+        "schedule_id": "${m.scheduleId}",
+      });
+      print(m.startDate);
+      if (req.statusCode == 200) {
+        List<dynamic> dynamicList = json.decode(req.body)["data"];
+        List<UserShiftSettingModel> models = dynamicList
+            .map((e) => UserShiftSettingModel.fromJson(e["userShift"]))
+            .toList();
+
+        return models;
+      }
+    } on HttpException catch (e) {
+      Get.dialog(ErrorAlert(
+        msg: e.message,
+        methodName: "fetchShifts | api_controller.dart",
+      ));
+    }
+  }
+
+  Future logOut() async {
+    await Get.delete<ModelController>();
+    Get.offAll(() => LoginView());
   }
 }

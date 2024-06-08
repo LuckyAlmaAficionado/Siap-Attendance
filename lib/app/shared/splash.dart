@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 
 class SplashPageView extends StatefulWidget {
   const SplashPageView({super.key});
@@ -23,7 +22,7 @@ class _SplashPageViewState extends State<SplashPageView> {
         width: Get.width,
         height: Get.height,
         child: Center(
-          child: Icon(Iconsax.activity, size: 60),
+          child: Icon(Icons.developer_board, size: 60),
         ),
       ),
     );

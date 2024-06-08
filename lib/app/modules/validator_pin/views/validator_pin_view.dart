@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:heroicons/heroicons.dart';
+
 import 'package:talenta_app/app/shared/utils.dart';
 
 import '../../../shared/theme.dart';
@@ -32,10 +33,14 @@ class ValidatorPinView extends GetView<ValidatorPinController> {
           onPressed: () {
             Get.back();
           },
-          icon: Icon(
-            Iconsax.arrow_left,
-            color: darkGreyColor,
+          icon: HeroIcon(
+            HeroIcons.chevronLeft,
+            color: Colors.grey,
           ),
+          // icon: Icon(
+          //   Iconsax.arrow_left,
+          //   color: darkGreyColor,
+          // ),
         ),
       ),
       body: Column(

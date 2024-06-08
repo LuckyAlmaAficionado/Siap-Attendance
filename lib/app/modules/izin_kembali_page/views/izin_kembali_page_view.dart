@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_map/flutter_map.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:heroicons/heroicons.dart';
 import 'package:intl/intl.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -61,40 +63,118 @@ class IzinKembaliPageView extends GetView<IzinKembaliPageController> {
                     itemBuilder: (context, index) {
                       ModelIzin a = i[index];
 
-                      return ListTile(
-                        onTap: () => Get.bottomSheet(
-                          isScrollControlled: true,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10),
-                              topRight: Radius.circular(10),
+                      // return ListTile(
+                      //   onTap: () => Get.bottomSheet(
+                      //     isScrollControlled: true,
+                      //     shape: RoundedRectangleBorder(
+                      //       borderRadius: BorderRadius.only(
+                      //         topLeft: Radius.circular(10),
+                      //         topRight: Radius.circular(10),
+                      //       ),
+                      //     ),
+                      //     backgroundColor: whiteColor,
+                      //     PermitActivityDetails(
+                      //       a: a,
+                      //       t: m.u.value!.id!,
+                      //     ),
+                      //   ),
+                      //   title: Text(
+                      //     (a.status != 0) ? "Izin Masuk" : "Izin Keluar",
+                      //     style: normalTextStyle.copyWith(
+                      //       fontSize: 16,
+                      //       fontWeight: medium,
+                      //       color: (a.status != 0) ? greenColor : redColor,
+                      //     ),
+                      //   ),
+                      //   subtitle: Text(
+                      //     "${DateFormat("dd MMM yyyy", "id_ID").format(a.jamKeluar)}",
+                      //     style: normalTextStyle.copyWith(
+                      //       color: darkGreyColor,
+                      //       fontSize: 12,
+                      //     ),
+                      //   ),
+                      //   trailing: Text(
+                      //     "${a.alasan.isEmpty ? "Note: Tidak ada alasan" : "Note: ${a.alasan.capitalizeFirst}"}",
+                      //     style: normalTextStyle.copyWith(
+                      //       fontSize: 12,
+                      //     ),
+                      //   ),
+                      // );
+                      return Container(
+                        margin: const EdgeInsets.only(
+                          top: 10,
+                          left: 15,
+                          right: 15,
+                        ),
+                        child: Material(
+                          elevation: 1,
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          child: InkWell(
+                            onTap: () => Get.bottomSheet(
+                              isScrollControlled: true,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                ),
+                              ),
+                              backgroundColor: whiteColor,
+                              PermitActivityDetails(
+                                a: a,
+                                t: m.u.value!.id!,
+                              ),
                             ),
-                          ),
-                          backgroundColor: whiteColor,
-                          PermitActivityDetails(
-                            a: a,
-                            t: m.u.value!.id!,
-                          ),
-                        ),
-                        title: Text(
-                          (a.status != 0) ? "Izin Masuk" : "Izin Keluar",
-                          style: normalTextStyle.copyWith(
-                            fontSize: 16,
-                            fontWeight: medium,
-                            color: (a.status != 0) ? greenColor : redColor,
-                          ),
-                        ),
-                        subtitle: Text(
-                          "${DateFormat("dd MMM yyyy", "id_ID").format(a.jamKeluar)}",
-                          style: normalTextStyle.copyWith(
-                            color: darkGreyColor,
-                            fontSize: 12,
-                          ),
-                        ),
-                        trailing: Text(
-                          "${a.alasan.isEmpty ? "Note: Tidak ada alasan" : "Note: ${a.alasan.capitalizeFirst}"}",
-                          style: normalTextStyle.copyWith(
-                            fontSize: 12,
+                            borderRadius: BorderRadius.circular(15),
+                            child: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Row(
+                                children: [
+                                  HeroIcon(
+                                    HeroIcons.clipboardDocument,
+                                    color: Colors.pink,
+                                  ),
+                                  const Gap(15),
+                                  SizedBox(
+                                    width: context.width * 0.4,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          (a.status != 0)
+                                              ? "Izin Masuk"
+                                              : "Izin Keluar",
+                                          style: normalTextStyle.copyWith(
+                                            fontSize: 14,
+                                            fontWeight: medium,
+                                            color: (a.status != 0)
+                                                ? greenColor
+                                                : redColor,
+                                          ),
+                                        ),
+                                        Text(
+                                          "Catatan: Sedang ada acara keluarga sebentar yang harus dilaksanakan",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: normalTextStyle.copyWith(
+                                            fontSize: 10,
+                                            color: Colors.black45,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  Icon(
+                                    Icons.keyboard_arrow_right_rounded,
+                                    color: Colors.pink,
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                       );

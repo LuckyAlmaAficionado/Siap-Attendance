@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:heroicons/heroicons.dart';
 
 import 'package:talenta_app/app/modules/home/controllers/home_controller.dart';
 import 'package:talenta_app/app/shared/images/images.dart';
@@ -83,17 +83,19 @@ class _KaryawanViewState extends State<KaryawanView> {
       appBar: AppBar(
         backgroundColor: whiteColor,
         toolbarHeight: 0,
-        elevation: 2,
+        elevation: 0.5,
         bottom: PreferredSize(
-          preferredSize: Size.fromHeight(100),
+          preferredSize: Size.fromHeight(90),
           child: Container(
             color: Colors.white,
             padding: const EdgeInsets.all(20),
             child: TextField1(
               hintText: "Cari karyawan",
-              preffixIcon: Icon(
-                Iconsax.search_normal_1,
-              ),
+              preffixIcon: HeroIcon(HeroIcons.magnifyingGlass),
+              // preffixIcon: Icon(
+              //   Iconsax.search_normal_1,
+              //   size: 20,
+              // ),
               onChanged: findEmployeeByName,
             ),
           ),
@@ -102,79 +104,67 @@ class _KaryawanViewState extends State<KaryawanView> {
       body: Obx(
         () => (controller.karyawan.isEmpty)
             ? Center(child: CircularProgressIndicator())
-            : ListView(
-                children: [
-                  SizedBox(
-                    height: context.height * 0.75,
-                    child: ListView.builder(
-                      controller: scrollController,
-                      itemCount: (controller.sortingKaryawan.length == 0)
-                          ? controller.karyawan.length
-                          : controller.sortingKaryawan.length,
-                      itemBuilder: (context, index) {
-                        Karyawan model =
-                            (controller.sortingKaryawan.length == 0)
-                                ? controller.karyawan[index]
-                                : controller.sortingKaryawan[index];
+            : ListView.builder(
+                controller: scrollController,
+                itemCount: (controller.sortingKaryawan.length == 0)
+                    ? controller.karyawan.length
+                    : controller.sortingKaryawan.length,
+                itemBuilder: (context, index) {
+                  Karyawan model = (controller.sortingKaryawan.length == 0)
+                      ? controller.karyawan[index]
+                      : controller.sortingKaryawan[index];
 
-                        return Container(
-                          margin: const EdgeInsets.only(top: 1),
-                          child: ListTile(
-                            tileColor: whiteColor,
-                            onTap: () => Get.toNamed(Routes.DETAIL_KARYAWAN,
-                                arguments: model),
-                            title: Text(
-                              "${model.name}",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: blackTextStyle.copyWith(
-                                  fontSize: 14, fontWeight: medium),
-                            ),
-                            subtitle: Text(
-                              "${model.jabatan}",
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: darkGreyTextStyle.copyWith(
-                                fontWeight: regular,
-                                fontSize: 12,
-                              ),
-                            ),
-                            leading: CircleAvatar(
-                              child: SizedBox(
-                                width: 80,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(100),
-                                  child: ImageNetwork(url: model.avatar!),
-                                ),
-                              ),
-                            ),
-                            trailing: Container(
-                              width: 100,
-                              child: Row(
-                                children: [
-                                  IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      Iconsax.call_calling,
-                                      color: Colors.black26,
-                                    ),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(
-                                      Iconsax.messages_2,
-                                      color: Colors.black26,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                  return Container(
+                    margin: const EdgeInsets.only(top: 1),
+                    child: ListTile(
+                      tileColor: whiteColor,
+                      onTap: () =>
+                          Get.toNamed(Routes.DETAIL_KARYAWAN, arguments: model),
+                      title: Text(
+                        "${model.name}",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: normalTextStyle.copyWith(
+                          fontSize: 14,
+                          fontWeight: medium,
+                        ),
+                      ),
+                      subtitle: Text(
+                        "${model.jabatan}",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: normalTextStyle.copyWith(
+                          fontWeight: regular,
+                          fontSize: 10,
+                        ),
+                      ),
+                      leading: CircleAvatar(
+                        child: SizedBox(
+                          width: 80,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(100),
+                            child: ImageNetwork(url: model.avatar!),
                           ),
-                        );
-                      },
+                        ),
+                      ),
+                      trailing: Container(
+                        width: 100,
+                        child: Row(
+                          children: [
+                            IconButton(
+                              onPressed: () {},
+                              icon: HeroIcon(HeroIcons.phone),
+                            ),
+                            IconButton(
+                              onPressed: () {},
+                              icon: HeroIcon(HeroIcons.chatBubbleLeftEllipsis),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  );
+                },
               ),
       ),
       floatingActionButton: AnimatedSlide(

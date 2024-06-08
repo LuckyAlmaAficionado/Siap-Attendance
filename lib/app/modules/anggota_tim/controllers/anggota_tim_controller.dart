@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
@@ -21,8 +22,8 @@ class AnggotaTimController extends GetxController {
 
   @override
   void onInit() async {
-    s.value = DateTime.now().toIso8601String();
-    // value = await fetchHolidayDate();
+    // s.value = DateTime.now().toIso8601String();
+    value = await fetchHolidayDate();
     super.onInit();
   }
 
@@ -31,12 +32,22 @@ class AnggotaTimController extends GetxController {
 
     try {
       final res = await dio.get(
-          "https://www.googleapis.com/calendar/v3/calendars/id.indonesian%23holiday@group.v.calendar.google.com/events?key=AIzaSyAgswKdqQrBGikVZ40r7pNrOLpaMZ4hWmk");
+        "https://www.googleapis.com/calendar/v3/calendars/id.indonesian%23holiday@group.v.calendar.google.com/events?key=AIzaSyAgswKdqQrBGikVZ40r7pNrOLpaMZ4hWmk",
+      );
+
+      log("status: ${res.statusCode}");
 
       if (res.statusCode == 200) {
         List temp = res.data['items'];
-        googleCalendar(
-            temp.map((e) => GoogleCalendarModel.fromJson(e)).toList());
+
+        List<GoogleCalendarModel> gcm =
+            temp.map((e) => GoogleCalendarModel.fromJson(e)).toList();
+
+        googleCalendar(gcm);
+
+        // googleCalendar(
+        //   temp.map((e) => GoogleCalendarModel.fromJson(e)).toList(),
+        // );
 
         listDateTime.value = googleCalendar.map((e) => e.start.date).toList();
       }
@@ -56,6 +67,6 @@ class AnggotaTimController extends GetxController {
 
   Future fetchHolidayDate() async {
     if (listDateTime.isEmpty) await fetchDateFromInternet();
-    return listDateTime.toList();
+    return listDateTime;
   }
 }

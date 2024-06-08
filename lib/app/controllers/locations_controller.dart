@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:math' show sin, cos, sqrt, atan2;
 
 import 'package:geolocator/geolocator.dart';

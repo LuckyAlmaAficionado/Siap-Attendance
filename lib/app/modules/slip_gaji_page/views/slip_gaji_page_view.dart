@@ -1,24 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:heroicons/heroicons.dart';
+
+import 'package:talenta_app/app/controllers/model_controller.dart';
+import 'package:talenta_app/app/shared/images/images.dart';
 import 'package:talenta_app/app/shared/theme.dart';
 
 import '../controllers/slip_gaji_page_controller.dart';
 
 class SlipGajiPageView extends GetView<SlipGajiPageController> {
-  const SlipGajiPageView({Key? key}) : super(key: key);
+  SlipGajiPageView({Key? key}) : super(key: key);
+
+  final m = Get.find<ModelController>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Colors.white,
           title: Text(
             "Slip Gaji",
-            style: appBarTextStyle,
+            style: appBarTextStyle.copyWith(
+              color: Colors.black,
+            ),
           ),
           centerTitle: true,
+          iconTheme: IconThemeData(color: blackColor),
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(230),
             child: Padding(
@@ -30,7 +39,7 @@ class SlipGajiPageView extends GetView<SlipGajiPageController> {
                     height: 50,
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: whiteColor,
+                      color: Colors.grey.shade100,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Row(
@@ -57,7 +66,7 @@ class SlipGajiPageView extends GetView<SlipGajiPageController> {
                       height: 140,
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
-                        color: whiteColor,
+                        color: Colors.grey.shade100,
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Column(
@@ -97,24 +106,13 @@ class SlipGajiPageView extends GetView<SlipGajiPageController> {
                                 ],
                               ),
                               new Spacer(),
-                              CircleAvatar(
-                                radius: 25,
-                                backgroundColor: lightGreyColor,
-                                child: T
-                                    ? Icon(Iconsax.user)
-                                    : ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        child: Image.network(
-                                          loadingBuilder: (context, child,
-                                                  loadingProgress) =>
-                                              loadingProgress == null
-                                                  ? child
-                                                  : CircularProgressIndicator(),
-                                          "",
-                                        ),
-                                      ),
-                              ),
+                              SizedBox(
+                                width: 50,
+                                height: 50,
+                                child: ImageNetwork(
+                                  url: m.u.value!.avatar!,
+                                ),
+                              )
                             ],
                           )
                         ],
@@ -124,37 +122,44 @@ class SlipGajiPageView extends GetView<SlipGajiPageController> {
             ),
           ),
         ),
-        body: (false)
-            ? ListView()
-            : SizedBox(
-                width: Get.width,
-                height: Get.height,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Iconsax.wallet,
-                      size: 100,
-                    ),
-                    const Gap(20),
-                    Text(
-                      "Coba buka ini nanti",
-                      style: blackTextStyle.copyWith(
-                        fontWeight: extraBold,
-                        fontSize: 20,
+        body: FutureBuilder(
+          future: controller.checkUsers(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return (false)
+                  ? ListView()
+                  : SizedBox(
+                      width: Get.width,
+                      height: Get.height,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          HeroIcon(
+                            HeroIcons.banknotes,
+                            size: 60,
+                          ),
+                          const Gap(5),
+                          Text(
+                            "Coba buka ini nanti",
+                            style: normalTextStyle.copyWith(
+                              fontWeight: extraBold,
+                              fontSize: 18,
+                            ),
+                          ),
+                          Text(
+                            "Slip gaji ini masuh dikunci oleh Admin kantor Anda",
+                            style: normalTextStyle.copyWith(
+                              fontWeight: regular,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    const Gap(10),
-                    Text(
-                      "Slip gaji ini masuh dikunci oleh Admin kantor Anda",
-                      style: blackTextStyle.copyWith(
-                        fontWeight: regular,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-              ));
+                    );
+            }
+            return Container();
+          },
+        ));
   }
 }

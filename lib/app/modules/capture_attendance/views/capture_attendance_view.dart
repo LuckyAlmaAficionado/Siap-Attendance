@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:camera/camera.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 
 import 'package:talenta_app/app/modules/capture_attendance/controllers/capture_attendance_controller.dart';
 import 'package:talenta_app/app/shared/button/button_1.dart';
@@ -120,7 +120,7 @@ class _CaptureAttendanceViewState extends State<CaptureAttendanceView> {
                   children: [
                     Row(
                       children: [
-                        const Icon(Icons.exposure),
+                        const Icon(Boxicons.bx_brightness_half),
                         Expanded(
                           child: Slider(
                             value: currentExposureOffset,
@@ -138,8 +138,10 @@ class _CaptureAttendanceViewState extends State<CaptureAttendanceView> {
                         IconButton(
                           onPressed: _toggleTorch,
                           icon: isTorchOn
-                              ? Icon(Icons.light_mode,
-                                  color: Colors.amber.shade600)
+                              ? Icon(
+                                  Icons.light_mode,
+                                  color: Colors.amber.shade600,
+                                )
                               : Icon(
                                   Icons.light_mode_outlined,
                                   color: Colors.black,
@@ -151,7 +153,7 @@ class _CaptureAttendanceViewState extends State<CaptureAttendanceView> {
                       controller: c.noteC,
                       hintText: "Catatan",
                       obsecure: false,
-                      preffixIcon: Icon(Iconsax.note),
+                      preffixIcon: Icon(Boxicons.bx_note),
                     ),
                     const Gap(10),
                     Button1(

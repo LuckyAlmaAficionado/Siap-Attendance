@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -27,16 +29,33 @@ class AuthenticationView extends GetView<AuthController> {
 
           if (email.isNotEmpty && password.isNotEmpty) {
             return FutureBuilder(
-              future: controller.hiveCheckPin(),
+              future: controller.pinValidator(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
+                  // While the future is resolving, show a loading view (could be SplashView)
                   return SplashView();
-                } else if (snapshot.hasData) {
-                  return PinView();
+                } else if (snapshot.hasError) {
+                  // Handle the error case, maybe show an error view or a retry option
+                  return ErrorWidget(); // This could be any widget to display the error
                 } else if (snapshot.connectionState == ConnectionState.done) {
-                  return MenuView();
+                  if (snapshot.hasData) {
+                    // If we have data, check its value
+                    print("Snapshot Data: ${snapshot.data}");
+                    if (snapshot.data != null) {
+                      // If data is not null, show PinView
+                      return PinView();
+                    } else {
+                      // If data is null, show MenuView
+                      return MenuView();
+                    }
+                  } else {
+                    // If the future completed but no data is present
+                    return MenuView();
+                  }
+                } else {
+                  // This case shouldn't normally happen, but it's good to handle it
+                  return SplashView();
                 }
-                return ErrorWidget();
               },
             );
           } else {

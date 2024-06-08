@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,7 +19,13 @@ class AbsenPageView extends GetView<AbsenPageController> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Absen', style: appBarTextStyle),
+          elevation: 0.5,
+          shadowColor: Colors.grey.shade300,
+          backgroundColor: whiteColor,
+          title: Text(
+            'Absen',
+            style: appBarTextStyle.copyWith(color: blackColor),
+          ),
           centerTitle: true,
           bottom: PreferredSize(
             preferredSize: Size.fromHeight(Get.height * 0.11),
@@ -30,7 +37,7 @@ class AbsenPageView extends GetView<AbsenPageController> {
                   style: GoogleFonts.lexend(
                     fontSize: 30,
                     fontWeight: regular,
-                    color: whiteColor,
+                    color: blackColor,
                   ),
                 ),
                 const Gap(5),
@@ -39,13 +46,14 @@ class AbsenPageView extends GetView<AbsenPageController> {
                   style: normalTextStyle.copyWith(
                     fontSize: 16,
                     fontWeight: semiBold,
-                    color: whiteColor,
+                    color: blackColor,
                   ),
                 ),
                 const SizedBox(height: 15),
               ],
             ),
           ),
+          iconTheme: IconThemeData(color: blackColor),
         ),
         body: Padding(
           padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
@@ -77,88 +85,98 @@ class AbsenPageView extends GetView<AbsenPageController> {
                 ),
               ),
               const SizedBox(height: 20),
-              Column(
-                children: [
-                  if (controller.m.ci.value.id != null)
-                    ListTile(
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 20),
-                      onTap: () => Get.to(
-                        DetailClockInView(),
-                        arguments: controller.m.ci.value,
-                      ),
-                      leading: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "${DateFormat("HH:mm", "id_ID").format(controller.m.ci.value.createdAt!)}",
-                            style: normalTextStyle.copyWith(
-                              fontWeight: semiBold,
-                              fontSize: 16,
-                            ),
-                          ),
-                          Text(
-                            "${DateFormat("dd MMM", "id_ID").format(controller.m.ci.value.createdAt!)}",
-                            style: greenTextStyle.copyWith(
-                              fontSize: 14,
-                              fontWeight: extraLight,
-                            ),
-                          )
-                        ],
-                      ),
-                      title: Text(
-                        controller.m.ci.value.type!,
-                        style: normalTextStyle.copyWith(
-                          fontWeight: extraLight,
-                          fontSize: 14,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Column(
+                  children: [
+                    if (controller.m.ci.value.id != null)
+                      ListTileAbsen(
+                        controller: controller,
+                        colors: Colors.green.shade50,
+                        type: controller.m.ci.value.type!,
+                        onTap: () => Get.to(
+                          () => DetailClockInView(),
+                          arguments: controller.m.ci.value,
+                          transition: Transition.cupertino,
                         ),
                       ),
-                      trailing: Icon(Icons.keyboard_arrow_right_outlined),
-                    ),
-                  if (controller.m.co.value.id != null)
-                    ListTile(
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 20),
-                      onTap: () {
-                        Get.to(
-                          DetailClockInView(),
+                    const Gap(10),
+                    if (controller.m.co.value.id != null)
+                      ListTileAbsen(
+                        controller: controller,
+                        colors: Colors.red.shade50,
+                        type: controller.m.co.value.type!,
+                        onTap: () => Get.to(
+                          () => DetailClockInView(),
                           arguments: controller.m.co.value,
-                        );
-                      },
-                      leading: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "${DateFormat("HH:mm", "id_ID").format(controller.m.co.value.createdAt!)}",
-                            style: normalTextStyle.copyWith(
-                              fontWeight: semiBold,
-                              fontSize: 16,
-                            ),
-                          ),
-                          Text(
-                            "${DateFormat("dd MMM", "id_ID").format(controller.m.co.value.createdAt!)}",
-                            style: greenTextStyle.copyWith(
-                              fontSize: 14,
-                              fontWeight: extraLight,
-                            ),
-                          )
-                        ],
-                      ),
-                      title: Text(
-                        controller.m.co.value.type!,
-                        style: normalTextStyle.copyWith(
-                          fontWeight: extraLight,
-                          fontSize: 14,
+                          transition: Transition.cupertino,
                         ),
                       ),
-                      trailing: Icon(Icons.keyboard_arrow_right_outlined),
-                    ),
-                ],
+                  ],
+                ),
               )
             ],
           ),
         ));
+  }
+}
+
+class ListTileAbsen extends StatelessWidget {
+  const ListTileAbsen({
+    super.key,
+    required this.controller,
+    this.colors,
+    required this.type,
+    this.onTap,
+  });
+
+  final Color? colors;
+  final String type;
+  final Function()? onTap;
+  final AbsenPageController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      elevation: 1,
+      borderRadius: BorderRadius.circular(15),
+      child: ListTile(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        tileColor: colors,
+        contentPadding: const EdgeInsets.all(15),
+        title: Text(
+          type,
+          style: normalTextStyle.copyWith(
+            fontSize: 14,
+            fontWeight: semiBold,
+          ),
+        ),
+        trailing: Icon(Boxicons.bx_chevron_right),
+        leading: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "${DateFormat("HH:mm", "id_ID").format(controller.m.ci.value.createdAt!)}",
+              style: GoogleFonts.lexend(
+                fontWeight: semiBold,
+                fontSize: 16,
+              ),
+            ),
+            Text(
+              "${DateFormat("dd MMM", "id_ID").format(controller.m.ci.value.createdAt!)}",
+              style: normalTextStyle.copyWith(
+                color: Colors.green,
+                fontWeight: semiBold,
+                fontSize: 14,
+              ),
+            )
+          ],
+        ),
+        onTap: onTap,
+      ),
+    );
   }
 }

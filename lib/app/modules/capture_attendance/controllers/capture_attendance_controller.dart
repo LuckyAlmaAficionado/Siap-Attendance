@@ -96,7 +96,7 @@ class CaptureAttendanceController extends GetxController {
         await a.approvalRequest(noteC.text);
         break;
       default:
-        await a.submitAttendance(noteC.text, localImage);
+        await a.submitAttendance(noteC.text, localImage, status);
         break;
     }
   }

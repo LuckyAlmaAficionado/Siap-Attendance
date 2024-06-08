@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:talenta_app/app/modules/daftar_absensi_page/views/pengajuan_absensi_view.dart';
 import 'package:talenta_app/app/routes/app_pages.dart';
 
@@ -27,13 +26,13 @@ class MoreServices extends StatelessWidget {
               _Cbutton(
                 () => Get.toNamed(Routes.CUTI_PAGE),
                 "Cuti",
-                Iconsax.receipt_item,
+                Icons.developer_board,
                 constraints.maxHeight,
               ),
               _Cbutton(
                 () => Get.toNamed(Routes.TELAT_MASUK_PAGE),
                 "Istirahat Terlambat",
-                Iconsax.clock,
+                Icons.developer_board,
                 constraints.maxHeight,
               ),
               _Cbutton(
@@ -42,13 +41,13 @@ class MoreServices extends StatelessWidget {
                   transition: Transition.cupertino,
                 ),
                 "Absensi",
-                Iconsax.location,
+                Icons.location_on_sharp,
                 constraints.maxHeight,
               ),
               _Cbutton(
                 () => null,
                 "Perubahan Shift",
-                Iconsax.clock,
+                Icons.developer_board,
                 constraints.maxHeight,
               ),
             ],

@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:heroicons/heroicons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 import 'package:talenta_app/app/controllers/camera_data_controller.dart';
 import 'package:talenta_app/app/modules/cuti_page/controllers/cuti_page_controller.dart';
+import 'package:talenta_app/app/shared/button/button_1.dart';
 import 'package:talenta_app/app/shared/textfield/textfield_1.dart';
 import 'package:talenta_app/app/shared/theme.dart';
-import 'package:talenta_app/app/shared/utils.dart';
 
 import '../../home/views/home_view.dart';
 
@@ -59,10 +59,13 @@ class _PengajuanCutiViewState extends State<PengajuanCutiView> {
                 await jenisCuti();
                 setState(() {});
               },
-              preffixIcon: Icon(Iconsax.note_1),
+              preffixIcon: HeroIcon(HeroIcons.documentText),
               readOnly: true,
               hintText: "Jenis Cuti",
-              suffixIcon: Icon(Iconsax.arrow_bottom),
+              suffixIcon: HeroIcon(
+                HeroIcons.chevronDown,
+                size: 20,
+              ),
             ),
 
             const Gap(15),
@@ -85,18 +88,21 @@ class _PengajuanCutiViewState extends State<PengajuanCutiView> {
                 setState(() {});
               },
               hintText: "Pilih tanggal",
-              preffixIcon: Icon(Iconsax.calendar_1),
+              preffixIcon: HeroIcon(HeroIcons.calendarDays),
             ),
             const Gap(15),
             TextField1(
-              preffixIcon: Icon(Iconsax.note),
+              preffixIcon: HeroIcon(HeroIcons.bars3),
               hintText: "Alasan",
             ),
             const Gap(15),
             TextField1(
               hintText: "Dilegasi ke (opsional)",
-              preffixIcon: Icon(Iconsax.people),
-              suffixIcon: Icon(Iconsax.arrow_bottom),
+              preffixIcon: HeroIcon(HeroIcons.users),
+              suffixIcon: HeroIcon(
+                HeroIcons.chevronDown,
+                size: 20,
+              ),
               onTap: () => dilegasi(),
               readOnly: true,
             ),
@@ -107,7 +113,7 @@ class _PengajuanCutiViewState extends State<PengajuanCutiView> {
               controller: fl,
               hintText: "Input file (uk max. 10mb)",
               readOnly: true,
-              preffixIcon: Icon(Iconsax.task_square),
+              preffixIcon: HeroIcon(HeroIcons.paperClip),
               onTap: () async {
                 showModalBottomSheet(
                   context: context,
@@ -131,9 +137,9 @@ class _PengajuanCutiViewState extends State<PengajuanCutiView> {
                             setState(() {});
                           },
                           child: IconWidgetService(
-                            Iconsax.camera,
-                            "Kamera",
-                            greenColor,
+                            title: "Kamera",
+                            icons: HeroIcons.camera,
+                            colors: Colors.green,
                           ),
                         ),
                         GestureDetector(
@@ -144,9 +150,9 @@ class _PengajuanCutiViewState extends State<PengajuanCutiView> {
                             setState(() {});
                           },
                           child: IconWidgetService(
-                            Iconsax.gallery,
-                            "Galeri",
-                            Colors.blueAccent,
+                            title: "Galeri",
+                            icons: HeroIcons.photo,
+                            colors: Colors.green,
                           ),
                         ),
                       ],
@@ -156,10 +162,10 @@ class _PengajuanCutiViewState extends State<PengajuanCutiView> {
               },
             ),
             const SizedBox(height: 50),
-            CustomButton(
-              title: "Kirim pengajuan",
+            Button1(
+              title: "Kirim Pengajuan",
               onTap: () {},
-            )
+            ),
           ],
         ),
       ),

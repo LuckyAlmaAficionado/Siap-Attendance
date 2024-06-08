@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:heroicons/heroicons.dart';
 import 'package:intl/intl.dart';
+import 'package:talenta_app/app/controllers/calendar_controller.dart';
 
 import 'package:talenta_app/app/controllers/date_controller.dart';
 import 'package:talenta_app/app/controllers/file_picker_controller.dart';
@@ -10,6 +12,7 @@ import 'package:talenta_app/app/controllers/model_controller.dart';
 import 'package:talenta_app/app/models/user_absensi.dart';
 import 'package:talenta_app/app/modules/daftar_absensi_page/controllers/daftar_absensi_page_controller.dart';
 import 'package:talenta_app/app/shared/button/button_1.dart';
+import 'package:talenta_app/app/shared/textfield/textfield_1.dart';
 import 'package:talenta_app/app/shared/theme.dart';
 
 class PengajuanAbsensiView extends StatefulWidget {
@@ -26,12 +29,17 @@ class _PengajuanAbsensiViewState extends State<PengajuanAbsensiView> {
 
   TextEditingController timeController = TextEditingController();
 
+  TextEditingController clockInC = TextEditingController();
+  TextEditingController clockOutC = TextEditingController();
+
   final controller = Get.put(DaftarAbsensiPageController());
   final dateController = Get.put(DateController());
+  final calendarC = Get.put(CalendarController());
   final filePicker = Get.put(FilePickerController());
 
   final m = Get.find<ModelController>();
 
+  DateTime now = DateTime.now();
   DateTime picked = DateTime.now();
   late List<ModelAbsensi> absensi;
   late ModelAbsensi currentTime;
@@ -42,28 +50,31 @@ class _PengajuanAbsensiViewState extends State<PengajuanAbsensiView> {
   @override
   void initState() {
     super.initState();
-    absensi = m.a;
-    // absensi = authC.listUserAbsensi;
   }
 
   findAbsensiByDate() {
-    tempClockIn = absensi.firstWhere(
+    tempClockIn = m.a.firstWhere(
       (element) =>
           element.createdAt!.day == picked.day &&
           element.createdAt!.month == picked.month &&
           element.createdAt!.year == picked.year &&
-          element.type == "clockin",
+          element.type == "Clock-In",
       orElse: () => ModelAbsensi(),
     );
 
-    tempClockOut = absensi.firstWhere(
+    tempClockOut = m.a.firstWhere(
       (element) =>
           element.createdAt!.day == picked.day &&
           element.createdAt!.month == picked.month &&
           element.createdAt!.year == picked.year &&
-          element.type == "clockout",
+          element.type == "Clock-Out",
       orElse: () => ModelAbsensi(),
     );
+  }
+
+  String formatTime(String time) {
+    DateTime dateTime = DateFormat('HH:mm:ss').parse(time);
+    return DateFormat('HH:mm').format(dateTime);
   }
 
   @override
@@ -72,9 +83,11 @@ class _PengajuanAbsensiViewState extends State<PengajuanAbsensiView> {
         appBar: AppBar(
           title: Text(
             'Pengajuan Absensi',
-            style: appBarTextStyle,
+            style: appBarTextStyle.copyWith(color: Colors.black),
           ),
-          centerTitle: true,
+          backgroundColor: Colors.white,
+          iconTheme: IconThemeData(color: Colors.black),
+          centerTitle: false,
           elevation: 0,
         ),
         body: Stack(
@@ -87,26 +100,40 @@ class _PengajuanAbsensiViewState extends State<PengajuanAbsensiView> {
                 padding: const EdgeInsets.all(0),
                 children: [
                   // ... pilih tanggal
-                  TextFormField(
+
+                  TextField1(
                     controller: timeController,
                     onTap: () async {
-                      FocusScope.of(context).requestFocus(new FocusNode());
                       picked = await dateController.selectDate(context, picked);
                       timeController.text =
-                          DateFormat("dd MMM yyyy", "id_ID").format(picked);
-
+                          DateFormat("dd MMMM yyyy", "id_ID").format(picked);
                       setState(() {
                         findAbsensiByDate();
                       });
                     },
-                    decoration: InputDecoration(
-                      labelText: 'Pick a date',
-                      labelStyle: darkGreyTextStyle,
-                      suffixIcon: Icon(Icons.calendar_today),
-                      border: OutlineInputBorder(),
-                    ),
-                    readOnly: true, // Jadikan text field hanya bisa dibaca
+                    suffixIcon: HeroIcon(HeroIcons.calendarDays),
+                    readOnly: true,
                   ),
+                  // TextFormField(
+                  //   controller: timeController,
+                  //   onTap: () async {
+                  //     FocusScope.of(context).requestFocus(new FocusNode());
+                  //     picked = await dateController.selectDate(context, picked);
+                  //     timeController.text =
+                  //         DateFormat("dd MMM yyyy", "id_ID").format(picked);
+
+                  //     setState(() {
+                  //       findAbsensiByDate();
+                  //     });
+                  //   },
+                  //   decoration: InputDecoration(
+                  //     labelText: 'Pick a date',
+                  //     labelStyle: darkGreyTextStyle,
+                  //     suffixIcon: Icon(Icons.calendar_today),
+                  //     border: OutlineInputBorder(),
+                  //   ),
+                  //   readOnly: true, // Jadikan text field hanya bisa dibaca
+                  // ),
                   ListTile(
                     contentPadding: const EdgeInsets.all(0),
                     title: Text(
@@ -114,7 +141,7 @@ class _PengajuanAbsensiViewState extends State<PengajuanAbsensiView> {
                       style: blackTextStyle,
                     ),
                     subtitle: Text(
-                      "Office 2 (${DateFormat("HH:MM").format(DateTime.now())} - ${DateFormat("HH:MM").format(DateTime.now())})",
+                      "${m.shiftC.value.shiftName} (${formatTime(m.shiftC.value.scheduleIn!)} - ${formatTime(m.shiftC.value.scheduleOut!)})",
                       style: darkGreyTextStyle,
                     ),
                   ),
@@ -162,102 +189,110 @@ class _PengajuanAbsensiViewState extends State<PengajuanAbsensiView> {
                     thickness: 1,
                     color: darkGreyColor,
                   ),
-                  ListTile(
-                    contentPadding: const EdgeInsets.all(0),
-                    leading: Checkbox(
-                      onChanged: (value) {
-                        setState(() {
-                          clockIn = value!;
-                        });
-                      },
-                      value: clockIn,
-                    ),
-                    title: Text(
-                      "Clock In",
-                      style: blackTextStyle.copyWith(
-                        fontSize: 14,
+                  const Gap(10),
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: (!clockInC.text.isEmpty),
+                        onChanged: (value) {
+                          setState(() {
+                            clockInC.text = "";
+                          });
+                        },
                       ),
-                    ),
-                    subtitle: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Jam',
-                        hintStyle: darkGreyTextStyle,
-                        border: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            width: 1,
-                            color: darkGreyColor,
-                          ),
+                      Flexible(
+                        child: TextField1(
+                          controller: clockInC,
+                          onTap: () async {
+                            TimeOfDay? picker = await showTimePicker(
+                              context: context,
+                              initialEntryMode: TimePickerEntryMode.dial,
+                              initialTime: TimeOfDay.now(),
+                            );
+                            setState(() {
+                              clockInC.text = DateFormat("HH:MM").format(
+                                  DateTime(
+                                      picked.day,
+                                      picked.month,
+                                      picked.year,
+                                      picker!.hour,
+                                      picker.minute));
+                            });
+                          },
+                          readOnly: true,
+                          suffixIcon: HeroIcon(HeroIcons.clock),
+                          hintText: "Clock-In",
+                          fillColor: (clockInC.text.isEmpty)
+                              ? lightGreyColor
+                              : Colors.blue.shade50,
+                          onChanged: (p0) {},
                         ),
-                      ),
-                    ),
-                  ),
-                  ListTile(
-                    contentPadding: const EdgeInsets.all(0),
-                    leading: Checkbox(
-                      onChanged: (value) {
-                        setState(() {
-                          clockOut = value!;
-                        });
-                      },
-                      value: clockOut,
-                    ),
-                    title: Text(
-                      "Clock Out",
-                      style: blackTextStyle.copyWith(
-                        fontSize: 14,
-                      ),
-                    ),
-                    subtitle: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Jam',
-                        hintStyle: darkGreyTextStyle,
-                        border: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            width: 1,
-                            color: darkGreyColor,
-                          ),
-                        ),
-                      ),
-                    ),
+                      )
+                    ],
                   ),
                   const Gap(10),
-                  TextField(
-                    decoration: InputDecoration(
-                        hintText: "Deksripsi",
-                        hintStyle: darkGreyTextStyle,
-                        prefixIcon: Icon(Icons.format_align_left_outlined),
-                        border: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            width: 1,
-                            color: darkGreyColor,
-                          ),
-                        )),
+
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: (!clockOutC.text.isEmpty),
+                        onChanged: (value) {
+                          setState(() {
+                            clockOutC.text = "";
+                          });
+                        },
+                      ),
+                      Flexible(
+                        child: TextField1(
+                          controller: clockOutC,
+                          onTap: () async {
+                            TimeOfDay? picker = await showTimePicker(
+                              context: context,
+                              initialEntryMode: TimePickerEntryMode.dial,
+                              initialTime: TimeOfDay.now(),
+                            );
+                            setState(() {
+                              clockOutC.text = DateFormat("HH:MM").format(
+                                  DateTime(
+                                      picked.day,
+                                      picked.month,
+                                      picked.year,
+                                      picker!.hour,
+                                      picker.minute));
+                            });
+                          },
+                          readOnly: true,
+                          hintText: "Clock-Out",
+                          suffixIcon: HeroIcon(HeroIcons.clock),
+                          fillColor: (clockOutC.text.isEmpty)
+                              ? lightGreyColor
+                              : Colors.blue.shade50,
+                          onChanged: (p0) {
+                            setState(() {});
+                          },
+                        ),
+                      )
+                    ],
                   ),
+
                   const Gap(10),
-                  GestureDetector(
+                  TextField1(
+                    maxLines: 4,
+                    hintText: "Deskripsi",
+                    suffixIcon: Icon(Icons.description_outlined),
+                  ),
+
+                  const Gap(10),
+                  TextField1(
+                    hintText: "Max file 5mb (click here..!)",
+                    suffixIcon: Icon(Icons.file_download_outlined),
+                    readOnly: true,
                     onTap: () async {
                       path = await filePicker.openFileExplorerPDF();
                       setState(() {});
                     },
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.all(0),
-                      title: Text(
-                        "Unggah file",
-                        style: blackTextStyle,
-                      ),
-                      subtitle: TextField(
-                        readOnly: true,
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(Icons.task_outlined),
-                          hintText: (path.isEmpty)
-                              ? "Max file 10 mb (click here..!)"
-                              : path.split("/").last,
-                          hintMaxLines: 2,
-                          hintStyle: darkGreyTextStyle,
-                        ),
-                      ),
-                    ),
                   ),
+
                   const Gap(80),
                 ],
               ),

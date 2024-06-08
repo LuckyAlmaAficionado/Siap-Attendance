@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:heroicons/heroicons.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:iconsax/iconsax.dart';
 
 import 'package:talenta_app/app/modules/home/controllers/home_controller.dart';
 import 'package:talenta_app/app/shared/alert/alert-detail-inbox.dart';
+import 'package:talenta_app/app/shared/images/images.dart';
 
 import '../../../routes/app_pages.dart';
 import '../../../shared/theme.dart';
@@ -38,7 +40,7 @@ class _NotificationViewState extends State<NotificationView>
         children: [
           // ... appbar view
           Material(
-            elevation: 3,
+            elevation: 0.5,
             child: Container(
               width: Get.width,
               padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -131,6 +133,37 @@ class NoAccessPanel extends StatelessWidget {
   }
 }
 
+class CustomTileApproval extends StatelessWidget {
+  const CustomTileApproval({
+    super.key,
+    this.onTap,
+    this.leading,
+    required this.title,
+    this.trailing,
+  });
+
+  final Function()? onTap;
+  final Widget? leading;
+  final String title;
+  final Widget? trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: onTap,
+      leading: leading,
+      title: Text(
+        title,
+        style: normalTextStyle.copyWith(
+          fontWeight: regular,
+        ),
+      ),
+      trailing: trailing,
+    );
+    ;
+  }
+}
+
 class PersetujuanTabBar extends StatelessWidget {
   const PersetujuanTabBar({
     super.key,
@@ -140,100 +173,71 @@ class PersetujuanTabBar extends StatelessWidget {
   final HomeController controller;
   @override
   Widget build(BuildContext context) {
-    Widget customTile(Function()? onTap, leading, title, trailing) => ListTile(
-          onTap: onTap,
-          leading: leading,
-          title: Text(
-            title,
-            style: normalTextStyle.copyWith(
-              fontWeight: regular,
-            ),
-          ),
-          trailing: trailing,
-        );
-
     return ListView(
       physics: ClampingScrollPhysics(),
       padding: const EdgeInsets.all(0),
       children: [
-        customTile(
-          () =>
-              Get.toNamed(Routes.PERSETUJUAN_PAGE, arguments: "Reimbursement"),
-          Icon(
-            Icons.developer_board,
-            color: HexColor("15B6A7"),
-          ),
-          "Reimbursement",
-          Icon(
-            Icons.navigate_next_outlined,
+        CustomTileApproval(
+          title: "Reimbursement",
+          leading: Icon(Boxicons.bx_wallet, color: HexColor("15B6A7")),
+          trailing: Icon(Boxicons.bx_chevron_right),
+          onTap: () => Get.toNamed(
+            Routes.PERSETUJUAN_PAGE,
+            arguments: "Reimbursement",
           ),
         ),
-        customTile(
-          () => Get.toNamed(Routes.PERSETUJUAN_PAGE, arguments: "Cuti"),
-          Icon(
-            Icons.access_time_filled_sharp,
-            color: HexColor("3A84F3"),
-          ),
-          "Cuti",
-          Icon(
-            Icons.navigate_next_outlined,
+        CustomTileApproval(
+          title: "Cuti",
+          leading: Icon(Boxicons.bx_time, color: HexColor("3A84F3")),
+          trailing: Icon(Boxicons.bx_chevron_right),
+          onTap: () => Get.toNamed(
+            Routes.PERSETUJUAN_PAGE,
+            arguments: "Cuti",
           ),
         ),
-        customTile(
-          () => Get.toNamed(Routes.PERSETUJUAN_PAGE, arguments: "Absensi"),
-          Icon(
-            Icons.location_on_sharp,
-            color: HexColor("F59E0C"),
-          ),
-          "Absensi",
-          Icon(
-            Icons.navigate_next_outlined,
+        CustomTileApproval(
+          title: "Absensi",
+          leading: Icon(Icons.my_location_sharp, color: HexColor("F59E0C")),
+          trailing: Icon(Boxicons.bx_chevron_right),
+          onTap: () => Get.toNamed(
+            Routes.PERSETUJUAN_PAGE,
+            arguments: "Absensi",
           ),
         ),
-        customTile(
-          () => Get.toNamed(Routes.PERSETUJUAN_PAGE, arguments: "Lembur"),
-          Icon(
-            Icons.more_time_sharp,
-            color: HexColor("FB7316"),
-          ),
-          "Lembur",
-          Icon(
-            Icons.navigate_next_outlined,
+        CustomTileApproval(
+          title: "Lembur",
+          leading: Icon(Boxicons.bx_timer, color: HexColor("FB7316")),
+          trailing: Icon(Boxicons.bx_chevron_right),
+          onTap: () => Get.toNamed(
+            Routes.PERSETUJUAN_PAGE,
+            arguments: "Lembur",
           ),
         ),
-        customTile(
-          () => Get.toNamed(Routes.PERSETUJUAN_PAGE,
-              arguments: "Perubahan shift"),
-          Icon(
-            Icons.business_center_rounded,
-            color: HexColor("EE4443"),
-          ),
-          "Perubahan shift",
-          Icon(
-            Icons.navigate_next_outlined,
+        CustomTileApproval(
+          title: "Perubahan shift",
+          leading: Icon(Boxicons.bx_briefcase, color: HexColor("EE4443")),
+          trailing: Icon(Boxicons.bx_chevron_right),
+          onTap: () => Get.toNamed(
+            Routes.PERSETUJUAN_PAGE,
+            arguments: "Perubahan shift",
           ),
         ),
-        customTile(
-          () =>
-              Get.toNamed(Routes.PERSETUJUAN_PAGE, arguments: "Perubahan data"),
-          Icon(
-            Icons.account_box_sharp,
-            color: HexColor("8B5DFB"),
-          ),
-          "Perubahan data",
-          Icon(
-            Icons.navigate_next_outlined,
+        CustomTileApproval(
+          title: "Perubahan data",
+          leading: Icon(Icons.account_box_outlined, color: HexColor("8B5DFB")),
+          trailing: Icon(Boxicons.bx_chevron_right),
+          onTap: () => Get.toNamed(
+            Routes.PERSETUJUAN_PAGE,
+            arguments: "Perubahan data",
           ),
         ),
-        customTile(
-          () => Get.toNamed(Routes.PERSETUJUAN_PAGE, arguments: "Formulir"),
-          Icon(
-            Icons.format_align_left_outlined,
-            color: HexColor("8D5BF8"),
-          ),
-          "Formulir",
-          Icon(
-            Icons.navigate_next_outlined,
+        CustomTileApproval(
+          title: "Formulir",
+          leading: Icon(Boxicons.bx_task, color: HexColor("8D5BF8")),
+          trailing: Icon(Boxicons.bx_chevron_right),
+          onTap: () => Get.toNamed(
+            Routes.PERSETUJUAN_PAGE,
+            arguments: "Formulir",
           ),
         ),
       ],
@@ -261,10 +265,8 @@ class NotificationPanel extends StatelessWidget {
             transition: Transition.cupertino,
           ),
           minVerticalPadding: 10,
-          trailing: Icon(Iconsax.arrow_right_3),
-          leading: CircleAvatar(
-            backgroundColor: darkGreyColor,
-          ),
+          trailing: HeroIcon(HeroIcons.chevronRight),
+          leading: ImageNetwork(url: "#####"),
           title: Text(
             "Maria Setiawati Purbanigtyas",
             style: normalTextStyle.copyWith(

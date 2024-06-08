@@ -6,40 +6,45 @@ environment:
   sdk: ">=3.2.6 <4.0.0"
 
 dependencies:
-  cupertino_icons: ^1.0.2
-  get: 4.6.6
-  carousel_slider: 4.2.1
-  hexcolor: 3.0.1
-  google_fonts: 6.1.0
-  intl: any
+  cupertino_icons: ^1.0.2 #done
+  get: 4.6.6 #done
+  carousel_slider: 4.2.1 #done
+  hexcolor: 3.0.1 #done
+  google_fonts: 6.1.0 #done
+  intl: any #done
   flutter_map_location_marker: ^8.0.8
   month_year_picker: ^0.3.0+1
-  camera: 0.10.5+9
-  file_picker: 6.2.0
-  shared_preferences: ^2.2.2
-  gap: 3.0.1
-  geolocator: ^11.0.0
-  lottie: ^3.1.0
-  image_picker: 1.0.7
-  local_auth: ^2.2.0
-  internet_connection_checker: ^1.0.0+1
-  another_stepper: ^1.2.2
-  table_calendar: ^3.0.9
-  month_picker_dialog: ^2.11.2
-  dio: ^5.4.2+1
-  permission_handler: 11.3.1
-  iconsax: ^0.0.8
-  geocoding: ^3.0.0
-  flutter_image_compress: 2.2.0
-  custom_navigation_bar: ^0.8.2
-  package_info_plus: 8.0.0
-  shimmer: ^3.0.0
-  path_provider: ^2.1.3
+  camera: 0.10.5+9 #done
+  file_picker: 6.2.0 #done
+  shared_preferences: ^2.2.2 #update (hive)
+  gap: 3.0.1 #done
+  geolocator: ^11.0.0 #done
+  lottie: ^3.1.0 #done
+  image_picker: 1.0.7 #done
+  local_auth: ^2.2.0 #maintenance
+  another_stepper: ^1.2.2 #done
+  table_calendar: ^3.0.9 #done
+  month_picker_dialog: ^2.11.2 #update
+  dio: ^5.4.2+1 #update
+  permission_handler: 11.3.1 #done
+  geocoding: ^3.0.0 #done
+  flutter_image_compress: 2.2.0 #done
+  custom_navigation_bar: ^0.8.2 #done
+  package_info_plus: 8.0.0 #done
+  shimmer: ^3.0.0 #done
   uuid: 4.4.0
   flutter:
     sdk: flutter
+  device_preview: ^1.1.0
+  flutter_boxicons: ^3.0.0
+  heroicons: ^0.10.0
+  connectivity_plus: ^6.0.3
+  hive: any
+  hive_flutter: any
 
 dev_dependencies:
+  hive_generator: any
+  build_runner: any
   flutter_lints: ^2.0.0
   flutter_launcher_icons: ^0.13.1
   flutter_test:

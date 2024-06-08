@@ -13,6 +13,7 @@ class ImageNetwork extends StatelessWidget {
   final String url;
   final double? borderRadius;
   final BoxFit? boxFit;
+
   @override
   Widget build(BuildContext context) {
     final images = Get.put(CaptureAttendanceController());
@@ -30,23 +31,25 @@ class ImageNetwork extends StatelessWidget {
           );
         }
         if (snapshot.hasData) {
-          print(snapshot.data);
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(borderRadius!),
-            child: Image.file(
-              snapshot.data,
-              fit: boxFit,
-              errorBuilder: (context, error, stackTrace) => CircleAvatar(
-                backgroundColor: Colors.grey.shade200,
-                child: Icon(
-                  Icons.person_2_rounded,
-                  color: Colors.grey.shade500,
+          final imageFile = snapshot.data;
+          if (imageFile != null) {
+            return ClipRRect(
+              borderRadius: BorderRadius.circular(borderRadius!),
+              child: Image.file(
+                imageFile,
+                fit: boxFit,
+                errorBuilder: (context, error, stackTrace) => CircleAvatar(
+                  backgroundColor: Colors.grey.shade200,
+                  child: Icon(
+                    Icons.person_2_rounded,
+                    color: Colors.grey.shade500,
+                  ),
                 ),
               ),
-            ),
-          );
+            );
+          }
         }
-        return (url.isEmpty)
+        return (url.isEmpty || !Uri.parse(url).hasAbsolutePath)
             ? CircleAvatar(
                 backgroundColor: Colors.grey.shade200,
                 child: Icon(
@@ -76,7 +79,7 @@ class ImageNetwork extends StatelessWidget {
                     backgroundColor: Colors.grey.shade200,
                     child: Icon(
                       Icons.person_2_rounded,
-                      color: Colors.grey.shade500,
+                      color: Colors.grey[500],
                     ),
                   ),
                 ),

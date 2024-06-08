@@ -37,9 +37,13 @@ class DetailClockInView extends GetView {
         appBar: AppBar(
           title: Text(
             'Detail ${absen.type}',
-            style: appBarTextStyle,
+            style: appBarTextStyle.copyWith(color: blackColor),
           ),
-          centerTitle: true,
+          titleSpacing: 0,
+          centerTitle: false,
+          backgroundColor: whiteColor,
+          elevation: 0.7,
+          iconTheme: IconThemeData(color: blackColor),
         ),
         body: Column(
           children: [
@@ -55,8 +59,8 @@ class DetailClockInView extends GetView {
                       child: FlutterMap(
                         options: MapOptions(
                           initialCenter: LatLng(
-                            double.parse(absen.lat!),
                             double.parse(absen.lang!),
+                            double.parse(absen.lat!),
                           ),
                           initialZoom: 17,
                           maxZoom: 18,
@@ -75,8 +79,8 @@ class DetailClockInView extends GetView {
                                 width: 45.0,
                                 height: 45.0,
                                 point: LatLng(
-                                  double.parse(absen.lat!),
                                   double.parse(absen.lang!),
+                                  double.parse(absen.lat!),
                                 ),
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -117,25 +121,29 @@ class DetailClockInView extends GetView {
             Expanded(
               child: ListView(
                 physics: BouncingScrollPhysics(),
-                padding: const EdgeInsets.all(10.0),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 children: [
                   _buildListTile(
-                      'Waktu ${absen.type}',
-                      DateFormat("HH:mm - (dd MMM yyyy)", "id_ID")
-                          .format(absen.createdAt!)),
-                  const Divider(),
+                    'Waktu ${absen.type}',
+                    DateFormat("HH:mm - (dd MMM yyyy)", "id_ID")
+                        .format(absen.createdAt!),
+                  ),
+                  const Divider(height: 0),
                   _buildListTile('Shift', 'Office2 (08:00 - 16:45)'),
-                  const Divider(),
+                  const Divider(height: 0),
                   _buildListTile(
                       'Jadwal Shift',
                       DateFormat("EEE, dd MMM yyyy", "id_ID")
                           .format(DateTime.now())),
-                  const Divider(),
+                  const Divider(height: 0),
                   _buildListTile('Lokasi', absen.address!),
-                  const Divider(),
-                  _buildListTile('Koordinat', '${absen.lat}, ${absen.lang}'),
-                  const Divider(),
-                  _buildListTile('Catatan', absen.catatan!),
+                  const Divider(height: 0),
+                  _buildListTile('Koordinat', '${absen.lang}, ${absen.lat}'),
+                  const Divider(height: 0),
+                  _buildListTile(
+                    'Catatan',
+                    absen.catatan!.isEmpty ? "-" : absen.catatan!,
+                  ),
                 ],
               ),
             ),
@@ -149,6 +157,11 @@ class DetailClockInView extends GetView {
           title,
           style: normalTextStyle.copyWith(color: darkGreyColor),
         ),
-        subtitle: Text(subtitle, style: normalTextStyle),
+        subtitle: Text(
+          subtitle,
+          style: normalTextStyle.copyWith(
+            fontSize: 13,
+          ),
+        ),
       );
 }

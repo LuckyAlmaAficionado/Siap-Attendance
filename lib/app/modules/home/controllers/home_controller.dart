@@ -3,9 +3,11 @@ import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:talenta_app/app/controllers/api_controller.dart';
+import 'package:talenta_app/app/controllers/calendar_controller.dart';
 
 import 'package:talenta_app/app/controllers/model_controller.dart';
 import 'package:talenta_app/app/models/users.dart';
+import 'package:talenta_app/app/modules/authentication/controllers/authentication_controller.dart';
 
 import '../../../controllers/version_controller.dart';
 import '../../../models/karyawan.dart';
@@ -17,6 +19,7 @@ class HomeController extends GetxController {
   final versionC = Get.put(VersionController());
 
   RxList<Karyawan> sortingKaryawan = <Karyawan>[].obs;
+  final m = Get.find<ModelController>();
   RxList<Karyawan> karyawan = Get.find<ModelController>().k;
 
   RxInt btmNavIndex = 0.obs;
@@ -26,7 +29,7 @@ class HomeController extends GetxController {
   late bool isManager = false;
 
   ModelUser u = Get.find<ModelController>().u.value!;
-  final m = Get.put(ModelController());
+  final c = Get.put(CalendarController());
   final a = Get.put(ApiController());
 
   @override
@@ -74,8 +77,10 @@ class HomeController extends GetxController {
   void changeBtmNavIndex(int index) => btmNavIndex(index);
 
   Future onRefresh() async {
-    await a.fetchTodayAttendance();
+    c.checkDateStatus(DateTime.now());
+    await Get.put(AuthController()).checkEmailAndPassword();
     await a.fetchDetailAttendance();
+    await a.fetchTodayAttendance();
     await validatorIzin();
   }
 }

@@ -46,7 +46,10 @@ class DaftarAbsensiPageView extends GetView<DaftarAbsensiPageController> {
                 Tab(text: "Absensi"),
                 Tab(text: "Shift"),
               ],
-              labelStyle: normalTextStyle.copyWith(fontWeight: regular),
+              labelStyle: normalTextStyle.copyWith(
+                fontWeight: semiBold,
+                fontSize: 13,
+              ),
               unselectedLabelColor: darkGreyColor,
               labelColor: blueColor,
             ),

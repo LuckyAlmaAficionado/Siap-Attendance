@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:heroicons/heroicons.dart';
 import 'package:intl/intl.dart';
-import 'package:month_year_picker/month_year_picker.dart';
+import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:talenta_app/app/modules/daftar_absensi_page/controllers/daftar_absensi_page_controller.dart';
 
+import '../../../shared/textfield/textfield_1.dart';
 import '../../../shared/theme.dart';
 
 class ShiftPageView extends StatefulWidget {
@@ -18,6 +21,13 @@ enum Sorting { semuaStatus, menunggu, disetujui, tidakDisetujui, dibatalkan }
 class _AbsensiPageViewState extends State<ShiftPageView> {
   final daftarC = Get.put(DaftarAbsensiPageController());
   Sorting enumSorting = Sorting.semuaStatus;
+  TextEditingController calendarC = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    calendarC.text = DateFormat("MMMM yyyy", "id_ID").format(DateTime.now());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,88 +37,58 @@ class _AbsensiPageViewState extends State<ShiftPageView> {
         children: [
           const SizedBox(height: 10),
           Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Row(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: new Row(
               children: [
-                GestureDetector(
-                  onTap: () async {
-                    await showMonthYearPicker(
-                      context: context,
-                      initialDate: DateTime.now(),
-                      firstDate: DateTime(2000),
-                      lastDate: DateTime(3000),
-                    );
-                  },
-                  child: Container(
-                    width: (Get.width * 0.82) - 10,
-                    height: 50,
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(width: 1, color: darkGreyColor),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.calendar_month,
-                          color: darkGreyColor,
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
-                          "${DateFormat("MMM yyyy").format(DateTime.now())} - ${DateFormat("MMM yyyy").format(DateTime.now())}",
-                          style: blackTextStyle.copyWith(fontWeight: regular),
-                        ),
-                        new Spacer(),
-                        Icon(
-                          Icons.arrow_drop_down_outlined,
-                          color: darkGreyColor,
-                        ),
-                      ],
-                    ),
+                new Flexible(
+                  child: new TextField1(
+                    readOnly: true,
+                    suffixIcon: HeroIcon(HeroIcons.chevronDown, size: 15),
+                    preffixIcon: HeroIcon(HeroIcons.calendarDays),
+                    controller: calendarC,
+                    onTap: () {
+                      showMonthPicker(
+                        context: context,
+                        locale: Locale("id", "ID"),
+                        initialDate: DateTime.now(),
+                        unselectedMonthTextColor: Colors.black,
+                      ).then((date) {
+                        if (date != null) {
+                          setState(() {
+                            calendarC.text =
+                                DateFormat("MMMM yyyy", "id_ID").format(date);
+                          });
+                        }
+                      });
+                    },
                   ),
                 ),
-                const SizedBox(width: 10),
-
-                // FILTER
-                GestureDetector(
-                  onTap: () async {
-                    await showModalBottomSheet(
+                const Gap(10),
+                InkWell(
+                  onTap: () {
+                    Get.bottomSheet(
+                      backgroundColor: Colors.white,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10),
-                          topRight: Radius.circular(10),
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15),
                         ),
                       ),
-                      context: context,
-                      builder: (context) {
-                        return Padding(
-                          padding: const EdgeInsets.all(16.0),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Container(
+                          height: 300,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      'Filter',
-                                      textAlign: TextAlign.center,
-                                      style: blackTextStyle.copyWith(
-                                          fontWeight: semiBold, fontSize: 16),
-                                    ),
-                                  ),
-                                  Icon(
-                                    Icons.close,
-                                    color: darkGreyColor,
-                                  ),
-                                ],
-                              ),
+                              const Gap(10),
                               Text(
-                                'Status',
-                                style: blackTextStyle.copyWith(
+                                'Filter',
+                                textAlign: TextAlign.center,
+                                style: normalTextStyle.copyWith(
                                   fontWeight: semiBold,
-                                  fontSize: 14,
+                                  fontSize: 16,
                                 ),
                               ),
                               const SizedBox(height: 15),
@@ -118,7 +98,8 @@ class _AbsensiPageViewState extends State<ShiftPageView> {
                                 children: [
                                   Text(
                                     "Semua Status",
-                                    style: darkGreyTextStyle,
+                                    style: normalTextStyle.copyWith(
+                                        color: darkGreyColor, fontSize: 14),
                                   ),
                                   Radio<Sorting>(
                                     value: Sorting.semuaStatus,
@@ -138,7 +119,8 @@ class _AbsensiPageViewState extends State<ShiftPageView> {
                                 children: [
                                   Text(
                                     "Menunggu",
-                                    style: darkGreyTextStyle,
+                                    style: normalTextStyle.copyWith(
+                                        color: darkGreyColor, fontSize: 14),
                                   ),
                                   Radio<Sorting>(
                                     value: Sorting.menunggu,
@@ -158,7 +140,8 @@ class _AbsensiPageViewState extends State<ShiftPageView> {
                                 children: [
                                   Text(
                                     "Disetujui",
-                                    style: darkGreyTextStyle,
+                                    style: normalTextStyle.copyWith(
+                                        color: darkGreyColor, fontSize: 14),
                                   ),
                                   Radio<Sorting>(
                                     value: Sorting.disetujui,
@@ -178,7 +161,8 @@ class _AbsensiPageViewState extends State<ShiftPageView> {
                                 children: [
                                   Text(
                                     "Tidak disetujui",
-                                    style: darkGreyTextStyle,
+                                    style: normalTextStyle.copyWith(
+                                        color: darkGreyColor, fontSize: 14),
                                   ),
                                   Radio<Sorting>(
                                     value: Sorting.tidakDisetujui,
@@ -198,7 +182,8 @@ class _AbsensiPageViewState extends State<ShiftPageView> {
                                 children: [
                                   Text(
                                     "Dibatalkan",
-                                    style: darkGreyTextStyle,
+                                    style: normalTextStyle.copyWith(
+                                        color: darkGreyColor, fontSize: 14),
                                   ),
                                   Radio<Sorting>(
                                     value: Sorting.dibatalkan,
@@ -214,23 +199,17 @@ class _AbsensiPageViewState extends State<ShiftPageView> {
                               ),
                             ],
                           ),
-                        );
-                      },
+                        ),
+                      ),
                     );
                   },
                   child: Container(
-                    width: Get.width * 0.15 - 10,
-                    height: 50,
+                    padding: const EdgeInsets.all(11.5),
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(width: 1, color: darkGreyColor),
+                      border: Border.all(width: 0.3),
+                      borderRadius: BorderRadius.circular(5),
                     ),
-                    child: Center(
-                      child: Icon(
-                        Icons.filter_alt_outlined,
-                        color: darkGreyColor,
-                      ),
-                    ),
+                    child: HeroIcon(HeroIcons.adjustmentsVertical),
                   ),
                 ),
               ],
@@ -242,16 +221,14 @@ class _AbsensiPageViewState extends State<ShiftPageView> {
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Image.asset(
-                        "assets/icons/ic_nodata.png",
-                        width: 170,
-                        filterQuality: FilterQuality.high,
-                        fit: BoxFit.contain,
+                      HeroIcon(
+                        HeroIcons.archiveBoxXMark,
+                        size: 100,
                       ),
                       Text(
                         "Belum ada pengajuan",
-                        style: blackTextStyle.copyWith(
-                          fontWeight: semiBold,
+                        style: normalTextStyle.copyWith(
+                          fontWeight: bold,
                           fontSize: 16,
                         ),
                       ),
@@ -259,7 +236,7 @@ class _AbsensiPageViewState extends State<ShiftPageView> {
                       Text(
                         "pengajuan penggantian shif Anda akan\ntampil di sini",
                         textAlign: TextAlign.center,
-                        style: darkGreyTextStyle.copyWith(
+                        style: normalTextStyle.copyWith(
                           fontSize: 12,
                         ),
                       ),

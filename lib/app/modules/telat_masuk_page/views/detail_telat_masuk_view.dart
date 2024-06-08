@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
-import 'package:another_stepper/another_stepper.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import 'package:talenta_app/app/controllers/model_controller.dart';
 import 'package:talenta_app/app/models/approval.dart';
+import 'package:talenta_app/app/shared/images/images.dart';
 import 'package:talenta_app/app/shared/theme.dart';
 
 class DetailTelatMasukView extends StatefulWidget {
@@ -30,41 +31,42 @@ class _DetailTelatMasukViewState extends State<DetailTelatMasukView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        titleSpacing: 0,
+        title: Text(
+          "Details Izin",
+          style: appBarTextStyle.copyWith(color: Colors.black),
+        ),
+        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: Colors.white,
+        elevation: 1,
         bottom: PreferredSize(
-            preferredSize: Size.fromHeight(120),
+            preferredSize: Size.fromHeight(130),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircleAvatar(
-                  radius: 35,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      border: Border.all(
-                        width: 1,
-                        color: whiteColor,
-                      ),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: Image.network(
-                        "${m.u.value!.avatar}",
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                SizedBox(
+                  width: 60,
+                  height: 60,
+                  child: ImageNetwork(
+                    url: m.u.value!.avatar!,
                   ),
                 ),
                 const Gap(10),
                 Text(
                   '${m.u.value!.nama}',
-                  style: whiteTextStyle.copyWith(
+                  style: normalTextStyle.copyWith(
+                    color: Colors.black,
                     fontWeight: semiBold,
-                    fontSize: 18,
+                    fontSize: 16,
                   ),
                 ),
                 Text(
                   "${m.u.value!.jabatan}",
-                  style: whiteTextStyle,
+                  style: normalTextStyle.copyWith(
+                    fontWeight: regular,
+                    fontSize: 12,
+                    color: darkGreyColor,
+                  ),
                 ),
                 const Gap(20),
               ],
@@ -88,10 +90,20 @@ class _DetailTelatMasukViewState extends State<DetailTelatMasukView> {
                 children: [
                   SizedBox(
                       width: constraints.maxWidth * 0.5,
-                      child: Text(style: normalTextStyle, "Tanggal Cuti")),
+                      child: Text(
+                          style: normalTextStyle.copyWith(
+                            fontSize: 13,
+                            fontWeight: medium,
+                          ),
+                          "Tanggal Cuti")),
                   SizedBox(
                       width: constraints.maxWidth * 0.5,
-                      child: Text(style: normalTextStyle, "02 Apr 2024"))
+                      child: Text(
+                          style: normalTextStyle.copyWith(
+                            fontSize: 13,
+                            fontWeight: medium,
+                          ),
+                          "${DateFormat("dd MMMM yyyy", "id_ID").format(DateTime.now())}"))
                 ],
               ),
               const Gap(10),
@@ -99,40 +111,71 @@ class _DetailTelatMasukViewState extends State<DetailTelatMasukView> {
                 children: [
                   SizedBox(
                       width: constraints.maxWidth * 0.5,
-                      child: Text(style: normalTextStyle, "Jenis Izin")),
+                      child: Text(
+                          style: normalTextStyle.copyWith(
+                            fontSize: 13,
+                            fontWeight: medium,
+                          ),
+                          "Lama terlambat")),
                   SizedBox(
                       width: constraints.maxWidth * 0.5,
-                      child: Text(style: normalTextStyle, "Masuk Terlambat"))
+                      child: Text(
+                          style: normalTextStyle.copyWith(
+                            fontSize: 13,
+                            fontWeight: medium,
+                          ),
+                          "25 Menit"))
+                ],
+              ),
+              const Gap(10),
+              Row(
+                children: [
+                  SizedBox(
+                      width: constraints.maxWidth * 0.5,
+                      child: Text(
+                          style: normalTextStyle.copyWith(
+                            fontSize: 13,
+                            fontWeight: medium,
+                          ),
+                          "Jenis Izin")),
+                  SizedBox(
+                      width: constraints.maxWidth * 0.5,
+                      child: Text(
+                          style: normalTextStyle.copyWith(
+                            fontSize: 13,
+                            fontWeight: medium,
+                          ),
+                          "Masuk Terlambat"))
                 ],
               ),
               const Gap(20),
-              Text(
-                "Status Pengajuan",
-                style: normalTextStyle.copyWith(
-                  fontWeight: semiBold,
-                  fontSize: 16,
-                ),
-              ),
-              AnotherStepper(
-                stepperList:
-                    List.generate(approval.approvals.length + 1, (index) {
-                  print(approval.approvals.length);
+              // Text(
+              //   "Status Pengajuan",
+              //   style: normalTextStyle.copyWith(
+              //     fontWeight: semiBold,
+              //     fontSize: 16,
+              //   ),
+              // ),
+              // AnotherStepper(
+              //   stepperList:
+              //       List.generate(approval.approvals.length + 1, (index) {
+              //     print(approval.approvals.length);
 
-                  return StepperData(
-                    title: StepperText(
-                        (index == 0)
-                            ? "Pengajuan di ajukan untuk Masuk Terlambat"
-                            : "${approval.approvals[index - 1].approved ? "Disetujui" : "Menunggu"} disetujui oleh ${approval.approvals[index - 1].approver}",
-                        textStyle: normalTextStyle),
-                    subtitle: StepperText("02 Apr 2024 10:19",
-                        textStyle: normalTextStyle),
-                  );
-                }),
-                activeIndex:
-                    approval.approvals.where((e) => e.approved == true).length,
-                stepperDirection: Axis.vertical,
-                inverted: false,
-              )
+              //     return StepperData(
+              //       title: StepperText(
+              //           (index == 0)
+              //               ? "Pengajuan di ajukan untuk Masuk Terlambat"
+              //               : "${approval.approvals[index - 1].approved ? "Disetujui" : "Menunggu"} disetujui oleh ${approval.approvals[index - 1].approver}",
+              //           textStyle: normalTextStyle),
+              //       subtitle: StepperText("02 Apr 2024 10:19",
+              //           textStyle: normalTextStyle),
+              //     );
+              //   }),
+              //   activeIndex:
+              //       approval.approvals.where((e) => e.approved == true).length,
+              //   stepperDirection: Axis.vertical,
+              //   inverted: false,
+              // )
             ],
           ),
         ),

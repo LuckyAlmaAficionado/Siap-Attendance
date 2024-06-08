@@ -3,14 +3,16 @@
 import 'package:flutter/material.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:heroicons/heroicons.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'package:talenta_app/app/controllers/model_controller.dart';
+import 'package:talenta_app/app/modules/authentication/controllers/authentication_controller.dart';
 import 'package:talenta_app/app/shared/button/button_1.dart';
 import 'package:talenta_app/app/shared/images/images.dart';
 import 'package:talenta_app/app/shared/more_services.dart';
@@ -57,12 +59,15 @@ class HomeView extends GetView<HomeController> {
                           children: [
                             Text(
                               "${controller.u.nama}",
-                              style: normalTextStyle,
+                              style: normalTextStyle.copyWith(
+                                fontWeight: semiBold,
+                                fontSize: 14,
+                              ),
                             ),
                             Text(
                               "${controller.u.jabatan}",
                               style: normalTextStyle.copyWith(
-                                fontSize: 12,
+                                fontSize: 10,
                                 color: darkGreyColor,
                               ),
                             ),
@@ -72,11 +77,19 @@ class HomeView extends GetView<HomeController> {
                       new Spacer(),
                       IconButton(
                         onPressed: () async {
-                          await controller.a.getLocations();
+                          await Get.put(AuthController()).pinValidator();
+                          // await controller.a.fetchUserJob();
+                          // await controller.a.fetchSchedule();
+                          // await controller.a.fetchShifts();
+                          // CalendarController().checkDateStatus(DateTime.now());
+                          // await controller.a.getLocations();
                           // Get.put(CaptureAttendanceController()).loadImage(
                           //     "1c913910-21d8-1ff6-a458-8b8bb778ddf1.jpg");
                         },
-                        icon: Icon(Iconsax.notification, color: Colors.black54),
+                        icon: Icon(
+                          Boxicons.bx_grid_alt,
+                          color: Colors.black54,
+                        ),
                       )
                     ],
                   ),
@@ -366,6 +379,13 @@ class PanelAbsensi extends StatelessWidget {
   final m = Get.find<ModelController>();
   final a = Get.put(HomeController());
 
+  final now = DateTime.now();
+
+  String formatTime(String time) {
+    DateTime dateTime = DateFormat('HH:mm:ss').parse(time);
+    return DateFormat('HH:mm').format(dateTime);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -390,7 +410,10 @@ class PanelAbsensi extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Icon(Iconsax.danger, color: Colors.red),
+                        HeroIcon(
+                          HeroIcons.exclamationTriangle,
+                          color: Colors.red,
+                        ),
                         const Gap(5),
                         RichText(
                           text: TextSpan(
@@ -431,18 +454,68 @@ class PanelAbsensi extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Jadwal: ${DateFormat("d MMM yyyy", "id_ID").format(DateTime.now())}",
-                    style: normalTextStyle.copyWith(
-                        fontSize: 12, color: darkGreyColor),
-                  ),
-                  const Gap(5),
-                  Text(
-                    "${DateFormat("HH:MM").format(DateTime.now())} WIB - ${DateFormat("HH:MM").format(DateTime.now().add(Duration(minutes: 840)))} WIB",
-                    style: normalTextStyle.copyWith(
-                      fontWeight: medium,
-                      fontSize: 14,
-                    ),
+                  Obx(
+                    () => (m.shiftC.value.id != null)
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Jadwal: ${m.shiftC.value.shiftName}",
+                                style: normalTextStyle.copyWith(
+                                  fontSize: 12,
+                                  color: darkGreyColor,
+                                ),
+                              ),
+                              const Gap(5),
+                              Text(
+                                "${formatTime(m.shiftC.value.scheduleIn!)} WIB - ${formatTime(m.shiftC.value.scheduleOut!)} WIB",
+                                style: normalTextStyle.copyWith(
+                                  fontWeight: medium,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ],
+                          )
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: context.width * 0.4,
+                                height: 15,
+                                child: Shimmer.fromColors(
+                                  child: Text("Shimmer"),
+                                  baseColor: Colors.grey,
+                                  highlightColor: Colors.white,
+                                ),
+                              ),
+                              SizedBox(
+                                width: context.width * 0.7,
+                                height: 15,
+                                child: Shimmer.fromColors(
+                                  child: Text("Shimmer"),
+                                  baseColor: Colors.grey,
+                                  highlightColor: Colors.white,
+                                ),
+                              ),
+                              // Container(
+                              //   width: context.width * 0.4,
+                              //   height: 15,
+                              //   decoration: BoxDecoration(
+                              //     color: Colors.grey.shade300,
+                              //     borderRadius: BorderRadius.circular(100),
+                              //   ),
+                              // ),
+                              // const Gap(9),
+                              // Container(
+                              //   width: context.width * 0.7,
+                              //   height: 15,
+                              //   decoration: BoxDecoration(
+                              //     borderRadius: BorderRadius.circular(100),
+                              //     color: Colors.grey.shade300,
+                              //   ),
+                              // ),
+                            ],
+                          ),
                   ),
                   const Gap(10),
                   Row(
@@ -497,71 +570,57 @@ class ServiceWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             color: whiteColor,
           ),
-          padding: const EdgeInsets.all(0),
+          padding: const EdgeInsets.all(5),
           child: Wrap(
             alignment: WrapAlignment.spaceBetween,
             children: [
-              GestureDetector(
+              IconWidgetService(
                 onTap: () => Get.toNamed(Routes.DAFTAR_ABSENSI_PAGE),
-                child: IconWidgetService(
-                  Iconsax.calendar,
-                  "Daftar Absen",
-                  HexColor("FA7113"),
-                ),
+                title: "Daftar Absen",
+                icons: HeroIcons.bookOpen,
+                colors: HexColor("FA7113"),
               ),
-              GestureDetector(
+              IconWidgetService(
                 onTap: () => Get.toNamed(Routes.ABSEN_PAGE),
-                child: IconWidgetService(
-                  Iconsax.location,
-                  "Absen",
-                  HexColor("FC9E13"),
-                ),
+                title: "Absen",
+                icons: HeroIcons.mapPin,
+                colors: HexColor("FA7113"),
               ),
-              GestureDetector(
+              IconWidgetService(
                 onTap: () => Get.toNamed(Routes.TELAT_MASUK_PAGE),
-                child: IconWidgetService(
-                  Iconsax.watch,
-                  "Istirahat Telat",
-                  HexColor("18B8A6"),
-                ),
+                title: "Istirahat Telat",
+                icons: HeroIcons.clock,
+                colors: HexColor("FA7113"),
               ),
-              GestureDetector(
+              IconWidgetService(
                 onTap: () => Get.toNamed(Routes.CUTI_PAGE),
-                child: IconWidgetService(
-                  Iconsax.briefcase,
-                  "Cuti",
-                  HexColor("3883F7"),
-                ),
+                title: "Cuti",
+                icons: HeroIcons.briefcase,
+                colors: HexColor("FA7113"),
               ),
-              GestureDetector(
+              IconWidgetService(
                 onTap: () {
                   Get.toNamed(Routes.SLIP_GAJI_PAGE);
                 },
-                child: IconWidgetService(
-                  Iconsax.wallet,
-                  "Slip Gaji",
-                  HexColor("18B8A6"),
-                ),
+                title: "Slip Gaji",
+                icons: HeroIcons.banknotes,
+                colors: HexColor("FA7113"),
               ),
-              GestureDetector(
+              IconWidgetService(
                 onTap: () {
                   Get.dialog(MoreServices());
                 },
-                child: IconWidgetService(
-                  Iconsax.task_square,
-                  "Pengajuan",
-                  HexColor("7D4DFD"),
-                ),
+                title: "Pengajuan",
+                icons: HeroIcons.clipboardDocumentCheck,
+                colors: HexColor("FA7113"),
               ),
-              GestureDetector(
+              IconWidgetService(
                 onTap: () => Get.toNamed(Routes.IZIN_KEMBALI_PAGE),
-                child: IconWidgetService(
-                  Iconsax.refresh,
-                  "Izin Kembali",
-                  HexColor("FA7113"),
-                ),
+                title: "Izin Kembali",
+                icons: HeroIcons.arrowRightEndOnRectangle,
+                colors: HexColor("FA7113"),
               ),
-              GestureDetector(
+              IconWidgetService(
                 onTap: () {
                   switch (m.u.value!.manager) {
                     case "1":
@@ -576,12 +635,10 @@ class ServiceWidget extends StatelessWidget {
                       break;
                   }
                 },
-                child: IconWidgetService(
-                  Iconsax.people,
-                  "Tim Anda",
-                  HexColor("3883F7"),
-                ),
-              )
+                title: "Tim Anda",
+                icons: HeroIcons.users,
+                colors: HexColor("FA7113"),
+              ),
             ],
           ),
         ),
@@ -615,7 +672,7 @@ class PanelIzin extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    Icon(Iconsax.danger, color: redColor),
+                    HeroIcon(HeroIcons.exclamationTriangle),
                     const Gap(5),
                     Text(
                       "Anda belum izin kembali",
@@ -644,34 +701,54 @@ class PanelIzin extends StatelessWidget {
   }
 }
 
-Container IconWidgetService(IconData icons, String title, Color colors) {
-  return Container(
-    width: 80,
-    height: 90,
-    child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(7),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.grey.shade100,
-          ),
-          child: Icon(
-            icons,
-            size: 23,
-            color: Colors.black54,
-          ),
+class IconWidgetService extends StatelessWidget {
+  const IconWidgetService({
+    super.key,
+    this.onTap,
+    required this.title,
+    required this.icons,
+    required this.colors,
+  });
+
+  final Function()? onTap;
+  final String title;
+  final HeroIcons icons;
+  final Color colors;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 80,
+        height: 90,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(7),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.grey.shade100,
+              ),
+              child: HeroIcon(
+                icons,
+                size: 23,
+                color: Colors.black38,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              title,
+              style: blackTextStyle.copyWith(
+                fontSize: 10,
+                color: Colors.black87,
+                fontWeight: regular,
+              ),
+            ),
+          ],
         ),
-        const SizedBox(height: 10),
-        Text(
-          title,
-          style: blackTextStyle.copyWith(
-            fontSize: 11,
-            fontWeight: regular,
-          ),
-        ),
-      ],
-    ),
-  );
+      ),
+    );
+  }
 }

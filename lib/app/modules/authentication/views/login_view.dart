@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:gap/gap.dart';
 
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:talenta_app/app/modules/authentication/controllers/authentication_controller.dart';
 import 'package:talenta_app/app/shared/textfield/textfield_1.dart';
 
@@ -56,7 +56,7 @@ class LoginView extends GetView<AuthController> {
                       TextField1(
                         controller: controller.email,
                         hintText: "Email",
-                        preffixIcon: Icon(Iconsax.user_octagon),
+                        preffixIcon: Icon(Boxicons.bx_user),
                         textInputAction: TextInputAction.next,
                       ),
                       const Gap(10),
@@ -65,14 +65,15 @@ class LoginView extends GetView<AuthController> {
                           controller: controller.password,
                           hintText: "Password",
                           obsecure: controller.obsecure.value,
+                          maxLines: 1,
                           textInputAction: TextInputAction.done,
-                          preffixIcon: Icon(Iconsax.lock),
+                          preffixIcon: Icon(Boxicons.bx_lock_alt),
                           suffixIcon: IconButton(
                             onPressed: () => controller.obsecure.toggle(),
                             icon: Icon(
                               (controller.obsecure.value)
-                                  ? Iconsax.eye_slash
-                                  : Iconsax.eye,
+                                  ? Icons.visibility_off_outlined
+                                  : Icons.visibility_outlined,
                             ),
                           ),
                         ),

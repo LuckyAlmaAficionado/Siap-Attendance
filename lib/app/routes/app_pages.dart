@@ -85,7 +85,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.SLIP_GAJI_PAGE,
-      page: () => const SlipGajiPageView(),
+      page: () => SlipGajiPageView(),
       binding: SlipGajiPageBinding(),
     ),
     GetPage(

@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:heroicons/heroicons.dart';
 
 import 'package:talenta_app/app/modules/home/controllers/home_controller.dart';
 import 'package:talenta_app/app/modules/home/views/home_view.dart';
 import 'package:talenta_app/app/modules/home/views/karyawan_view.dart';
 import 'package:talenta_app/app/modules/home/views/notification_view.dart';
 import 'package:talenta_app/app/modules/home/views/setting_view.dart';
+
+import '../../../shared/theme.dart';
 
 class MenuView extends GetView<HomeController> {
   MenuView({Key? key}) : super(key: key);
@@ -38,94 +41,74 @@ class MenuView extends GetView<HomeController> {
               onTap: (value) => controller.btmNavIndex(value),
               items: [
                 CustomNavigationBarItem(
-                  selectedIcon: Image.asset(
-                    "assets/icons/ic_home.png",
-                    color: Colors.blue,
-                  ),
-                  icon: Image.asset(
-                    "assets/icons/ic_home.png",
-                    color: Colors.black38,
-                  ),
+                  icon: HeroIcon(HeroIcons.home),
                   selectedTitle: Text(
                     "Home",
-                    style: GoogleFonts.outfit(
-                      fontSize: 14,
+                    style: GoogleFonts.quicksand(
+                      fontWeight: medium,
+                      fontSize: 12,
                       color: Colors.blue,
                     ),
                   ),
                   title: Text(
                     "Home",
-                    style: GoogleFonts.outfit(
-                      fontSize: 14,
+                    style: GoogleFonts.quicksand(
+                      fontWeight: medium,
+                      fontSize: 12,
                       color: Colors.black38,
                     ),
                   ),
                 ),
                 if (controller.m.u.value!.manager == "1")
                   CustomNavigationBarItem(
-                    selectedIcon: Image.asset(
-                      "assets/icons/ic_team.png",
-                      color: Colors.blue,
-                    ),
-                    icon: Image.asset(
-                      "assets/icons/ic_team.png",
-                      color: Colors.grey,
-                    ),
+                    icon: HeroIcon(HeroIcons.userGroup),
                     selectedTitle: Text(
                       "Karyawan",
-                      style:
-                          GoogleFonts.outfit(fontSize: 14, color: Colors.blue),
+                      style: GoogleFonts.quicksand(
+                          fontWeight: medium, fontSize: 12, color: Colors.blue),
                     ),
                     title: Text(
                       "Karyawan",
-                      style: GoogleFonts.outfit(
-                          fontSize: 14, color: Colors.black38),
+                      style: GoogleFonts.quicksand(
+                          fontWeight: medium,
+                          fontSize: 12,
+                          color: Colors.black38),
                     ),
                   ),
                 CustomNavigationBarItem(
-                  selectedIcon: Image.asset(
-                    "assets/icons/ic_inbox.png",
-                    color: Colors.blue,
-                  ),
-                  icon: Image.asset(
-                    "assets/icons/ic_inbox.png",
-                    color: Colors.black38,
-                  ),
+                  icon: HeroIcon(HeroIcons.inbox),
                   selectedTitle: Text(
                     "Inbox",
-                    style: GoogleFonts.outfit(
-                      fontSize: 14,
+                    style: GoogleFonts.quicksand(
+                      fontWeight: medium,
+                      fontSize: 12,
                       color: Colors.blue,
                     ),
                   ),
                   title: Text(
                     "Inbox",
-                    style: GoogleFonts.outfit(
-                      fontSize: 14,
+                    style: GoogleFonts.quicksand(
+                      fontWeight: medium,
+                      fontSize: 12,
                       color: Colors.black38,
                     ),
                   ),
                 ),
                 CustomNavigationBarItem(
-                  selectedIcon: Image.asset(
-                    "assets/icons/ic_settings.png",
-                    color: Colors.blue,
-                  ),
-                  icon: Image.asset(
-                    "assets/icons/ic_settings.png",
-                    color: Colors.black38,
-                  ),
+                  icon: HeroIcon(HeroIcons.cog6Tooth),
                   selectedTitle: Text(
                     "Setting",
-                    style: GoogleFonts.outfit(
-                      fontSize: 14,
+                    style: GoogleFonts.quicksand(
+                      fontWeight: medium,
+                      fontSize: 12,
                       color: Colors.blue,
                     ),
                   ),
                   title: Text(
                     "Setting",
-                    style: GoogleFonts.outfit(
-                      fontSize: 14,
+                    style: GoogleFonts.quicksand(
+                      fontWeight: medium,
+                      fontSize: 12,
                       color: Colors.black38,
                     ),
                   ),

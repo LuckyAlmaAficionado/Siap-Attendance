@@ -4,14 +4,22 @@ import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:talenta_app/app/controllers/model_controller.dart';
 import 'package:talenta_app/app/modules/home/views/menu_view.dart';
 
 import 'package:talenta_app/app/shared/utils.dart';
 
 class DetailAbsenView extends StatelessWidget {
-  DetailAbsenView({super.key, required this.status});
+  DetailAbsenView({super.key, required this.status, required this.stat});
 
   final bool status;
+  final String stat;
+  final m = Get.put(ModelController());
+
+  DateTime formatTime(String time) {
+    DateTime dateTime = DateFormat('HH:mm:ss').parse(time);
+    return dateTime;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +41,7 @@ class DetailAbsenView extends StatelessWidget {
               ),
               const Gap(10),
               Text(
-                (status) ? "Absensi Berhasil" : "Absensi Gagap",
+                (status) ? "Absensi Berhasil" : "Absensi Gagal",
                 style: GoogleFonts.outfit(
                   fontWeight: FontWeight.bold,
                   color: (status) ? Colors.green : Colors.red,
@@ -45,7 +53,7 @@ class DetailAbsenView extends StatelessWidget {
                 DateFormat("HH:mm", "id_ID").format(DateTime.now()),
                 style: GoogleFonts.lexend(
                   fontWeight: FontWeight.bold,
-                  color: (status) ? Colors.green : Colors.red,
+                  color: checkColors(stat),
                   fontSize: 30,
                 ),
               ),
@@ -59,5 +67,20 @@ class DetailAbsenView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  checkColors(String stat) {
+    if (stat == "clockout") {
+      // jika jam sekarang itu setelah jam
+      if (DateTime.now().isAfter(formatTime(m.shiftC.value.scheduleOut!))) {
+        return Colors.green;
+      }
+      return Colors.red;
+    } else if (stat == "clockin") {
+      if (DateTime.now().isAfter(formatTime(m.shiftC.value.scheduleIn!))) {
+        return Colors.red;
+      }
+      return Colors.green;
+    }
   }
 }

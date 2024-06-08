@@ -1,12 +1,15 @@
 // ignore_for_file: must_be_immutable
 
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:talenta_app/app/shared/images/images.dart';
 
 import 'package:talenta_app/app/shared/theme.dart';
 
@@ -53,6 +56,12 @@ class AnggotaTimView extends GetView<AnggotaTimController> {
                         startingDayOfWeek: StartingDayOfWeek.sunday,
                         calendarBuilders: CalendarBuilders(
                           markerBuilder: (context, day, events) {
+                            tanggal.forEach((element) {
+                              if (element.year == 2024 && element.month == 4) {
+                                log("message: ${element}");
+                              }
+                            });
+
                             if (tanggal.any((element) =>
                                 (element.day == day.day &&
                                     element.month == day.month &&
@@ -69,7 +78,7 @@ class AnggotaTimView extends GetView<AnggotaTimController> {
                         headerStyle: HeaderStyle(
                           formatButtonVisible: false,
                           titleCentered: true,
-                          titleTextStyle: GoogleFonts.outfit(
+                          titleTextStyle: normalTextStyle.copyWith(
                             fontSize: 20,
                             fontWeight: FontWeight.normal,
                           ),
@@ -180,7 +189,7 @@ class AnggotaTimView extends GetView<AnggotaTimController> {
                                         style:
                                             (controller.curIndex.value == index)
                                                 ? whiteTextStyle
-                                                : darkGreyTextStyle,
+                                                : normalTextStyle,
                                       ),
                                     ),
                                   ),
@@ -211,7 +220,7 @@ class AnggotaTimView extends GetView<AnggotaTimController> {
                                       children: [
                                         ListTile(
                                           leading: Icon(
-                                            Iconsax.clock,
+                                            Boxicons.bx_time,
                                             color: Colors.green,
                                           ),
                                           title: Row(
@@ -220,15 +229,15 @@ class AnggotaTimView extends GetView<AnggotaTimController> {
                                                 "08:06",
                                                 style: normalTextStyle.copyWith(
                                                   fontWeight: regular,
-                                                  fontSize: 14,
+                                                  fontSize: 13,
                                                 ),
                                               ),
                                               const Gap(10),
                                               Text(
                                                 "Clock-In",
                                                 style: normalTextStyle.copyWith(
-                                                  fontWeight: semiBold,
-                                                  fontSize: 14,
+                                                  fontWeight: regular,
+                                                  fontSize: 13,
                                                 ),
                                               ),
                                             ],
@@ -236,7 +245,7 @@ class AnggotaTimView extends GetView<AnggotaTimController> {
                                         ),
                                         ListTile(
                                           leading: Icon(
-                                            Iconsax.clock,
+                                            Boxicons.bx_time_five,
                                             color: Colors.red,
                                           ),
                                           title: Row(
@@ -245,32 +254,32 @@ class AnggotaTimView extends GetView<AnggotaTimController> {
                                                 "16:51",
                                                 style: normalTextStyle.copyWith(
                                                   fontWeight: regular,
-                                                  fontSize: 14,
+                                                  fontSize: 13,
                                                 ),
                                               ),
                                               const Gap(10),
                                               Text(
                                                 "Clock-Out",
                                                 style: normalTextStyle.copyWith(
-                                                  fontWeight: semiBold,
-                                                  fontSize: 14,
+                                                  fontWeight: regular,
+                                                  fontSize: 13,
                                                 ),
                                               ),
                                             ],
                                           ),
                                         )
                                       ],
-                                      leading: CircleAvatar(),
+                                      leading: ImageNetwork(url: "###"),
                                       trailing: Obx(() => Icon(
                                             (isChange.value)
-                                                ? Iconsax.minus_square
-                                                : Iconsax.add_square,
+                                                ? Boxicons.bx_minus_circle
+                                                : Boxicons.bx_plus_circle,
                                           )),
                                       title: Text(
                                         "Adhymas Fajar Sudrajad",
-                                        style: GoogleFonts.outfit(
-                                          fontWeight: FontWeight.normal,
-                                          fontSize: 16,
+                                        style: normalTextStyle.copyWith(
+                                          fontWeight: regular,
+                                          fontSize: 14,
                                         ),
                                       ),
                                       subtitle: Column(
@@ -280,39 +289,38 @@ class AnggotaTimView extends GetView<AnggotaTimController> {
                                           const Gap(5),
                                           Text(
                                             "Programmer",
-                                            style: darkGreyTextStyle.copyWith(
+                                            style: normalTextStyle.copyWith(
                                               fontWeight: regular,
-                                              fontSize: 12,
+                                              color: darkGreyColor,
+                                              fontSize: 11,
                                             ),
                                           ),
                                           const Gap(5),
                                           Row(
                                             children: [
                                               Icon(
-                                                Icons.access_time_outlined,
+                                                Boxicons.bx_time,
                                                 color: greenColor,
                                               ),
                                               const Gap(10),
                                               Text(
                                                 "08:06",
-                                                style:
-                                                    darkGreyTextStyle.copyWith(
-                                                  fontWeight: semiBold,
-                                                  fontSize: 14,
+                                                style: normalTextStyle.copyWith(
+                                                  fontWeight: medium,
+                                                  fontSize: 12,
                                                 ),
                                               ),
                                               const Gap(40),
                                               Icon(
-                                                Icons.access_time_outlined,
+                                                Boxicons.bx_time_five,
                                                 color: blueColor,
                                               ),
                                               const Gap(10),
                                               Text(
                                                 "16:51",
-                                                style:
-                                                    darkGreyTextStyle.copyWith(
-                                                  fontWeight: semiBold,
-                                                  fontSize: 14,
+                                                style: normalTextStyle.copyWith(
+                                                  fontWeight: medium,
+                                                  fontSize: 12,
                                                 ),
                                               ),
                                             ],

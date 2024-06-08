@@ -2,10 +2,17 @@ import 'package:flutter/material.dart';
 
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:heroicons/heroicons.dart';
+import 'package:talenta_app/app/models/karyawan.dart';
 
 import 'package:talenta_app/app/modules/authentication/controllers/authentication_controller.dart';
+import 'package:talenta_app/app/modules/authentication/views/pin_view.dart';
 import 'package:talenta_app/app/modules/home/controllers/home_controller.dart';
+import 'package:talenta_app/app/modules/settings/views/info_file_view.dart';
+import 'package:talenta_app/app/modules/settings/views/info_payroll_view.dart';
+import 'package:talenta_app/app/modules/settings/views/info_pekerjaan_view.dart';
+import 'package:talenta_app/app/modules/settings/views/info_peringatan_view.dart';
+import 'package:talenta_app/app/modules/settings/views/info_personal_view.dart';
 import 'package:talenta_app/app/shared/images/images.dart';
 import 'package:talenta_app/app/shared/theme.dart';
 
@@ -22,26 +29,17 @@ class SettingView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     Get.lazyPut(() => AuthController());
     return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.bottomRight,
-          end: Alignment.topLeft,
-          colors: [
-            Colors.blue.shade100,
-            Colors.blue.shade100,
-            Colors.blue.shade100,
-            Colors.white,
-            Colors.white,
-            Colors.white,
-          ],
-        ),
-      ),
+      decoration: BoxDecoration(color: Colors.grey.shade100),
       child: ListView(
         children: [
-          const SizedBox(height: 10),
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 10,
+                bottom: 15,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -88,10 +86,10 @@ class SettingView extends GetView<HomeController> {
             ),
           ),
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 5),
+            margin: const EdgeInsets.fromLTRB(15, 0, 15, 0),
             child: Material(
               color: whiteColor,
-              borderRadius: BorderRadius.circular(5),
+              borderRadius: BorderRadius.circular(15),
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Column(
@@ -105,51 +103,79 @@ class SettingView extends GetView<HomeController> {
                       ),
                     ),
                     ListTile1(
+                      onTap: () => Get.to(
+                        InfoPersonalView(),
+                        transition: Transition.cupertino,
+                      ),
                       title: 'Info personal',
-                      prefixIcon: Iconsax.personalcard,
-                      suffixIcon: Iconsax.arrow_right_3,
+                      prefixIcon: HeroIcons.identification,
+                      suffixIcon: HeroIcons.chevronRight,
                     ),
                     ListTile1(
+                      onTap: () => Get.to(
+                        InfoPekerjaanView(),
+                        transition: Transition.cupertino,
+                      ),
                       title: 'Info pekerjaan',
-                      prefixIcon: Iconsax.activity,
-                      suffixIcon: Iconsax.arrow_right_3,
+                      prefixIcon: HeroIcons.briefcase,
+                      suffixIcon: HeroIcons.chevronRight,
                     ),
+                    // ListTile1(
+                    //   onTap: () => Get.to(
+                    //     InfoKontakDaruratView(),
+                    //     transition: Transition.cupertino,
+                    //   ),
+                    //   title: 'Info kontak darurat',
+                    //   prefixIcon: HeroIcons.shieldCheck,
+                    //   suffixIcon: HeroIcons.chevronRight,
+                    // ),
+                    // ListTile1(
+                    //   onTap: () => Get.to(
+                    //     InfoKeluargaView(),
+                    //     transition: Transition.cupertino,
+                    //   ),
+                    //   title: 'Info keluarga',
+                    //   prefixIcon: HeroIcons.userGroup,
+                    //   suffixIcon: HeroIcons.chevronRight,
+                    // ),
                     ListTile1(
-                      title: 'Info kontak darurat',
-                      prefixIcon: Iconsax.information,
-                      suffixIcon: Iconsax.arrow_right_3,
-                    ),
-                    ListTile1(
-                      title: 'Info keluarga',
-                      prefixIcon: Iconsax.people,
-                      suffixIcon: Iconsax.arrow_right_3,
-                    ),
-                    ListTile1(
+                      onTap: () => Get.to(
+                        InfoPayrollView(),
+                        transition: Transition.cupertino,
+                      ),
                       title: 'Info Payroll',
-                      prefixIcon: Iconsax.card,
-                      suffixIcon: Iconsax.arrow_right_3,
+                      prefixIcon: HeroIcons.banknotes,
+                      suffixIcon: HeroIcons.chevronRight,
                     ),
                     ListTile1(
+                      onTap: () => Get.to(
+                        InfoFileView(),
+                        transition: Transition.cupertino,
+                      ),
                       title: 'File saya',
-                      prefixIcon: Iconsax.task_square,
-                      suffixIcon: Iconsax.arrow_right_3,
+                      prefixIcon: HeroIcons.folder,
+                      suffixIcon: HeroIcons.chevronRight,
                     ),
                     ListTile1(
+                      onTap: () => Get.to(
+                        InfoPeringatanView(),
+                        transition: Transition.cupertino,
+                      ),
                       title: 'Peringatan',
-                      prefixIcon: Iconsax.danger,
-                      suffixIcon: Iconsax.arrow_right_3,
+                      prefixIcon: HeroIcons.exclamationTriangle,
+                      suffixIcon: HeroIcons.chevronRight,
                     ),
                   ],
                 ),
               ),
             ),
           ),
-          const Gap(5),
+          const Gap(15),
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 5),
+            margin: const EdgeInsets.symmetric(horizontal: 15),
             child: Material(
               color: whiteColor,
-              borderRadius: BorderRadius.circular(5),
+              borderRadius: BorderRadius.circular(15),
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Column(
@@ -164,25 +190,66 @@ class SettingView extends GetView<HomeController> {
                     ),
                     ListTile1(
                       title: 'Ubah kata sandi',
-                      prefixIcon: Iconsax.lock_1,
-                      suffixIcon: Iconsax.arrow_right_3,
+                      prefixIcon: HeroIcons.lockClosed,
+                      suffixIcon: HeroIcons.chevronRight,
                     ),
-                    ListTile1(
-                      title: 'PIN',
-                      prefixIcon: Iconsax.code,
-                      suffixIcon: Iconsax.arrow_right_3,
+                    Obx(() => ListTile1(
+                          onTap: () => Get.to(
+                            () => PinView(),
+                            transition: Transition.cupertino,
+                            arguments:
+                                controller.m.pinC.isEmpty ? "" : "ubah-pin",
+                          ),
+                          title: controller.m.pinC.isEmpty ? "PIN" : "Ubah PIN",
+                          prefixIcon: HeroIcons.key,
+                          suffixIcon: HeroIcons.chevronRight,
+                        )),
+                    Obx(
+                      () => (controller.m.pinC.isEmpty)
+                          ? SizedBox()
+                          : ListTile1(
+                              title: "Matikan PIN",
+                              onTap: () async {
+                                Get.to(
+                                  () => PinView(),
+                                  arguments: "matikan-pin",
+                                );
+                              },
+                              prefixIcon: HeroIcons.lockOpen,
+                              suffixIcon: HeroIcons.chevronRight,
+                            ),
                     ),
+                    Obx(
+                      () => (controller.m.pinC.isEmpty)
+                          ? SizedBox()
+                          : ListTile(
+                              contentPadding: EdgeInsets.all(0),
+                              leading: HeroIcon(HeroIcons.fingerPrint),
+                              horizontalTitleGap: 0,
+                              title: Text(
+                                "Hidupkan Biometric",
+                                style: normalTextStyle.copyWith(
+                                  fontWeight: light,
+                                  color: blackColor,
+                                ),
+                              ),
+                              trailing: Switch(
+                                value: true,
+                                activeColor: Colors.pink.shade400,
+                                onChanged: (value) {},
+                              )),
+                    )
                   ],
                 ),
               ),
             ),
           ),
-          const Gap(5),
+          const Gap(15),
           Container(
-            margin: const EdgeInsets.symmetric(horizontal: 5),
+            margin: const EdgeInsets.symmetric(horizontal: 15),
             child: Material(
               color: whiteColor,
-              borderRadius: BorderRadius.circular(5),
+              borderRadius: BorderRadius.circular(15),
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Column(
@@ -197,8 +264,8 @@ class SettingView extends GetView<HomeController> {
                     ),
                     ListTile1(
                       title: 'Keluar',
-                      prefixIcon: Iconsax.logout,
-                      suffixIcon: Iconsax.arrow_right_3,
+                      prefixIcon: HeroIcons.arrowRightEndOnRectangle,
+                      suffixIcon: HeroIcons.chevronRight,
                       colors: redColor,
                       onTap: () => Get.dialog(AlertExit()),
                     ),
@@ -216,15 +283,15 @@ class SettingView extends GetView<HomeController> {
                   "Version (${snapshot.data})",
                   textAlign: TextAlign.center,
                   style: normalTextStyle.copyWith(
-                    color: blackColor,
-                    fontSize: 16,
+                    color: darkGreyColor,
+                    fontSize: 10,
                   ),
                 );
               }
               return Container();
             },
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
         ],
       ),
     );
@@ -256,8 +323,8 @@ class ListTile1 extends StatelessWidget {
 
   final String title;
   final Function()? onTap;
-  final IconData? prefixIcon;
-  final IconData? suffixIcon;
+  final HeroIcons? prefixIcon;
+  final HeroIcons? suffixIcon;
   final Color? colors;
 
   @override
@@ -266,11 +333,9 @@ class ListTile1 extends StatelessWidget {
       contentPadding: EdgeInsets.all(0),
       onTap: onTap,
       leading: prefixIcon != null
-          ? Icon(
-              prefixIcon,
-              color: colors ?? darkGreyColor,
-            )
+          ? HeroIcon(prefixIcon!, color: colors ?? darkGreyColor)
           : null,
+      horizontalTitleGap: 0,
       title: Text(
         title,
         style: normalTextStyle.copyWith(
@@ -279,10 +344,7 @@ class ListTile1 extends StatelessWidget {
         ),
       ),
       trailing: suffixIcon != null
-          ? Icon(
-              suffixIcon,
-              color: colors ?? darkGreyColor,
-            )
+          ? HeroIcon(suffixIcon!, color: colors ?? darkGreyColor)
           : null,
     );
   }

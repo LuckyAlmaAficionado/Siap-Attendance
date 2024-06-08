@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:heroicons/heroicons.dart';
+
 import 'package:intl/intl.dart';
 import 'package:month_picker_dialog/month_picker_dialog.dart';
 import 'package:talenta_app/app/controllers/api_controller.dart';
 
 import 'package:talenta_app/app/modules/daftar_absensi_page/controllers/daftar_absensi_page_controller.dart';
+import 'package:talenta_app/app/shared/textfield/textfield_1.dart';
 import 'package:talenta_app/app/shared/theme.dart';
 
 class RiwayatPageView extends StatefulWidget {
@@ -20,8 +22,15 @@ class RiwayatPageView extends StatefulWidget {
 
 class _RiwayatPageViewState extends State<RiwayatPageView> {
   final controller = Get.put(DaftarAbsensiPageController());
-
   final a = Get.put(ApiController());
+
+  TextEditingController calendarC = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    calendarC.text = DateFormat("MMMM yyyy", "id_ID").format(DateTime.now());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,52 +41,30 @@ class _RiwayatPageViewState extends State<RiwayatPageView> {
 
     return Column(
       children: [
-        const SizedBox(height: 20),
-        GestureDetector(
-          onTap: () async {
-            await showMonthPicker(
-              context: context,
-              locale: Locale("id", "ID"),
-              initialDate: DateTime.now(),
-              unselectedMonthTextColor: blackColor,
-            ).then((date) {
-              if (date != null) {
-                setState(() {
-                  controller.selectedDate = date;
-                });
-              }
-            });
-          },
-          child: Container(
-            width: Get.width,
-            height: 50,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            margin: const EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                width: 1,
-                color: darkGreyColor,
-              ),
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.date_range_outlined),
-                const SizedBox(width: 10),
-                Text(
-                  "${DateFormat("MMM yyyy", "id_ID").format(
-                    DateTime(controller.startDate.year,
-                        controller.startDate.month + 1),
-                  )}",
-                  style: normalTextStyle,
-                ),
-                new Spacer(),
-                Icon(
-                  Icons.arrow_drop_down_sharp,
-                  color: darkGreyColor,
-                ),
-              ],
-            ),
+        const SizedBox(height: 10),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: TextField1(
+            readOnly: true,
+            suffixIcon: HeroIcon(HeroIcons.chevronDown, size: 15),
+            preffixIcon: HeroIcon(HeroIcons.calendarDays),
+            controller: calendarC,
+            onTap: () {
+              showMonthPicker(
+                context: context,
+                locale: Locale("id", "ID"),
+                initialDate: DateTime.now(),
+                unselectedMonthTextColor: Colors.black,
+              ).then((date) {
+                if (date != null) {
+                  setState(() {
+                    controller.selectedDate = date;
+                    calendarC.text =
+                        DateFormat("MMMM yyyy", "id_ID").format(date);
+                  });
+                }
+              });
+            },
           ),
         ),
         Expanded(
@@ -94,7 +81,7 @@ class _RiwayatPageViewState extends State<RiwayatPageView> {
                       margin: const EdgeInsets.all(10),
                       height: 150,
                       decoration: BoxDecoration(
-                        color: blueColor.withAlpha(40),
+                        color: Colors.grey.withAlpha(30),
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Row(
@@ -263,9 +250,9 @@ class _RiwayatPageViewState extends State<RiwayatPageView> {
                 onPressed: () {
                   ShowDetailAbsensi(context, index, clockin, clockout);
                 },
-                icon: Icon(
-                  Iconsax.arrow_right_3,
-                  color: darkGreyColor,
+                icon: HeroIcon(
+                  HeroIcons.chevronRight,
+                  size: 20,
                 ),
               ),
             ],
@@ -453,7 +440,10 @@ class ListTileInfo extends StatelessWidget {
         ),
         Text(
           value.toString(),
-          style: blueTextStyle.copyWith(fontWeight: bold),
+          style: normalTextStyle.copyWith(
+            fontWeight: bold,
+            color: Colors.blue[700],
+          ),
         ),
       ],
     );

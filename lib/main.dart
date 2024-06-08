@@ -6,9 +6,11 @@ import 'package:flutter/services.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 
+import 'package:talenta_app/app/controllers/connection_controller.dart';
 import 'package:talenta_app/app/controllers/model_controller.dart';
 import 'package:talenta_app/app/modules/capture_attendance/controllers/capture_attendance_controller.dart';
 
@@ -23,8 +25,12 @@ Future<void> main() async {
     ));
   }
 
+  await Hive.initFlutter();
+  await Hive.openBox("siap");
+
   await initializeDateFormatting("id_ID", null);
-  await Get.put(ModelController(), permanent: true);
+  await Get.put<ModelController>(ModelController(), permanent: true);
+  Get.put<ConnectionController>(ConnectionController(), permanent: true);
   Get.put(CaptureAttendanceController()).cameras(await availableCameras());
 
   runApp(const MyApp());
@@ -36,9 +42,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: "SIAP",
+      title: "Andi Attendance",
       debugShowCheckedModeBanner: false,
-      enableLog: false,
       theme: ThemeData(useMaterial3: false),
       initialRoute: Routes.AUTHENTICATION,
       getPages: AppPages.routes,

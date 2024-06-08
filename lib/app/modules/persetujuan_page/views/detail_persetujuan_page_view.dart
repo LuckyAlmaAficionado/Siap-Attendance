@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
 
+import 'package:talenta_app/app/shared/images/images.dart';
 import 'package:talenta_app/app/shared/theme.dart';
 
 class DetailPersetujuanPageView extends GetView {
@@ -10,12 +12,17 @@ class DetailPersetujuanPageView extends GetView {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
           'Detail Persetujuan',
-          style: appBarTextStyle,
+          style: appBarTextStyle.copyWith(color: Colors.black),
         ),
-        centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 0.5,
+        centerTitle: false,
+        titleSpacing: 0,
+        iconTheme: IconThemeData(color: Colors.black),
       ),
       body: Container(
         width: Get.width,
@@ -25,7 +32,8 @@ class DetailPersetujuanPageView extends GetView {
           children: [
             Row(
               children: [
-                CircleAvatar(),
+                SizedBox(
+                    width: 50, height: 50, child: ImageNetwork(url: "####")),
                 // ... information
                 const Gap(20),
                 Column(
@@ -55,127 +63,8 @@ class DetailPersetujuanPageView extends GetView {
                 new Spacer(),
                 // ... Icon Button
                 IconButton(
-                  onPressed: () {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (context) {
-                        return Container(
-                          padding: const EdgeInsets.all(15),
-                          width: Get.width,
-                          height: 230,
-                          child: Column(
-                            children: [
-                              // bio pengguna
-                              Row(
-                                children: [
-                                  CircleAvatar(),
-                                  const Gap(15),
-                                  Text(
-                                    "Fachrun Wire Prana",
-                                    style: blackTextStyle.copyWith(
-                                      fontWeight: regular,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                  new Spacer(),
-                                  IconButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    icon: Icon(Icons.close),
-                                  ),
-                                ],
-                              ),
-                              const Gap(10),
-                              LayoutBuilder(
-                                builder: (context, constraints) {
-                                  return Column(
-                                    children: [
-                                      Row(
-                                        children: [
-                                          SizedBox(
-                                            width: constraints.maxWidth * 0.5,
-                                            child: Text(
-                                              "Employee ID",
-                                              style: redTextStyle,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: constraints.maxWidth * 0.5,
-                                            child: Text(
-                                              ": 3022",
-                                              style: blackTextStyle,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      const Gap(10),
-                                      Row(
-                                        children: [
-                                          SizedBox(
-                                            width: constraints.maxWidth * 0.5,
-                                            child: Text(
-                                              "Organization",
-                                              style: redTextStyle,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: constraints.maxWidth * 0.5,
-                                            child: Text(
-                                              ": AGS",
-                                              style: blackTextStyle,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      const Gap(10),
-                                      Row(
-                                        children: [
-                                          SizedBox(
-                                            width: constraints.maxWidth * 0.5,
-                                            child: Text(
-                                              "Job Position",
-                                              style: redTextStyle,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: constraints.maxWidth * 0.5,
-                                            child: Text(
-                                              ": Programmer",
-                                              style: blackTextStyle,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      const Gap(10),
-                                      Row(
-                                        children: [
-                                          SizedBox(
-                                            width: constraints.maxWidth * 0.5,
-                                            child: Text(
-                                              "Branch",
-                                              style: redTextStyle,
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            width: constraints.maxWidth * 0.5,
-                                            child: Text(
-                                              ": CV Andi Offset Yogyakarta Pusat",
-                                              style: blackTextStyle,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      const Gap(10),
-                                    ],
-                                  );
-                                },
-                              )
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  },
-                  icon: Icon(Icons.account_circle_outlined),
+                  onPressed: () => detailInformations(),
+                  icon: Icon(Boxicons.bx_info_circle),
                 ),
               ],
             ),
@@ -309,7 +198,7 @@ class DetailPersetujuanPageView extends GetView {
             boxShadow: [
               BoxShadow(
                 offset: Offset(0, -0.1),
-                color: darkGreyColor.withAlpha(100),
+                color: darkGreyColor.withAlpha(20),
                 spreadRadius: 2,
                 blurRadius: 3,
               )
@@ -383,4 +272,115 @@ class DetailPersetujuanPageView extends GetView {
       ),
     );
   }
+
+  detailInformations() => Get.bottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(15),
+            topRight: Radius.circular(15),
+          ),
+        ),
+        backgroundColor: whiteColor,
+        Container(
+          height: 250,
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                children: [
+                  SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: ImageNetwork(url: "###"),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    "Fachrun Wire Prana",
+                    style: normalTextStyle.copyWith(
+                      fontWeight: medium,
+                      fontSize: 14,
+                    ),
+                  ),
+                  new Spacer(),
+                  IconButton(
+                    onPressed: () => Get.back(),
+                    icon: Icon(Icons.close),
+                  ),
+                ],
+              ),
+              const Gap(10),
+              Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: Get.width * 0.4,
+                      child: Text(style: normalTextStyle, "ID Karyawan"),
+                    ),
+                    Text(style: normalTextStyle, ": "),
+                    SizedBox(
+                      width: Get.width * 0.4,
+                      child: Text(style: normalTextStyle, "074"),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: Get.width * 0.4,
+                      child: Text(style: normalTextStyle, "Organisasi"),
+                    ),
+                    Text(style: normalTextStyle, ": "),
+                    SizedBox(
+                      width: Get.width * 0.4,
+                      child: Text(style: normalTextStyle, "AGS"),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: Get.width * 0.4,
+                      child: Text(style: normalTextStyle, "Posisi pekerjaan"),
+                    ),
+                    Text(style: normalTextStyle, ": "),
+                    SizedBox(
+                      width: Get.width * 0.4,
+                      child: Text(
+                        style: normalTextStyle,
+                        "Programmer",
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: Get.width * 0.4,
+                      child: Text(style: normalTextStyle, "Cabang"),
+                    ),
+                    Text(style: normalTextStyle, ": "),
+                    SizedBox(
+                      width: Get.width * 0.4,
+                      child: Text(
+                          style: normalTextStyle,
+                          "CV Andi Offset Yogyakarta Pusat"),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
 }

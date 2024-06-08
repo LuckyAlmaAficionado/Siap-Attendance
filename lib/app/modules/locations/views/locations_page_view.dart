@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_location_marker/flutter_map_location_marker.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:heroicons/heroicons.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'package:talenta_app/app/controllers/model_controller.dart';
@@ -86,7 +87,7 @@ class _LocationsPageViewState extends State<LocationsPageView> {
                                       "${m.u.value!.avatar}",
                                     ),
                                   )
-                                : Icon(Iconsax.user),
+                                : HeroIcon(HeroIcons.user),
                           ),
                           markerSize: const Size(40, 40),
                           markerDirection: MarkerDirection.top,
@@ -144,7 +145,7 @@ class _LocationsPageViewState extends State<LocationsPageView> {
                     child: IconButton(
                       onPressed: () => Get.back(),
                       icon: Icon(
-                        Iconsax.arrow_left,
+                        Boxicons.bx_arrow_back,
                         color: blackColor,
                       ),
                     ),
@@ -164,7 +165,8 @@ class _LocationsPageViewState extends State<LocationsPageView> {
                           setState(() {});
                         },
                         icon: Icon(
-                          Icons.refresh_rounded,
+                          // Icons.refresh_rounded,
+                          Boxicons.bx_refresh,
                           color: blackColor,
                         ),
                       ),

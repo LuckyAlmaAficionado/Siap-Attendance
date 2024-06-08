@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:gap/gap.dart';
 import 'package:get/get.dart';
+import 'package:talenta_app/app/controllers/api_controller.dart';
 
 import 'package:talenta_app/app/modules/authentication/controllers/authentication_controller.dart';
 import 'package:talenta_app/app/modules/authentication/views/login_view.dart';
@@ -309,6 +310,7 @@ class AlertExit extends StatelessWidget {
                           height: 40,
                           width: constraints.maxWidth * 0.4,
                           child: Button1(
+                            color: blueColor,
                             title: "Kembali",
                             onTap: () => Get.back(),
                           ),
@@ -320,9 +322,10 @@ class AlertExit extends StatelessWidget {
                           child: Button1(
                             color: redColor,
                             title: "Keluar",
-                            onTap: () => Get.put(AuthController())
-                                .hiveRemoveEmailAndPassword()
-                                .then((value) => Get.offAll(() => LoginView())),
+                            onTap: () => Get.put(ApiController()).logOut(),
+                            // onTap: () => Get.put(AuthController())
+                            //     .hiveRemoveEmailAndPassword()
+                            //     .then((value) => Get.offAll(() => LoginView())),
                           ),
                         ),
                       ],

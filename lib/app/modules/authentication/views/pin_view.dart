@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:talenta_app/app/modules/authentication/controllers/authentication_controller.dart';
-import 'package:talenta_app/app/shared/loading/loading1.dart';
 import 'package:talenta_app/app/shared/theme.dart';
 
 class PinView extends GetView<AuthController> {
-  const PinView({Key? key}) : super(key: key);
+  PinView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     Get.lazyPut<AuthController>(() => AuthController());
+    controller.informations("Masukan PIN Anda");
     RxString status = "${Get.arguments}".obs;
 
     print(controller.tempPin.value);
@@ -21,9 +22,9 @@ class PinView extends GetView<AuthController> {
             begin: Alignment.bottomRight,
             end: Alignment.topLeft,
             colors: [
-              Colors.blue.shade100,
-              Colors.blue.shade100,
-              Colors.blue.shade100,
+              Colors.green.shade100,
+              Colors.green.shade100,
+              Colors.green.shade100,
               Colors.white,
               Colors.white,
               Colors.white,
@@ -37,20 +38,30 @@ class PinView extends GetView<AuthController> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Obx(() => Text(
-                      (status.value == "remove-pin-code")
-                          ? "Masukan PIN Untuk Di Nonaktifkan"
-                          : (status.value == "set-password")
-                              ? (controller.tempPin.value.isNotEmpty)
-                                  ? "Masukan Kembali Pin Baru"
-                                  : "Masukan PIN Baru"
-                              : "Masukan PIN Anda",
-                      style: normalTextStyle.copyWith(
-                        color: Colors.blue[900],
-                        fontWeight: FontWeight.w500,
-                        fontSize: 20,
-                      ),
-                    )),
+                Obx(
+                  () => Text(
+                    controller.informations.value,
+                    style: normalTextStyle.copyWith(
+                      fontSize: 22,
+                      color: Colors.green[900],
+                      fontWeight: medium,
+                    ),
+                  ),
+                ),
+                // Obx(() => Text(
+                //       (status.value == "remove-pin-code")
+                //           ? "Masukan PIN Untuk Di Nonaktifkan"
+                //           : (status.value == "set-password")
+                //               ? (controller.tempPin.value.isNotEmpty)
+                //                   ? "Masukan Kembali Pin Baru"
+                //                   : "Masukan PIN Baru"
+                //               : "Masukan PIN Anda",
+                //       style: normalTextStyle.copyWith(
+                //         color: Colors.green[900],
+                //         fontWeight: FontWeight.w500,
+                //         fontSize: 20,
+                //       ),
+                //     )),
                 const SizedBox(height: 30),
                 Obx(
                   () => Row(
@@ -64,15 +75,11 @@ class PinView extends GetView<AuthController> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: (controller.textfield.value.length < index + 1)
-                              ? Colors.blue[100]
-                              : Colors.blue[500],
+                              ? Colors.green[100]
+                              : Colors.green[500],
                         ),
-                        width: (controller.textfield.value.length < index + 1)
-                            ? 5
-                            : 15,
-                        height: (controller.textfield.value.length < index + 1)
-                            ? 5
-                            : 15,
+                        width: 15,
+                        height: 15,
                       ),
                     ),
                   ),
@@ -103,12 +110,16 @@ class PinView extends GetView<AuthController> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            SizedBox(
-                              width: 50,
-                              child: Icon(
-                                size: 50,
-                                color: Colors.white,
-                                Icons.fingerprint,
+                            GestureDetector(
+                              onTap: () async =>
+                                  await controller.removeAllHive(),
+                              child: SizedBox(
+                                width: 50,
+                                child: Icon(
+                                  size: 50,
+                                  color: Colors.white,
+                                  Icons.fingerprint,
+                                ),
                               ),
                             ),
                             Container(
@@ -116,11 +127,11 @@ class PinView extends GetView<AuthController> {
                               alignment: Alignment.center,
                               child: Material(
                                 elevation: 2,
-                                color: Colors.blue[50],
+                                color: Colors.green[50],
                                 borderRadius: BorderRadius.circular(100),
                                 child: InkWell(
                                   borderRadius: BorderRadius.circular(100),
-                                  highlightColor: Colors.blue[900],
+                                  highlightColor: Colors.green[900],
                                   onTapCancel: () => controller.onClicked(-1),
                                   onTapDown: (details) =>
                                       controller.onClicked(10),
@@ -142,7 +153,7 @@ class PinView extends GetView<AuthController> {
                                           color:
                                               (controller.onClicked.value == 10)
                                                   ? Colors.white
-                                                  : Colors.blue[900],
+                                                  : Colors.green[900],
                                           fontWeight: FontWeight.w300,
                                         ),
                                       ),
@@ -181,7 +192,7 @@ class PinView extends GetView<AuthController> {
                   alignment: Alignment.center,
                   child: Material(
                     elevation: 2,
-                    color: Colors.blue[50],
+                    color: Colors.green[50],
                     borderRadius: BorderRadius.circular(100),
                     child: InkWell(
                       splashColor: Colors.white,
@@ -231,8 +242,8 @@ class PinView extends GetView<AuthController> {
                                                       .visibility_off_outlined
                                                   : Icons.visibility_outlined,
                                               color: (controller.obsecure.value)
-                                                  ? Colors.blue[500]
-                                                  : Colors.blue[500],
+                                                  ? Colors.green[500]
+                                                  : Colors.green[500],
                                             ),
                                           ),
                                           border: OutlineInputBorder(
@@ -250,7 +261,7 @@ class PinView extends GetView<AuthController> {
                                   width: context.width,
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.blue[500],
+                                      backgroundColor: Colors.green[500],
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10),
                                       ),
@@ -281,7 +292,7 @@ class PinView extends GetView<AuthController> {
                           "GUNAKAN PASSWORD",
                           style: normalTextStyle.copyWith(
                             fontSize: 14,
-                            color: Colors.blue[900],
+                            color: Colors.green[900],
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -302,10 +313,9 @@ class PinView extends GetView<AuthController> {
     if (controller.textfield.value.length < 6) {
       controller.textfield(controller.textfield + values.toString());
       if (controller.textfield.value.length == 6) {
-        Get.dialog(Loading1());
-
-        controller.onCheckPinValidator(
-            controller.textfield.value, (Get.arguments ?? "login"));
+        controller.submitPinValidator((Get.arguments ?? "login"));
+        // controller.submitPinValidator(
+        //     controller.textfield.value, (Get.arguments ?? "login"));
         controller.textfield("");
       }
     }
@@ -336,11 +346,11 @@ class CustomNumberButton extends StatelessWidget {
           3,
           (index) => Material(
             elevation: 2,
-            color: Colors.blue[50],
+            color: Colors.green[50],
             borderRadius: BorderRadius.circular(100),
             child: InkWell(
               borderRadius: BorderRadius.circular(100),
-              highlightColor: Colors.blue[900],
+              highlightColor: Colors.green[900],
               onTapCancel: () => controller.onClicked(-1),
               onTapDown: (details) => controller.onClicked(index + startIndex),
               onTapUp: (_) => controller.onClicked(-1),
@@ -360,7 +370,7 @@ class CustomNumberButton extends StatelessWidget {
                       fontSize: 25,
                       color: (controller.onClicked.value == index + startIndex)
                           ? Colors.white
-                          : Colors.blue[900],
+                          : Colors.green[900],
                       fontWeight: FontWeight.w300,
                     ),
                   ),
@@ -377,8 +387,9 @@ class CustomNumberButton extends StatelessWidget {
     if (controller.textfield.value.length < 6) {
       controller.textfield(controller.textfield + values.toString());
       if (controller.textfield.value.length == 6) {
-        controller.onCheckPinValidator(
-            controller.textfield.value, (Get.arguments ?? "login"));
+        controller.submitPinValidator((Get.arguments ?? "login"));
+        // controller.onCheckPinValidator(
+        //     controller.textfield.value, (Get.arguments ?? "login"));
         controller.textfield("");
       }
     }

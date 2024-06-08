@@ -19,7 +19,7 @@ class ReimbursementPageView extends GetView<ReimbursementPageController> {
       appBar: AppBar(
         title: Text(
           'Reimbursement',
-          style: whiteTextStyle.copyWith(
+          style: appBarTextStyle.copyWith(
             fontWeight: regular,
             fontSize: 18,
           ),

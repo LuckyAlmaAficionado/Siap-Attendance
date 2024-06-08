@@ -9,6 +9,7 @@ import 'package:talenta_app/app/controllers/locations_controller.dart';
 import 'package:talenta_app/app/models/locations.dart';
 
 import '../../../shared/alert/alert-out-range.dart';
+import '../../capture_attendance/views/capture_attendance_view.dart';
 
 class LocationsPageController extends GetxController {
   final locations = Get.put(LocationController());
@@ -56,24 +57,35 @@ class LocationsPageController extends GetxController {
     log("latitude: $latitude");
     log("longitude: $longitude");
 
-    var result = validator.singleWhere((element) => locations.isWithinRange(
-          latitude,
-          longitude,
-          double.parse(element.lat),
-          double.parse(element.lng),
-          element.radius.toDouble(),
-        ));
+    bool isFlexible = false;
+    validator.forEach((element) {
+      if (element.flexible == 1) {
+        isFlexible = true;
+      }
+    });
 
-    if (result.locName.isEmpty) {
-      await Get.dialog(AlertOutRange(status: status));
-      return;
+    if (!isFlexible) {
+      List<ModelLocations> result = validator
+          .where((element) => locations.isWithinRange(
+                latitude,
+                longitude,
+                double.parse(element.lat),
+                double.parse(element.lng),
+                element.radius.toDouble(),
+              ))
+          .toList();
+
+      if (result.isEmpty) {
+        await Get.dialog(AlertOutRange(status: status));
+        return;
+      }
     }
 
-    // Get.to(
-    //   () => CaptureAttendanceView(),
-    //   transition: Transition.cupertino,
-    //   arguments: status,
-    // );
+    Get.to(
+      () => CaptureAttendanceView(),
+      transition: Transition.cupertino,
+      arguments: status,
+    );
   }
 
   @override

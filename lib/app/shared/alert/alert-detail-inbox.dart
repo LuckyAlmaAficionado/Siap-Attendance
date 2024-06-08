@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boxicons/flutter_boxicons.dart';
 import 'package:gap/gap.dart';
 
 import 'package:get/get.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
+import 'package:talenta_app/app/shared/images/images.dart';
 import 'package:talenta_app/app/shared/theme.dart';
 
 class DetailInboxView extends GetView {
@@ -11,14 +12,18 @@ class DetailInboxView extends GetView {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: whiteColor,
         appBar: AppBar(
+          elevation: 0.4,
           title: Text(
             'Detail Inbox',
-            style: appBarTextStyle,
+            style: appBarTextStyle.copyWith(color: Colors.black),
           ),
-          centerTitle: true,
+          centerTitle: false,
+          titleSpacing: 0,
+          backgroundColor: Colors.white,
           iconTheme: IconThemeData(
-            color: whiteColor,
+            color: blackColor,
           ),
         ),
         body: Padding(
@@ -29,7 +34,11 @@ class DetailInboxView extends GetView {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  CircleAvatar(radius: 25),
+                  SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: ImageNetwork(url: "url"),
+                  ),
                   const SizedBox(width: 15),
                   SizedBox(
                     width: context.width * 0.6,
@@ -64,134 +73,14 @@ class DetailInboxView extends GetView {
                   ),
                   Spacer(),
                   IconButton(
-                    onPressed: () {
-                      showModalBottomSheet(
-                        isScrollControlled: true,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20),
-                          ),
-                        ),
-                        context: context,
-                        builder: (context) {
-                          return Container(
-                            height: 230,
-                            padding: const EdgeInsets.all(10.0),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    CircleAvatar(),
-                                    const SizedBox(width: 10),
-                                    Text(
-                                      "Maria Setiawati Purbaningtyas",
-                                      style: normalTextStyle.copyWith(
-                                        fontWeight: medium,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    new Spacer(),
-                                    IconButton(
-                                      onPressed: () => Get.back(),
-                                      icon: Icon(Icons.close),
-                                    ),
-                                  ],
-                                ),
-                                const Gap(10),
-                                Padding(
-                                  padding: const EdgeInsets.all(6.0),
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        width: Get.width * 0.4,
-                                        child: Text(
-                                            style: normalTextStyle,
-                                            "ID Karyawan"),
-                                      ),
-                                      Text(style: normalTextStyle, ": "),
-                                      SizedBox(
-                                        width: Get.width * 0.4,
-                                        child:
-                                            Text(style: normalTextStyle, "074"),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(6.0),
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        width: Get.width * 0.4,
-                                        child: Text(
-                                            style: normalTextStyle,
-                                            "Organisasi"),
-                                      ),
-                                      Text(style: normalTextStyle, ": "),
-                                      SizedBox(
-                                        width: Get.width * 0.4,
-                                        child: Text(
-                                            style: normalTextStyle,
-                                            "Personalia & Umum"),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(6.0),
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        width: Get.width * 0.4,
-                                        child: Text(
-                                            style: normalTextStyle,
-                                            "Posisi pekerjaan"),
-                                      ),
-                                      Text(style: normalTextStyle, ": "),
-                                      SizedBox(
-                                        width: Get.width * 0.4,
-                                        child: Text(
-                                            style: normalTextStyle,
-                                            "Staff Personalia"),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(6.0),
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        width: Get.width * 0.4,
-                                        child: Text(
-                                            style: normalTextStyle, "Cabang"),
-                                      ),
-                                      Text(style: normalTextStyle, ": "),
-                                      SizedBox(
-                                        width: Get.width * 0.4,
-                                        child: Text(
-                                            style: normalTextStyle,
-                                            "CV Andi Offset Yogyakarta Pusat"),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    icon: Icon(Iconsax.personalcard),
+                    onPressed: () => detailInformations(),
+                    icon: Icon(Boxicons.bx_info_circle),
                   )
                 ],
               ),
-              SizedBox(
-                height: Get.height * 0.05,
-              ),
+              const Gap(10),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 5),
                 child: Text(
                   "Your request attendance, check in on 18 Mar 2024 at 07:53 for 18 Mar 2024 has been approved. Reason: pertama kali pake berbakat",
                   style: normalTextStyle.copyWith(
@@ -204,4 +93,112 @@ class DetailInboxView extends GetView {
           ),
         ));
   }
+
+  detailInformations() => Get.bottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(15),
+            topRight: Radius.circular(15),
+          ),
+        ),
+        backgroundColor: whiteColor,
+        Container(
+          height: 250,
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                children: [
+                  SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: ImageNetwork(url: "###"),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    "Maria Setiawati Purbaningtyas",
+                    style: normalTextStyle.copyWith(
+                      fontWeight: medium,
+                      fontSize: 14,
+                    ),
+                  ),
+                  new Spacer(),
+                  IconButton(
+                    onPressed: () => Get.back(),
+                    icon: Icon(Icons.close),
+                  ),
+                ],
+              ),
+              const Gap(10),
+              Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: Get.width * 0.4,
+                      child: Text(style: normalTextStyle, "ID Karyawan"),
+                    ),
+                    Text(style: normalTextStyle, ": "),
+                    SizedBox(
+                      width: Get.width * 0.4,
+                      child: Text(style: normalTextStyle, "074"),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: Get.width * 0.4,
+                      child: Text(style: normalTextStyle, "Organisasi"),
+                    ),
+                    Text(style: normalTextStyle, ": "),
+                    SizedBox(
+                      width: Get.width * 0.4,
+                      child: Text(style: normalTextStyle, "Personalia & Umum"),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: Get.width * 0.4,
+                      child: Text(style: normalTextStyle, "Posisi pekerjaan"),
+                    ),
+                    Text(style: normalTextStyle, ": "),
+                    SizedBox(
+                      width: Get.width * 0.4,
+                      child: Text(style: normalTextStyle, "Staff Personalia"),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(6.0),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: Get.width * 0.4,
+                      child: Text(style: normalTextStyle, "Cabang"),
+                    ),
+                    Text(style: normalTextStyle, ": "),
+                    SizedBox(
+                      width: Get.width * 0.4,
+                      child: Text(
+                          style: normalTextStyle,
+                          "CV Andi Offset Yogyakarta Pusat"),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
 }

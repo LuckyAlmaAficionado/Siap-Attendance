@@ -38,9 +38,9 @@ TextStyle blueTextStyle = GoogleFonts.outfit(color: Colors.blue[800]);
 
 TextStyle redTextStyle = GoogleFonts.outfit(color: Colors.red);
 
-TextStyle normalTextStyle = GoogleFonts.outfit(
+TextStyle normalTextStyle = GoogleFonts.quicksand(
   color: blackColor,
-  fontSize: 14,
+  fontSize: 12,
 );
 
 // ... TEXTSTYLE APPBAR
