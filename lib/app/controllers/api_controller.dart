@@ -51,7 +51,7 @@ class ApiController extends GetxController {
   // final BASE_URL = "http://192.168.71.195:8000";
 
   final Map<String, String> listApi = {
-    "login": "api/v1/auth/login", //  
+    "login": "api/v1/auth/login", //
     "fetchAllEmployee": "api/v1/all-users", // done
     "todayAttendance": "api/v1/absensi", // done
     "permit": "api/izin/find", // not fix yet
